@@ -1,0 +1,192 @@
+
+
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<style>
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1c1c1c;
+        color: white;
+    }
+    .markdown-body table tr {
+        background-color: #1c1c1c;
+    }
+    .markdown-body table tr:nth-child(2n) {
+        background-color: black;
+    }
+}
+</style>
+
+
+
+<link rel="alternate" type="application/rss+xml" href="../../../../feed.xml" title="Introducing ZKNOX">
+
+
+
+<link rel="stylesheet" type="text/css" href="../../../../css/common-vendor.b8ecfc406ac0b5f77a26.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
+
+<script type="text/x-mathjax-config">
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']]
+  },
+  svg: {
+    fontCache: 'global',
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../scripts/tex-svg.js">
+</script>
+
+<style>
+</style>
+
+<div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
+
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Introducing ZKNOX" />
+<meta name="twitter:image" content="http://vitalik.ca/images/icon.png" />
+
+
+<br>
+<h1 style="margin-bottom:7px"> Introducing ZKNOX </h1>
+<small style="float:left; color: #888"> 2025 Feb 18 </small>
+<small style="float:right; color: #888"><a href="../../../../index.html">See all posts</a></small>
+<br> <br> <br>
+<title> Introducing ZKNOX </title>
+
+<p><img src="../../../../../images/zknoxlogo.jpeg" /></p>
+<h2 id="advancing-hardware-security-cryptography.">Advancing Hardware
+Security &amp; Cryptography.</h2>
+<p>Today, we're excited to introduce ZKNOX, a new venture founded by
+three experts in hardware security and cryptography (ECC, ZK, MPC). With
+deep expertise in securing critical systems, our mission is to advance
+secure hardware, cryptographic protocols, and blockchain-integrated
+security solutions—with a strong alignment to Ethereum, defensive and
+decentralized technologies.</p>
+<p>We're bringing deep expertise and innovation to every challenge on
+the whole security chain, from user end (be it secure enclaves, hardware
+wallets), back end (TEE, HSMs) or on-chain (smart contracts).</p>
+<p>Stay tuned for updates as we share insights, breakthroughs, and
+product developments. If you're interested in collaborating or learning
+more, reach out to us—we're just getting started.</p>
+<h2 id="the-team">The team</h2>
+<ul>
+<li>Bacca Nicolas - Co-founder and ex-CTO of the unicorn Ledger, with
+25+ years of experience in building and breaking secure solutions.
+Realizations include giving birth to Nano, Ledger best seller.</li>
+<li>Dubois Renaud - Cryptologist with 20 years of experience (Thales
+Defense, Ledger). Realizations include several <a
+href="https://dblp.org/pid/26/211.html">publications</a> and <a
+href="https://patents.google.com/?inventor=Renaud+Dubois">patents</a>,
+and delivering the fastest generic <a
+href="https://github.com/rdubois-crypto/FreshCryptoLib/blob/master/README.md">ecc</a>
+implementations, including passkeys integrated in Coinbase Smart
+Wallet.<br />
+</li>
+<li>Masson Simon - Cryptologist with 8 years of experience (Thales,
+Anoma). Realizations include several <a
+href="https://dblp.org/pid/218/7096.html">publications</a> including
+Bandersnatch, the fastest embedded curve for ECDSA verification
+circuit.</li>
+</ul>
+<h2 id="reach-us">Reach us</h2>
+<p>🔐 Practical security on the whole chain.</p>
+<p><a href="https://www.zknox.com">Website</a> | <a
+href="https://x.com/zknoxhq">Twitter</a> | <a
+href="https://zknox.eth.limo">Blog</a> | <a
+href="mailto:gm@zknox.com">Contact Info</a></p>
+<h2 id="advancing-hardware-security-cryptography.-1">Advancing Hardware
+Security &amp; Cryptography.</h2>
+<p>Today, we're excited to introduce ZKNOX, a new venture founded by
+three experts in hardware security and cryptography (ECC, ZK, MPC). With
+deep expertise in securing critical systems, our mission is to advance
+secure hardware, cryptographic protocols, and blockchain-integrated
+security solutions—with a strong alignment to Ethereum and decentralized
+technologies.</p>
+<p>We're bringing deep expertise and innovation to every challenge on
+the whole security chain, from user end (be it secure enclaves, hardware
+wallets), back end (TEE, HSMs) or on-chain (smart contracts).</p>
+<p>Stay tuned for updates as we share insights, breakthroughs, and
+product developments. If you're interested in collaborating or learning
+more, reach out to us—we're just getting started.</p>
+<h2 id="the-team-1">The team</h2>
+<ul>
+<li>Bacca Nicolas - Co-founder and ex-CTO of the unicorn Ledger, with
+25+ years of experience. Realizations include giving birth to Nano,
+Ledger best seller.</li>
+<li>Dubois Renaud - Cryptologist with 20 years of experience (Thales
+Defense, Ledger). Realizations includes several <a
+href="https://dblp.org/pid/26/211.html">publications</a> and <a
+href="https://patents.google.com/?inventor=Renaud+Dubois">patents</a>,
+and delivering the fastest generic <a
+href="https://github.com/rdubois-crypto/FreshCryptoLib/blob/master/README.md">ecc</a>
+implementations, including passkeys integrated in Coinbase Smart
+Wallet.<br />
+</li>
+<li>Masson Simon - Cryptologist with 10 years of experience (Thales,
+Anoma). Realizations includes several <a
+href="https://dblp.org/pid/218/7096.html">publications</a> including
+Bandersnatch, the fastest embedded curve for ECDSA verification
+circuit.</li>
+</ul>
+<h2 id="reach-us-1">Reach us</h2>
+<p>🔐 Security on the whole chain.</p>
+<p><a href="zknox.com">Website</a> | <a
+href="handleplz">Twitter/LinkedIn</a> | <a href="gm@zknox.com">Contact
+Info</a> | <a href="https://github.com/ZKNoxHQ">GitHub</a></p>
+ </div> 

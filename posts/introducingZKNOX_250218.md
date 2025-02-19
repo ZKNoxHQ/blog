@@ -21,10 +21,10 @@ Stay tuned for updates as we share insights, breakthroughs, and product developm
 - Bacca Nicolas - Co-founder and ex-CTO of the unicorn Ledger, with 25+ years of experience in building and breaking secure solutions. Realizations include giving birth to Nano, Ledger best seller.
 - Dubois Renaud - Cryptologist with 20 years of experience (Thales Defense, Ledger). Realizations include several [publications](https://dblp.org/pid/26/211.html) and [patents](https://patents.google.com/?inventor=Renaud+Dubois), and delivering the fastest generic [ecc](https://github.com/rdubois-crypto/FreshCryptoLib/blob/master/README.md) implementations, including passkeys integrated in Coinbase Smart Wallet.  
 - Masson Simon - Cryptologist with 8 years of experience (Thales, Anoma).
-Realizations include several [publications](https://dblp.org/pid/218/7096.html) including Bandersnatch, the fastest embedded curve for ECDSA verification circuit.
+Realizations include several [publications](https://dblp.org/pid/218/7096.html) including Bandersnatch, a fast embedded curve for ECDSA verification circuit.
  
 ## Reach us
 
 🔐 Practical security on the whole chain.
 
-[Github](https://github.com/zknoxhq) | [Website](https://www.zknox.com) | [Twitter](https://x.com/zknoxhq) | [Blog](https://zknox.eth.limo) | [Contact Info](mailto:gm@zknox.com)
+[Github](https://github.com/zknoxhq) | [Website](https://www.zknox.eth.limo) | [Twitter](https://x.com/zknoxhq) | [Blog](https://zknox.eth.limo) | [Contact Info](mailto:gm@zknox.com)

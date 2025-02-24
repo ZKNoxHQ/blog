@@ -1,14 +1,23 @@
 <?xml version="1.0" ?>
 <rss version="2.0">
 <channel>
-  <title>Vitalik Buterin's website</title>
+  <title>ZKNox Blog</title>
   <link>tbd/</link>
-  <description>Vitalik Buterin's website</description>
+  <description>ZKNox Blog</description>
   <image>
-      <url>http://vitalik.ca/images/icon.png</url>
-      <title>Vitalik Buterin's website</title>
+      <url></url>
+      <title>ZKNox Blog</title>
       <link>tbd/</link>
   </image>
+
+<item>
+<title>EIP-7885</title>
+<link>tbd/posts/2025/02/24/ETHEREUM for PQ era_250224.html</link>
+<guid>tbd/posts/2025/02/24/ETHEREUM for PQ era_250224.html</guid>
+<pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate>
+<description></description>
+</item>
+
 
 <item>
 <title>Introducing ZKNOX</title>

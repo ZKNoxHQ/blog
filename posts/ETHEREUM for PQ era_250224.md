@@ -1,3 +1,8 @@
+[category]: <> (General)
+[date]: <> (2025/02/24)
+[title]: <> (EIP-7885)
+
+
 # EIP-7885: the Case for NTT as an Ethereum Precompile for PQ Cryptography
 
 

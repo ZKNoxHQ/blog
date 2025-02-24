@@ -1,0 +1,225 @@
+
+
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<style>
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1c1c1c;
+        color: white;
+    }
+    .markdown-body table tr {
+        background-color: #1c1c1c;
+    }
+    .markdown-body table tr:nth-child(2n) {
+        background-color: black;
+    }
+}
+</style>
+
+
+
+<link rel="alternate" type="application/rss+xml" href="../../../../feed.xml" title="EIP-7885: the Case for NTT as an Ethereum Precompile for PQ Cryptography">
+
+
+
+<link rel="stylesheet" type="text/css" href="../../../../css/common-vendor.b8ecfc406ac0b5f77a26.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
+
+<script type="text/x-mathjax-config">
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']]
+  },
+  svg: {
+    fontCache: 'global',
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../scripts/tex-svg.js">
+</script>
+
+<style>
+</style>
+
+<div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
+
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="EIP-7885: the Case for NTT as an Ethereum Precompile for PQ Cryptography" />
+<meta name="twitter:image" content="" />
+
+
+<br>
+<h1 style="margin-bottom:7px"> EIP-7885: the Case for NTT as an Ethereum Precompile for PQ Cryptography </h1>
+<small style="float:left; color: #888"> 2025 Feb 24 </small>
+<small style="float:right; color: #888"><a href="../../../../index.html">See all posts</a></small>
+<br> <br> <br>
+<title> EIP-7885: the Case for NTT as an Ethereum Precompile for PQ Cryptography </title>
+
+<h2 id="introduction">Introduction</h2>
+<figure>
+<img src="../../../../../images/eip7885.jpeg"
+alt="My favorite T-shirt updated" />
+<figcaption aria-hidden="true">My favorite T-shirt updated</figcaption>
+</figure>
+<p>As the era of post-quantum (PQ) cryptography approaches, ensuring
+that blockchain systems like Ethereum can efficiently verify PQ
+signatures is crucial. One of the core operations for many PQ schemes is
+the <strong>Number Theoretic Transform (NTT)</strong>, which plays a
+fundamental role in accelerating cryptographic computations. In any
+cryptographic library, <strong>fast multiplier</strong> is the atomic
+critical operation. This is the lowest level function, typically
+optimized using assembly or crypto-accelerator. While traditional
+crypt-accelerators leverage fast multiplication over large fields (256
+to 512 bits), using Montgomery multiplier as their core operator,
+lattices operate on polynomial over smaller fields, requiring an
+hardware architecture update.</p>
+<p>At ZKNOX, we have been exploring ways to make <a
+href="https://ethresear.ch/t/the-road-to-post-quantum-ethereum-transaction-is-paved-with-account-abstraction-aa/21783">PQ
+signature verification</a> on Ethereum more gas-efficient. Our latest
+work focuses on implementing NTT in <strong>Yul</strong>, benchmarking
+its performance, and proposing a long-term solution to Ethereum's PQ
+challenges.</p>
+<h2
+id="optimizing-ntt-in-yul-for-gas-efficient-pq-verification">Optimizing
+NTT in Yul for Gas-Efficient PQ Verification</h2>
+<p>NTT is an essential component in many lattice-based PQ signature
+schemes, including <strong>FALCON</strong> and
+<strong>DILITHIUM</strong>, two leading candidates from the NIST PQC
+competition. To enable efficient verification of these schemes on
+Ethereum, we implemented NTT in <strong>Yul</strong>, Ethereum's
+low-level intermediate language, which offers finer control over gas
+optimizations.</p>
+<p>Our benchmarks showed significant improvements: - A full
+<strong>FALCON</strong> signature verification now consumes just
+<strong>3.6M gas</strong>—a substantial reduction compared to previous
+implementations. - Similar performance gains were observed for DILITHIUM
+and other PQ schemes relying on NTT.</p>
+<p>While this optimization enables rapid experimentation and improves
+efficiency, the cost is still <strong>too high for Ethereum PQ
+scaling</strong> in the long term.</p>
+<h2 id="the-need-for-ntt-as-an-ethereum-precompile">The Need for NTT as
+an Ethereum Precompile</h2>
+<p>Despite the gas savings from our Yul implementation, the cost of
+verifying PQ signatures remains a major bottleneck for practical
+adoption. This is why we advocate for <strong>including NTT as an
+Ethereum precompile</strong>. This proposition is now submitted in
+predraft mode as <a
+href="https://github.com/ethereum/EIPs/pull/9374">EIP-7885</a>.</p>
+<h3 id="why-a-precompile">Why a Precompile?</h3>
+<p>A precompile is a smart contract-like function implemented at the
+protocol level, offering much <strong>lower gas costs</strong> than
+executing the same logic in Solidity or Yul. Adding NTT as a precompile
+would: - <strong>Drastically reduce gas costs</strong> for PQ signature
+verification. - <strong>Enable Ethereum to support multiple PQ
+candidates</strong> instead of being limited to a single scheme. -
+<strong>Enhance Ethereum's crypto-agility</strong>, ensuring smooth
+transitions as new PQ standards evolve.</p>
+<h2 id="towards-a-crypto-agile-ethereum">Towards a Crypto-Agile
+Ethereum</h2>
+<p>Rather than committing Ethereum to a single PQ scheme, integrating an
+NTT precompile lays the foundation for broader PQ adoption. This
+approach ensures Ethereum remains flexible and secure as cryptographic
+advancements continue.</p>
+<p>By making NTT efficient and widely accessible, we move closer to a
+<strong>scalable, quantum-resistant Ethereum</strong>—one that is
+prepared for the post-quantum future without sacrificing usability.</p>
+<h2 id="reduce-starks-settlement">Reduce Starks settlement</h2>
+<p>Starks is a ZK technology used to scale ETHEREUM by ZKEVM layer 2
+like Starknet, Succint. NTT is also required during Starks settlement.
+This <a
+href="https://aszepieniec.github.io/stark-anatomy/faster.html">post</a>
+describes its role in the conception of a fast stark verifier. In
+addition to PQ cryptography, EIP-7885 also reduces cost for
+settlement.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Post-quantum security is not just a distant concern—it's an imminent
+challenge that must be addressed today. Our work optimizing NTT in Yul
+demonstrates the potential for gas-efficient PQ verification, but a
+long-term solution requires <strong>Ethereum protocol
+changes</strong>.</p>
+<p>We believe an <strong>NTT precompile</strong> is the next logical
+step towards <strong>PQ crypto-agility</strong> and <strong>ZK
+transition</strong>. We invite the Ethereum community, researchers, and
+developers to join the <a
+href="https://ethresear.ch/t/ntt-as-postquantum-and-starks-settlements-helper-precompile/21775">discussion</a>
+and push forward this crucial upgrade.</p>
+<p>🚀 Let's future-proof Ethereum together!</p>
+<h2 id="references">References</h2>
+<ul>
+<li><p><a
+href="https://ethresear.ch/t/ntt-as-postquantum-and-starks-settlements-helper-precompile/21775">ethereum
+research:</a> NTT as PostQuantum and Starks settlements helper
+precompile.</p></li>
+<li><p><a
+href="https://ethresear.ch/t/tasklist-for-post-quantum-eth/21296/13">ethereum
+research:</a> Tasklist for Post quantum ethereum.</p></li>
+<li><p><a
+href="https://vitalik.eth.limo/general/2019/05/12/fft.html">vitalik's
+post about FFT</a></p></li>
+<li><p><a href="https://github.com/ZKNoxHQ/NTT">ZKNOX NTT (github)</a>
+implementation.</p></li>
+<li><p><a href="https://github.com/ZKNoxHQ/ETHFALCON">ZKNOX FALCON
+(github)</a> implementation leveraging EIP-7885.</p></li>
+</ul>
+<h2 id="reach-us">Reach us</h2>
+<p>🔐 Practical security on the whole chain.</p>
+<p><a href="https://github.com/zknoxhq">Github</a> | <a
+href="https://www.zknox.com">Website</a> | <a
+href="https://x.com/zknoxhq">Twitter</a> | <a
+href="https://zknox.eth.limo">Blog</a> | <a
+href="mailto:gm@zknox.com">Contact Info</a></p>
+ </div> 

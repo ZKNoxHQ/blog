@@ -7,7 +7,7 @@
 
 ## Introduction
 
-![My favorite T-shirt updated](../../../../../images/lambdazknox.png)
+![My favorite T-shirt updated](../../../../../images/eip7885.jpeg)
 
 
 As the era of post-quantum (PQ) cryptography approaches, ensuring that blockchain systems like Ethereum can efficiently verify PQ signatures is crucial. One of the core operations for many PQ schemes is the **Number Theoretic Transform (NTT)**, which plays a fundamental role in accelerating cryptographic computations. In any cryptographic library, **fast multiplier** is the atomic critical operation. This is the lowest level function, typically optimized using assembly or crypto-accelerator.

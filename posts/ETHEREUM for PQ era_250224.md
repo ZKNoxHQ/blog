@@ -1,9 +1,6 @@
 [category]: <> (General)
 [date]: <> (2025/02/24)
-[title]: <> (EIP-7885)
-
-
-# EIP-7885: the Case for NTT as an Ethereum Precompile for PQ Cryptography
+[title]: <> (EIP-7885: the Case for NTT as an Ethereum Precompile for PQ Cryptography)
 
 
 
@@ -70,3 +67,10 @@ We believe an **NTT precompile** is the next logical step towards **PQ crypto-ag
 - [ZKNOX NTT (github)](https://github.com/ZKNoxHQ/NTT) implementation.
 
 - [ZKNOX FALCON (github)](https://github.com/ZKNoxHQ/ETHFALCON) implementation leveraging EIP-7885.
+
+
+## Reach us
+
+🔐 Practical security on the whole chain.
+
+[Github](https://github.com/zknoxhq) | [Website](https://www.zknox.com) | [Twitter](https://x.com/zknoxhq) | [Blog](https://zknox.eth.limo) | [Contact Info](mailto:gm@zknox.com)

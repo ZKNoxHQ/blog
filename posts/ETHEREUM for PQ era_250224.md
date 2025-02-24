@@ -11,7 +11,7 @@
 As the era of post-quantum (PQ) cryptography approaches, ensuring that blockchain systems like Ethereum can efficiently verify PQ signatures is crucial. One of the core operations for many PQ schemes is the **Number Theoretic Transform (NTT)**, which plays a fundamental role in accelerating cryptographic computations. In any cryptographic library, **fast multiplier** is the atomic critical operation. This is the lowest level function, typically optimized using assembly or crypto-accelerator.
 While traditional crypt-accelerators leverage fast multiplication over large fields (256 to 512 bits), using Montgomery multiplier as their core operator, lattices operate on polynomial over smaller fields, requiring an hardware architecture update.
 
-At ZKNOX, we have been exploring ways to make PQ signature verification on Ethereum more gas-efficient. Our latest work focuses on implementing NTT in **Yul**, benchmarking its performance, and proposing a long-term solution to Ethereum’s PQ challenges.
+At ZKNOX, we have been exploring ways to make [PQ signature verification](https://ethresear.ch/t/the-road-to-post-quantum-ethereum-transaction-is-paved-with-account-abstraction-aa/21783) on Ethereum more gas-efficient. Our latest work focuses on implementing NTT in **Yul**, benchmarking its performance, and proposing a long-term solution to Ethereum’s PQ challenges.
 
 ## Optimizing NTT in Yul for Gas-Efficient PQ Verification
 
@@ -57,6 +57,8 @@ We believe an **NTT precompile** is the next logical step towards **PQ crypto-ag
 ## References
 
 - [ethereum research:](https://ethresear.ch/t/ntt-as-postquantum-and-starks-settlements-helper-precompile/21775) NTT as PostQuantum and Starks settlements helper precompile.
+
+- [ethereum research:](https://ethresear.ch/t/tasklist-for-post-quantum-eth/21296/13) Tasklist for Post quantum ethereum.
 
 - [vitalik's post about FFT](https://vitalik.eth.limo/general/2019/05/12/fft.html)
 

@@ -1,5 +1,5 @@
 [category]: <> (General)
-[date]: <> (2025/02/18)
+[date]: <> (2025/02/26)
 [title]: <> (ZKNOX: Roadmap 2025)
 
 This post outlines the technical roadmap for ZKNOX in 2025.
@@ -26,7 +26,7 @@ SIMD strikes a balance between a full RISC-V VM switch and less flexible precomp
 
 ## Privacy-Focused Hardware Wallets and Governance
 
-Last year, our team delivered Multi-Party Computation (MPC) implementations of FROST and MuSig2 over secp256k1 and contributed to the BanderSnatch curve. Building on our experience with embedded cryptographic development, we plan to extend these implementations to hardware wallets, integrating MPC-based governance mechanisms.
+Last year, our team delivered a threshold signature scheme (TSS) implementations of FROST and MuSig2 over secp256k1 and contributed to the BanderSnatch curve. Building on our experience with embedded cryptographic development, we plan to extend these implementations to hardware wallets, integrating MPC-based governance mechanisms.
 
 This initiative aims to enhance security and resistance against malware for privacy-preserving protocols that use custom elliptic curves, such as Railgun. By embedding MPC directly into hardware wallets, we can strengthen user security while enabling advanced governance models for privacy-focused applications.
 

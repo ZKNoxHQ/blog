@@ -30,9 +30,13 @@ While this optimization enables rapid experimentation and improves efficiency, t
 Despite the gas savings from our Yul implementation, the cost of verifying PQ signatures remains a major bottleneck for practical adoption. This is why we advocate for **including NTT as an Ethereum precompile**. This proposition is now submitted in predraft mode as [EIP-7885](https://github.com/ethereum/EIPs/pull/9374).
 
 ### Why a Precompile?
+
 A precompile is a smart contract-like function implemented at the protocol level, offering much **lower gas costs** than executing the same logic in Solidity or Yul. Adding NTT as a precompile would:
+
 - **Drastically reduce gas costs** for PQ signature verification.
+
 - **Enable Ethereum to support multiple PQ candidates** instead of being limited to a single scheme.
+
 - **Enhance Ethereum’s crypto-agility**, ensuring smooth transitions as new PQ standards evolve.
 
 ## Towards a Crypto-Agile Ethereum

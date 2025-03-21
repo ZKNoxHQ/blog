@@ -9,7 +9,7 @@
 <small>(Hatching Ethereum FALCON)</small>
 
 
-In a previous note, we discussed the stakes of a post-quantum Ethereum future. This entry highlights ZKNOX's efforts over the past weeks to implement post-quantum signature schemes: FALCON and DILITHIUM.
+In a previous [note](https://zknox.eth.limo/posts/2025/02/24/ETHEREUM_for_PQ_era_250224.html), we discussed the stakes of a post-quantum Ethereum future. This entry highlights ZKNOX's efforts over the past weeks to implement post-quantum signature schemes: FALCON and DILITHIUM.
 
 ## Introduction
 
@@ -37,9 +37,20 @@ In standard FALCON, signature encoding is unique, enforced by encoding coefficie
 
 A key advantage of FALCON over DILITHIUM is its potential for a _recovery-based verification model_, similar to ECDSA. ZKNOX proposes a recovery version of FALCON that modifies the hash function specification to use the public key’s NTT representation. This allows verification using only an _NTT forward transform_, eliminating the need for an inverse NTT.
 
+## Ongoing work
+
+
+
 #### Toward a PQZK Future
 
 One of Ethereum’s long-term visions is a _zero-knowledge (ZK) endgame_. ZK circuits working on non-native fields introduce additional proving costs. To address this, we specified _ZK-friendly alternatives_ using _M31_ and _BabyBear_ fields, optimized for _STARK-based proving systems_ (e.g., STWO and RISC0). Our goal is to provide a migration path from BabyJubJub, JubJub, and Bandersnatch curves to _FALZKON_ and _ZKDILITHIUM_ for private payments. The security implications of switching fields will be discussed in a future post.
+
+
+#### Reduce gas using [EVMMAX](https://eips.ethereum.org/EIPS/eip-6690)
+
+
+At the current time of writing, some experiments using the EVMMAX precompile to further speedup the NTT (EIP-6690) are conducted by Ipsilon. A rough analysis suggests potential speedup around a factor 4 (down to 500K). This is very experimental as EVMMAX is not planned yet.
+
 
 
 ## Results

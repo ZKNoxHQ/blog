@@ -34,3 +34,11 @@ This initiative aims to enhance security and resistance against malware for priv
 
 ZKNOX remains committed to pushing the boundaries of cryptographic security, efficiency, and usability. Stay tuned for further updates as we execute this ambitious roadmap.
 
+
+## Reach us
+
+🔐 Practical security on the whole chain.
+
+[Github](https://github.com/zknoxhq) | [Website](https://www.zknox.com) | [Twitter](https://x.com/zknoxhq) | [Blog](https://zknox.eth.limo) | [Contact Info](mailto:gm@zknox.com)
+
+<small>Found typo, or want to improve the note ? Our blog is open to PRs.</small>

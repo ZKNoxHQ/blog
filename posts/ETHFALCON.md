@@ -9,31 +9,29 @@
 <small>(Hatching Ethereum FALCON)</small>
 
 
-## Introduction
-
 In a previous note, we discussed the stakes of a post-quantum Ethereum future. This entry highlights ZKNOX's efforts over the past weeks to implement post-quantum signature schemes: FALCON and DILITHIUM.
 
 ## Introduction
 
-Among lattice-based signatures, DILITHIUM and FALCON have been selected by NIST as suitable replacements for ECC. While FALCON is the fastest and most compact, its signer complexity is significantly higher. This makes it the preferred choice for on-chain applications, but other factors led us to implement DILITHIUM as well. Notably, DILITHIUM’s signing algorithm is hardware-friendly and is expected to see secure element implementations in the near future.
+Among lattice-based signatures, DILITHIUM and FALCON have been selected by NIST as suitable replacements for a digital signature algorithm. FALCON is faster and more compact than DILITHIUM, and thus preferred for on-chain applications. However, the signing algorithm of FALCON is more complicated from an implementation point of view, while DILITHIUM signing algorithm is hardware-friendly and is expected to see secure element implementations in a near future. All these factors led us to implement DILITHIUM as well.
 
 ## EVM-Friendly Versions
 
 ### Profiling
 
-Before full implementation, our team performed an initial assessment of the critical components of both algorithms. A previous post outlined the core operation—polynomial multiplication—and its optimization using the Number Theoretic Transform (NTT). ZKNOX successfully reduced a prior Solidity NTT implementation from 20M to 1.5M gas. This optimization made hash-to-field computation the dominant cost.
+Before a full implementation, our team performed an initial assessment of the critical components of both algorithms. A previous post outlined the core operation—polynomial multiplication—and its optimization using the Number Theoretic Transform (NTT). ZKNOX successfully reduced a prior Solidity NTT implementation from 20M to 1.5M gas. Using an optimized NTT, the remaining cost of the verification is a hash computation.
 
 FALCON requires SHAKE as its hash function, but since SHAKE is not natively supported by the EVM, it must be emulated. Even an optimized Yul implementation of SHAKE’s core permutation requires around 1M gas, resulting in a total of 10M gas for a full FALCON signature. To address this, we propose security-equivalent but more gas-efficient alternatives: **ETHFALCON** and **ETHDILITHIUM**.
 
 ### PRNG
 
-In cryptography, a hash function with a configurable output length is called an XOF (Extendable Output Function). The FALCON specification uses SHAKE as an XOF to generate valid polynomials without bias or collisions. However, SHAKE is not available as an EVM opcode [(see list)](https://www.evm.codes/), making its implementation costly (>4M gas per nonce-to-polynomial conversion). Some proposals replaced SHAKE with Keccak in unconventional ways, deriving output from internal state updates. After discussions with Zhenfei, one of FALCON’s authors, we decided to replace this approach with a standardized counter-mode generation method.
+In cryptography, a hash function with a configurable output length is called an XOF (Extendable Output Function). The FALCON specification uses SHAKE as an XOF to generate valid polynomials without bias nor collisions. However, SHAKE is not available as an EVM opcode [(see list)](https://www.evm.codes/), making its implementation costly (>4M gas per nonce-to-polynomial conversion). Some proposals replaced SHAKE with Keccak in unconventional ways, deriving output from internal state updates. After discussions with Zhenfei Zhang, one of FALCON’s authors, we decided to replace this approach with a standardized counter-mode generation method.
 
 ### Encodings
 
-FALCON’s raw signature undergoes a **compression function** that reduces its size by 30%. While this is computationally negligible in conventional environments, Solidity’s costly bitwise operations make compression inefficient on-chain. As a result, **Tetration** opted to use raw signatures as input.
+FALCON’s raw signature undergoes a **compression function** that reduces its size by 30%. While this is computationally negligible in conventional environments, this bitwise operations become cumbersome in Solidity, making the compression inefficient on-chain. As a result, **Tetration** opted to use raw signatures as input.
 
-In standard FALCON, signature encoding is unique, enforced by encoding coefficient signs. However, Tetration’s approach reintroduced **signature malleability**, allowing an attacker to replace a valid signature with another equivalent one—akin to the ECDSA vulnerability behind the Mt. Gox disaster. To mitigate this, ZKNOX proposed enforcing a fixed sign for the first coefficient, ensuring a unique encoding.
+In standard FALCON, signature encoding is unique, enforced by encoding coefficient signs. However, Tetration’s approach reintroduced **signature malleability**, allowing an attacker to replace a valid signature with another, (as with the ECDSA vulnerability behind the Mt. Gox disaster). To mitigate this, ZKNOX proposed enforcing a fixed sign for the first coefficient, ensuring a unique encoding.
 
 ### Recovery Version
 
@@ -55,16 +53,16 @@ One of Ethereum’s long-term visions is a **zero-knowledge (ZK) endgame**. ZK c
 
 Note: 
 
-- the inflated ETHFALCON key size comes from a precomputation of Decompress+NTT form of the public key.
-
-- the large key size of ETHDILITHIUM comes from a precomputation of the expand+NTT form of the public key.
+- The public key and the signature in ETHFALCON are decompressed in order to reduce the verification cost. This increases the size of public key and signature, compared with FALCON.
+- The large size of ETHDILITHIUM public key and signature comes from a precomputation of the public key and signature expanding and a NTT representation of one short element.
 
 
 ## Results
 
 ### Benchmarks
 
-The table below summarizes implementation results. While ETHFALCON is mature, WIP algorithms still have significant room for gas cost optimization.
+The table below summarizes implementation results. While ETHFALCON has been optimized, there is room for improvements in terms of gas saving.
+
 
 | Function                   | Description               | Gas Cost | Test Status |
 |----------------------------|---------------------------|----------|-------------|

@@ -101,3 +101,12 @@ DILITHIUM is significantly **less efficient** than FALCON on-chain, with **4× h
 ## Conclusion
 
 Thanks to ZKNOX’s work, **on-chain post-quantum verification is now feasible** for experimentation. While gas costs are acceptable for L2s, they remain prohibitively high for most L1 use cases—except for verifying high-value transactions. The team continue to work on the ZK versions, and will start embedded implementation.
+
+
+## Reach us
+
+🔐 Practical security on the whole chain.
+
+[Github](https://github.com/zknoxhq) | [Website](https://www.zknox.com) | [Twitter](https://x.com/zknoxhq) | [Blog](https://zknox.eth.limo) | [Contact Info](mailto:gm@zknox.com)
+
+<small>Found typo, or want to improve the note ? Our blog is open to PRs.</small>

@@ -1,6 +1,6 @@
 [category]: <> (General)
 [date]: <> (2025/02/24)
-[title]: <> (EIP-7885: the Case for NTT as an Ethereum Precompile for PQ Cryptography)
+[title]: <> (Practical results on Lattice onchain verfiers)
 
 
 
@@ -78,3 +78,5 @@ We believe an **NTT precompile** is the next logical step towards **PQ crypto-ag
 🔐 Practical security on the whole chain.
 
 [Github](https://github.com/zknoxhq) | [Website](https://www.zknox.com) | [Twitter](https://x.com/zknoxhq) | [Blog](https://zknox.eth.limo) | [Contact Info](mailto:gm@zknox.com)
+
+<small>Found typo, or want to improve the note ? Our blog is open to PRs.</small>

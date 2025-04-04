@@ -122,7 +122,7 @@ The contract address refers to the contract implementing FALCON in Solidity. Thi
 ```
 0x0000000000000000000000000000000000000000000000000000000000000001
 ```
-Congratulation, you just verified your first Post quantum signature on chain.
+Congratulation, you just verified your first Post quantum signature on chain. So much happyness deserves starring the repo to support our Open source work.
 
 ## Conclusion
 

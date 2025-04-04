@@ -82,8 +82,15 @@ with a cost of $\text{MSM}(4, 64)$ in the case of Bandersnatch. This bound is sl
 If circuits are used for **validity** and not privacy, then it is possible to use MSM. When applying the previous technique for multi-scalar multiplications, it is possible to reduce the cost of a $2$-MSM (and more generally a $n$-MSM). However, the gain is not significant in R1CS due to lookups cost for native curves. It has a potential outcome for non native, such as P256 as used by ZKMAIL, ZKWebAuthn. 
 
 ##### Proof of concept implementation
-We provide in [this repository](https://github.com/ZKNoxHQ/PyBandersnatch) a proof of concept of these algorithms in the context of Bandersnatch. In particular, [this file](https://github.com/ZKNoxHQ/PyBandersnatch/blob/main/example/glv_fakeglv.py) implements the decomposition using the four-dimensional lattice and then the verification of $[k]P=Q$ using a 4-MSM with scalars of 64 bits.
-
+We provide in [this repository](https://github.com/ZKNoxHQ/PyBandersnatch) a proof of concept of these algorithms in the context of Bandersnatch. In particular, [this file](https://github.com/ZKNoxHQ/PyBandersnatch/blob/main/example/glv_fakeglv.py) implements the decomposition using the four-dimensional lattice and then the verification of $[k]P=Q$ using a 4-MSM with scalars of 64 bits. Although this technique is useful in-circuit, we provide here an proof of concept to illustrate the efficiency gain. In particular, we provide an example of lattice decomposition:
+```python
+k = 8809196524735054409598625807987834789941239467291111440141961710399690321154 (253 bits)
+u1 = -4721629758273561887 (64 bits)
+u2 = 4445070398100683295 (62 bits)
+v1 = -968749169646434063 (61 bits)
+v2 = 2866665739561707568 (62 bits)
+```
+A benchmark is also provided for demonstration (although the implementation is not optimized), achieving around 40% improvement for Bandersnatch. We are now looking for an in-circuit implementation, together with Youssef El Housni.
 
 ## Use cases
 

@@ -7,7 +7,7 @@
 ## Introduction
 Ethereum's update PECTRA comes in the next weeks as an important update bringing evolutivity and security improvements. Among those, the integration of [BLS12-381](https://eips.ethereum.org/EIPS/eip-2537) in clients opens up perspectives for elliptic curves primitives (such as multi/threshold signatures) with zero-knowledge applications. A construction for private payments was designed by [Railgun](https://www.railgun.org/) using these primitives.
 
-In this blogpost, we present how to optimize  elliptic curve operations in the context of PECTRA update, with a focus on [Bandersnatch](https://eprint.iacr.org/2021/1152). In particular, a technique mixing FakeGLV and GLV over Bandersnatch is provided, leading to the most efficient in-circuit verification algorithm over BLS12-381 to date. More general tricks for generic curves (ZKMail, ZKWebAuthn) are also discussed.
+This blogpost describes how to optimize  elliptic curve operations in the context of PECTRA update, with a focus on [Bandersnatch](https://eprint.iacr.org/2021/1152). In particular, a technique mixing FakeGLV and GLV over Bandersnatch is provided, leading to the most efficient in-circuit verification algorithm over BLS12-381 to date. More general tricks for generic curves (ZKMail, ZKWebAuthn) are also discussed.
 
 ## Pectra
 
@@ -17,20 +17,20 @@ BN254 is an elliptic curve that has been widely used in zero-knowledge (ZK) cryp
 
 ##### Cryptographic primitive _above_ BLS12-381
 
-In the context of zero-knowledge proofs, it is sometimes required to compute elliptic curve arithmetic that will be, later on, verified in-circuit using BLS12-381. It is common to choose an elliptic curve designed to make ZK proofs efficient, called _embedded curves_. The curve is selected so that the verification algorithm involves native arithmetic for the ZK proof circuit. For BLS12-381, the ZK circuit is defined modulo a prime $r$ (which is BLS12-381 _scalar field order_). In this context, an embedded curve is defined over $\mathbb F_r$. While in-circuit verification is made efficient by this choice of base field, signature generation must also be fast in specific use-cases. Two curves have been designed for this purpose: [Jubjub](https://bitzecbzc.github.io/technology/jubjub/index.html) and [Bandersnatch](https://ethresear.ch/t/introducing-bandersnatch-a-fast-elliptic-curve-built-over-the-bls12-381-scalar-field). The latter has been designed so that scalar multiplications are more efficient. In the next section, we dig into the details of elliptic curve scalar multiplications in order to understand the benefits of Bandersnatch.
+In the context of zero-knowledge proofs, it is sometimes required to compute elliptic curve arithmetic that will be, later on, verified in-circuit using BLS12-381. It is common to choose an elliptic curve designed to make ZK proofs efficient, called _embedded curves_. The curve is selected so that the verification algorithm involves native arithmetic for the ZK proof circuit. For BLS12-381, the ZK circuit is defined modulo a prime $r$ (which is BLS12-381 _scalar field order_). In this context, an embedded curve is defined over $\mathbb F_r$. While in-circuit verification is made efficient by this choice of base field, signature generation must also be fast in specific use-cases. Two curves have been designed for this purpose: [Jubjub](https://bitzecbzc.github.io/technology/jubjub/index.html) and [Bandersnatch](https://ethresear.ch/t/introducing-bandersnatch-a-fast-elliptic-curve-built-over-the-bls12-381-scalar-field). The latter has been designed so that scalar multiplications are more efficient. Next section dig into the details of elliptic curve scalar multiplications in order to understand the benefits of Bandersnatch.
 
 ## Elliptic curve arithmetic
 
 Elliptic curves are used in cryptography to construct secure key exchange protocols and digital signatures, leveraging their algebraic structure to provide strong security with relatively small key sizes.
 
 ##### Scalar multiplication (SM)
-The critical algorithm used in cryptography based on elliptic curves (ECC) is the _scalar multiplication_. Given a scalar $k$ (usually of 256 bits), and a point $P$ of the curve, the point $[k]P$ is computed using the group law defined on the curve. This computation depends on the model used for the curve, but the cost is about $2\log_2(k)$ point additions. We do not go into the details of this cost in order to keep things as simple as possible.
+The critical algorithm used in cryptography based on elliptic curves (ECC) is the _scalar multiplication_. Given a scalar $k$ (usually of 256 bits), and a point $P$ of the curve, the point $[k]P$ is computed using the group law defined on the curve. This computation depends on the model used for the curve, but the cost is about $2\log_2(k)$ point additions. Cost details are skipped in order to keep the description as simple as possible.
 
 ##### Multi-scalar multiplication (MSM)
-In signature verification, it is common to compute multi-scalar multiplications (MSM) $[k]P + [\ell]Q$ for scalars $k,\ell < r$. After precomputing $P+Q$, it is possible to compute $[k]P+[\ell]Q$ in only $2\log_2(r)$ point additions, by reading simultaneously the bits of $k$ and $\ell$. More generally, a $n$-MSM $\sum_{i=1}^n [k_i]P_i$ can be computed in $2^n - n - 1$ precomputation additions, and $2\log_2(r)$ additions for the simultaneous computation. From now, we denote $\text{MSM}(n,N)$ the cost in elliptic curve additions of a multi-scalar multiplication of $n$ points with scalar of $N$ bits: $\text{MSM}(n,N) \approx 2^n -n -1 + 2N$. Note that in practice, additional operations are required and not taken into account in this blog post.
+In signature verification, it is common to compute multi-scalar multiplications (MSM) $[k]P + [\ell]Q$ for scalars $k,\ell < r$. After precomputing $P+Q$, it is possible to compute $[k]P+[\ell]Q$ in only $2\log_2(r)$ point additions, by reading simultaneously the bits of $k$ and $\ell$. More generally, a $n$-MSM $\sum_{i=1}^n [k_i]P_i$ can be computed in $2^n - n - 1$ precomputation additions, and $2\log_2(r)$ additions for the simultaneous computation. From now, $\text{MSM}(n,N)$ denotes the cost in elliptic curve additions of a multi-scalar multiplication of $n$ points with scalar of $N$ bits: $\text{MSM}(n,N) \approx 2^n -n -1 + 2N$. Note that in practice, additional operations are required and not taken into account in this blog post.
 
 ##### Fixed point SM
-When $P$ is fixed, we can use the above technique in order to speed-up a SM: precomputing $P_i = [2^{iN/n}]P$ and $k = \sum_{i=1}^n k_i 2^{iN/n}$, we can decompose $[k]P = \sum_{i=1}^n [k_i]P_i$. This technique works in practice, but the precomputation part becomes expensive as long as $n$ grows, as illustrated in the following table (where the costs are estimated in point additions, with the simplified formula above):
+When $P$ is fixed,  above technique can be used in order to speed-up a SM: precomputing $P_i = [2^{iN/n}]P$ and $k = \sum_{i=1}^n k_i 2^{iN/n}$, we can decompose $[k]P = \sum_{i=1}^n [k_i]P_i$. This technique works in practice, but the precomputation part becomes expensive as long as $n$ grows, as illustrated in the following table (where the costs are estimated in point additions, with the simplified formula above):
 
 |MSM|(1,256)|(2,128)|(3,86)|(4,64)|(5,52)|(6,43)|(7,37)|(8,32)|(9,29)|
 |-|-|-|-|-|-|-|-|-|-|
@@ -44,11 +44,11 @@ In the case of signature verification for an account, where the public key is th
 
 Zero-knowledge proofs are widespread cryptographic tools in blockchain, and one expensive computation is the scalar multiplication. In this context, the public key is kept as a secret input. Hence, it is not possible to use the fixed point MSM algorithm.
 
-In ZK circuits, we want to prove that $[k]P = Q$ and $Q$ is a hinted point (provided as additional helper input).FakeGLV, was recently introduced by [[YEH]](https://ethresear.ch/t/fake-glv-you-dont-need-an-efficient-endomorphism-to-implement-glv-like-scalar-multiplication-in-snark-circuits/20394) using a fractional decomposition of $k = u/v \mod r$, found by reducing the lattice defined by the rows of 
+In ZK circuits,the assumption to prove is that $[k]P = Q$,  where $Q$ is a hinted point (provided as additional helper input).FakeGLV, was recently introduced by [[YEH]](https://ethresear.ch/t/fake-glv-you-dont-need-an-efficient-endomorphism-to-implement-glv-like-scalar-multiplication-in-snark-circuits/20394) using a fractional decomposition of $k = u/v \mod r$, found by reducing the lattice defined by the rows of 
 $$\begin{pmatrix}
 r & 0\\k & 1
 \end{pmatrix}$$
-Indeed, a vector $(x,y)$ of this lattice satisfies $x = ky \mod r$. Using lattice reduction, we expect to find a small vector of norm around $1.16\sqrt{r}$. In consequence, it is possible to find $u,v$ of $128$ bits (for our targeted curve Bandersnatch) and to compute $[k]P = Q \iff [u]P - [v]Q = 0$. In this context, we can verify the scalar multiplication in-circuit in $\text{MSM}(2,128)$. For other curves such as seckp256k1, the size of the scalar might increase to 129 bits, making this decomposition slightly more complexe.
+Indeed, a vector $(x,y)$ of this lattice satisfies $x = ky \mod r$. Using lattice reduction, it is expected to find a small vector of norm around $1.16\sqrt{r}$. In consequence, it is possible to find $u,v$ of $128$ bits (for our targeted curve Bandersnatch) and to compute $[k]P = Q \iff [u]P - [v]Q = 0$. In this context, the scalar multiplication can be verified in-circuit in $\text{MSM}(2,128)$. 
 
 
 **Bandersnatch combines this decomposition together with the GLV optimization.**
@@ -58,7 +58,7 @@ Indeed, a vector $(x,y)$ of this lattice satisfies $x = ky \mod r$. Using lattic
 Bandersnatch is an embedded curve for BLS12-381, such as Jubjub, which was designed so that it has an efficiently computable endomorphism. This structure enables faster scalar multiplications.
 
 ##### [GLV](https://www.iacr.org/archive/crypto2001/21390189.pdf) optimization
-Small discriminant curves have a specfic structure that speeds up the scalar multiplication: there exists an (efficiently computable but non trivial) endomorphism $\phi$ that has an eigenvalue $\lambda$ on the points of order $r$ defined over $\mathbb F_p$. It results that we can decompose $k = k_1 + \lambda k_2 \mod r$ with $\log_2(k_i) = 128$, and the cost of a scalar multiplication is thus obtained using $\text{MSM}(2,128)$: $[k]P = k_1P + k_2\phi(P)$. This techniques was originally developed in 2001 and is for example implemented in Bitcoin's signatures.
+Small discriminant curves have a specfic structure that speeds up the scalar multiplication: there exists an (efficiently computable but non trivial) endomorphism $\phi$ that has an eigenvalue $\lambda$ on the points of order $r$ defined over $\mathbb F_p$. It results that k can decomposed as $k = k_1 + \lambda k_2 \mod r$ with $\log_2(k_i) = 128$, and the cost of a scalar multiplication is thus obtained using $\text{MSM}(2,128)$: $[k]P = k_1P + k_2\phi(P)$. This techniques was originally developed in 2001 and is for example implemented in Bitcoin's signatures.
 
 ##### GLV hinted verification
 
@@ -73,7 +73,7 @@ r & 0 & 0 & 0\\
 k & 0 & 1 & 0
 \end{pmatrix}
 $$
-In this case, using lattice reduction, we expect to find a vector with coefficients bounded by $1.22\sqrt[4]{r}$. Finally, a scalar multiplication is verified using
+In this case, using lattice reduction, it is expected to find a vector with coefficients bounded by $1.22\sqrt[4]{r}$. Finally, a scalar multiplication is verified using
 $$[k]P = Q\iff [u_1]P + [u_2]\phi(P) - [v_1]Q - [v_2]\phi(Q) = 0$$
 with a cost of $\text{MSM}(4, 64)$ in the case of Bandersnatch. This bound is slightly bigger for other $r$ (for instance, $65$ bits for seckp256k1).
 
@@ -82,7 +82,7 @@ with a cost of $\text{MSM}(4, 64)$ in the case of Bandersnatch. This bound is sl
 If circuits are used for **validity** and not privacy, then it is possible to use MSM. When applying the previous technique for multi-scalar multiplications, it is possible to reduce the cost of a $2$-MSM (and more generally a $n$-MSM). However, the gain is not significant in R1CS due to lookups cost for native curves. It has a potential outcome for non native, such as P256 as used by ZKMAIL, ZKWebAuthn. 
 
 ##### Proof of concept implementation
-We provide in [this repository](https://github.com/ZKNoxHQ/PyBandersnatch/blog/main/example/README.md) a proof of concept of these algorithms in the context of Bandersnatch. In particular, [this file](https://github.com/ZKNoxHQ/PyBandersnatch/blob/main/example/glv_fakeglv.py) implements the decomposition using the four-dimensional lattice and then the verification of $[k]P=Q$ using a 4-MSM with scalars of 64 bits. Although this technique is useful in-circuit, we provide here an proof of concept to illustrate the efficiency gain. In particular, we provide an example of lattice decomposition:
+ [ZKNOX repository](https://github.com/ZKNoxHQ/PyBandersnatch/blog/main/example/README.md) provides a proof of concept of these algorithms in the context of Bandersnatch. In particular, [this file](https://github.com/ZKNoxHQ/PyBandersnatch/blob/main/example/glv_fakeglv.py) implements the decomposition using the four-dimensional lattice and then the verification of $[k]P=Q$ using a 4-MSM with scalars of 64 bits. Although this technique is useful in-circuit, we provide here an proof of concept to illustrate the efficiency gain. In particular, we provide an example of lattice decomposition:
 ```python
 k = 8809196524735054409598625807987834789941239467291111440141961710399690321154 (253 bits)
 u1 = -4721629758273561887 (64 bits)

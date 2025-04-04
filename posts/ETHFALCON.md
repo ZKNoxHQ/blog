@@ -71,8 +71,8 @@ The table below summarizes implementation results. While ETHFALCON has been opti
 |----------------------------|---------------------------|----------|-------------|
 | ZKNOX_ethfalcon.sol        | EVM-friendly FALCON       | 1.9M     | ✅           |
 | ZKNOX_ethdilithium.sol     | EVM-friendly DILITHIUM    | 8.8M     | ✅           |
-| ZKNOX_falcon.sol           | NIST-compliant FALCON     | 12M      | WIP         |
-| ZKNOX_dilithium.sol        | NIST-compliant DILITHIUM  | 19M      | WIP         |
+| ZKNOX_falcon.sol           | NIST-compliant FALCON     | 7M      | ✅         |
+| ZKNOX_dilithium.sol        | NIST-compliant DILITHIUM  | 13M      | ✅         |
 | ZKNOX_zkdilithium.sol      | ZK-friendly DILITHIUM     | N/A      | WIP         |
 | ZKNOX_falzkon.sol          | ZK-friendly FALCON        | N/A      | WIP         |
 
@@ -98,6 +98,31 @@ DILITHIUM verification is _slower_ than FALCON on-chain, with _4× larger footpr
 | **Signer Simplicity**  | ❌         | ✅            |
 | **ZK Adaptability**    | ❌         | ✅            |
 | **MPC Friendliness**   | ❌         | ✅            |
+
+
+## The 2 minutes testing
+
+Generate keys, sign and verify onchain with FALCON in less than 2 minutes.
+
+- Navigate to [ZKNOX FALCON repo](https://github.com/ZKNoxHQ/ETHFALCON)
+
+- type make install, then make test
+
+- Use the following commands to generate, sign a message and verify it with the onchain contract
+
+```bash
+# generate public and private keys using 'falcon' or 'ethfalcon'
+./sign_cli.py genkeys --version='falcon'
+# generate a signature for the message "This is a demo"
+./sign_cli.py sign --privkey='private_key.pem' --data=546869732069732061207472616e73616374696f6e
+# verify onchain the  signature using address of contract specified below (ensure --version is compliant with address)
+./sign_cli.py verifyonchain --pubkey='public_key.pem' --data=546869732069732061207472616e73616374696f6e --signature='sig' --contractaddress='0x5dc45800383d30c2c4c8f7e948090b38b22025f9' --rpc='https://ethereum-holesky-rpc.publicnode.com'
+```
+The contract address refers to the contract implementing FALCON in Solidity. This should output:
+```
+0x0000000000000000000000000000000000000000000000000000000000000001
+```
+Congratulation, you just verified your first Post quantum signature on chain.
 
 ## Conclusion
 

@@ -5,10 +5,9 @@
 
 
 ## Introduction
-Ethereum's update PECTRA comes in the next weeks as an important update bringing evolutivity and security improvments. Among those, the integration of [BLS12-381](https://eips.ethereum.org/EIPS/eip-2537) in clients opens up perspectives for elliptic curves primitives (such as multi/threshold signatures) with zero-knowledge applications. 
-Among those are private payments (RAILGUN).
+Ethereum's update PECTRA comes in the next weeks as an important update bringing evolutivity and security improvements. Among those, the integration of [BLS12-381](https://eips.ethereum.org/EIPS/eip-2537) in clients opens up perspectives for elliptic curves primitives (such as multi/threshold signatures) with zero-knowledge applications. A construction for private payments was designed by [Railgun](https://www.railgun.org/) using these primitives.
 
-In this blogpost, we present how to optimize  elliptic curve operations in the context of PECTRA update, with a focus on [BanderSnatch](https://eprint.iacr.org/2021/1152). In particular, the first known implementation mixing FakeGLV and GLV over Bandersnatch is provided, leading to the most efficient in-circuit verification algorithm over BLS12-381 to date. More general tricks for generic curves (ZKMAIL, ZKWebAuthn) are also discussed.
+In this blogpost, we present how to optimize  elliptic curve operations in the context of PECTRA update, with a focus on [Bandersnatch](https://eprint.iacr.org/2021/1152). In particular, a technique mixing FakeGLV and GLV over Bandersnatch is provided, leading to the most efficient in-circuit verification algorithm over BLS12-381 to date. More general tricks for generic curves (ZKMail, ZKWebAuthn) are also discussed.
 
 ## Pectra
 
@@ -39,48 +38,72 @@ When $P$ is fixed, we can use the above technique in order to speed-up a SM: pre
 |Computation | 512 | 256 | 170 | 128 | 102 | 85 | 73 | 64 | 56 |
 |**Total** | **512** | **257** | **174** | **139** | **128** | **142** | **193** | **311** | **558** |
 
-In the case of signature verification for an account, where the public key is the fixed point, this speed up can be used. It is implemented in efficient libraries, such as BOLOS, FCL and OpenZeppelin P256 libraries (leading to their lesser gas cost compared to Daimo), and SCL generic one. This algorithm is also the scope of [RIP7696](https://github.com/ethereum/RIPs/blob/master/RIPS/rip-7696.md). However in the case of ZK, where public key is kept as a secret input, it is not possible to use this algorithm. 
+In the case of signature verification for an account, where the public key is the fixed point, this speed up can be used. It is implemented in efficient libraries, such as BOLOS, FCL and OpenZeppelin P256 libraries (leading to their reduced gas cost compared to Daimo), and SCL generic one. This algorithm is also the scope of [RIP7696](https://github.com/ethereum/RIPs/blob/master/RIPS/rip-7696.md). Unfortunately, in the context of zero-knowledge circuits, this technique is not possible.
 
-**BanderSnatch solves this using a combination of GLV and fakeGLV.**
+##### Fake-GLV: a hinted verification in ZK.
+
+Zero-knowledge proofs are widespread cryptographic tools in blockchain, and one expensive computation is the scalar multiplication. In this context, the public key is kept as a secret input. Hence, it is not possible to use the fixed point MSM algorithm.
+
+In ZK circuits, we want to prove that $[k]P = Q$ and $Q$ is a hinted point (provided as additional helper input).FakeGLV, was recently introduced by [[YEH]](https://ethresear.ch/t/fake-glv-you-dont-need-an-efficient-endomorphism-to-implement-glv-like-scalar-multiplication-in-snark-circuits/20394) using a fractional decomposition of $k = u/v \mod r$, found by reducing the lattice defined by the rows of 
+$$\begin{pmatrix}
+r & 0\\k & 1
+\end{pmatrix}$$
+Indeed, a vector $(x,y)$ of this lattice satisfies $x = ky \mod r$. Using lattice reduction, we expect to find a small vector of norm around $1.16\sqrt{r}$. In consequence, it is possible to find $u,v$ of $128$ bits (for our targeted curve Bandersnatch) and to compute $[k]P = Q \iff [u]P - [v]Q = 0$. In this context, we can verify the scalar multiplication in-circuit in $\text{MSM}(2,128)$. For other curves such as seckp256k1, the size of the scalar might increase to 129 bits, making this decomposition slightly more complexe.
+
+
+**Bandersnatch combines this decomposition together with the GLV optimization.**
 
 ## Bandersnatch
 
-Bandersnatch is an embedded curve, such as BabyJujub, which presents a GLV endomorphism. Having a GLV endomorphism allows faster SM.
+Bandersnatch is an embedded curve for BLS12-381, such as Jubjub, which was designed so that it has an efficiently computable endomorphism. This structure enables faster scalar multiplications.
 
 ##### [GLV](https://www.iacr.org/archive/crypto2001/21390189.pdf) optimization
-Small discriminant curves have a specfic structure that speeds up the scalar multiplication: there exists an (efficiently computable but non trivial) endomorphism $\phi$ that has an eigenvalue $\lambda$ on the points of order $r$. It results that we can decompose $k = k_1 + \lambda k_2 \mod r$ with $\log_2(k_i) = 128$, and the cost of a scalar multiplication is thus obtain $\text{MSM}(2,128)$.
+Small discriminant curves have a specfic structure that speeds up the scalar multiplication: there exists an (efficiently computable but non trivial) endomorphism $\phi$ that has an eigenvalue $\lambda$ on the points of order $r$ defined over $\mathbb F_p$. It results that we can decompose $k = k_1 + \lambda k_2 \mod r$ with $\log_2(k_i) = 128$, and the cost of a scalar multiplication is thus obtained using $\text{MSM}(2,128)$: $[k]P = k_1P + k_2\phi(P)$. This techniques was originally developed in 2001 and is for example implemented in Bitcoin's signatures.
 
-##### Fake-GLV: a hinted verification for ZK uses.
+##### GLV hinted verification
 
-Zero-knowledge proofs are widespread cryptographic tools in blockchain, and one expensive computation is the scalar multiplication. In this context, we want to prove that $[k]P = Q$ and $Q$ is a hinted point (provided as additional helper input).FakeGLV, was recently introduced by [[YEH]](https://ethresear.ch/t/fake-glv-you-dont-need-an-efficient-endomorphism-to-implement-glv-like-scalar-multiplication-in-snark-circuits/20394) using a fractional decomposition of $k = u/v \mod r$. It is possible to find $u,v$ of size almost $128$ bits and get the same speed-up as for GLV: $[k]P = Q \iff [u]P - [v]Q = 0$. In this context, we can verifiy the scalar multiplication in-circuit in $\text{MSM}(2,128^+)$. This technique can be combined with GLV (as mentioned by Liam Eagen [here](https://ethresear.ch/t/fake-glv-you-dont-need-an-efficient-endomorphism-to-implement-glv-like-scalar-multiplication-in-snark-circuits/20394/2)) in order to compute the verification in $\text{MSM}(4, 64^+)$. The bound on the obtained scalars can be estimated using lattice reduction.
+The technique presented in [[YEH]](https://ethresear.ch/t/fake-glv-you-dont-need-an-efficient-endomorphism-to-implement-glv-like-scalar-multiplication-in-snark-circuits/20394) can be combined with the GLV optimization, as mentioned byn Liam Eagen [here](https://ethresear.ch/t/fake-glv-you-dont-need-an-efficient-endomorphism-to-implement-glv-like-scalar-multiplication-in-snark-circuits/20394/2). The scalar $k$ can thus be decomposed as 
+$$k = \frac{u_1+λu_2}{v_1+λv_2}\mod r$$
+using a reduction of the lattice defined by the rows of 
+$$
+\begin{pmatrix}
+r & 0 & 0 & 0\\
+-λ & 1 & 0 & 0 \\
+0 & 0 & -λ & 1\\
+k & 0 & 1 & 0
+\end{pmatrix}
+$$
+In this case, using lattice reduction, we expect to find a vector with coefficients bounded by $1.22\sqrt[4]{r}$. Finally, a scalar multiplication is verified using
+$$[k]P = Q\iff [u_1]P + [u_2]\phi(P) - [v_1]Q - [v_2]\phi(Q) = 0$$
+with a cost of $\text{MSM}(4, 64)$ in the case of Bandersnatch. This bound is slightly bigger for other $r$ (for instance, $65$ bits for seckp256k1).
 
-##### In-circuit MSM
+##### higher dimension in-circuit MSM
 
-If ZK is used for **validity** and not privacy, then it is possible to use MSM.
-When applying the previous technique for multi-scalar multiplications, it is possible to reduce the cost of a $2$-MSM (and more generally a $n$-MSM). However, the gain is not significant in R1CS due to lookups cost for native curves. It has a potential outcome for non native, such as P256 as used by ZKMAIL, ZKWebAuthn. 
+If circuits are used for **validity** and not privacy, then it is possible to use MSM. When applying the previous technique for multi-scalar multiplications, it is possible to reduce the cost of a $2$-MSM (and more generally a $n$-MSM). However, the gain is not significant in R1CS due to lookups cost for native curves. It has a potential outcome for non native, such as P256 as used by ZKMAIL, ZKWebAuthn. 
+
+##### Proof of concept implementation
+We provide in [this repository](https://github.com/ZKNoxHQ/PyBandersnatch) a proof of concept of these algorithms in the context of Bandersnatch. In particular, [this file](https://github.com/ZKNoxHQ/PyBandersnatch/blob/main/example/glv_fakeglv.py) implements the decomposition using the four-dimensional lattice and then the verification of $[k]P=Q$ using a 4-MSM with scalars of 64 bits.
 
 
 ## Use cases
 
-##### Private Wallets/Privacy Pools
+##### Private wallets, Privacy pools
 
 All cryptographic primitives that can be converted into zero-knowledge schemes should be implemented using Bandersnatch. [Railgun](https://www.railgun.org/) enables privacy in Ethereum using a ZK construction with BabyJubjub and the pairing-based curve BN254. This shall be updated to work with Bandernsatch and BLS12-381 in order to reach a state of the art  security level as well, without loss of efficiency.
 
 ##### ZKWebAuthn, ZKMail
 
-ZKMail and ZKWebAuthn are  systems that allow users to prove ownership of an email address (resp. Passkey credential) without revealing the actual email content, metadata, or even the email address itself (resp. credentials). During authentication, the server sends a challenge, signed by the user, but rather than the signature, a ZK-proof of the signature is send instead and verified onchain.
-
+ZKMail and ZKWebAuthn are  systems that allow users to prove ownership of an email address (resp. Passkey credential) without revealing the actual email content, metadata, or even the email address itself (resp. credentials). During authentication, the server sends a challenge, signed by the user, but instead of the signature, a ZK proof of the signature is sent and then verified onchain.
 
 
 ## Conclusion
 
-This note described several optimizations to improve both security and UX (reducing the prover computations, i.e the latency of the phone/labtop) for the most popular ZK applications. GLV is linked to Bandersnatch, but fakeGLV+2MSM principle can be applied (with lesser gain) to generic curves. The provided python code is a first step before developing the circuits for an integration into proving backends. When moving to BLS12, Bandersnatch outperform Jujub and is the optimal choice.
+This note described several optimizations to improve both security and UX (reducing the prover computations, i.e the latency of the phone/labtop) for the most popular ZK applications. While GLV remains restricted to small discriminant curves (such as Bandersatch), the FakeGLV + 2MSM technique can be applied (with a lower gain) to generic curves. The provided python code is a first step before developing the circuits for an integration into proving backends. When moving to BLS12-381, Bandersnatch outperforms Jubjub and is a better choice in terms of efficiency.
 
 
 #### Acknowledment
 
-The fakeGLV is an original idea from Youssef el Housni. The mixing of fake and true has been discussed in [ethresearch]((https://ethresear.ch/t/fake-glv-you-dont-need-an-efficient-endomorphism-to-implement-glv-like-scalar-multiplication-in-snark-circuits/20394)). 
-The developments into ZK backend are currently in progress, along with a full article with  from Consensys.  
+The FakeGLV technique is an original idea from Youssef El Housni. Combining it with GLV has been discussed in [ethresearch]((https://ethresear.ch/t/fake-glv-you-dont-need-an-efficient-endomorphism-to-implement-glv-like-scalar-multiplication-in-snark-circuits/20394)) by Liam Eagen. The developments into ZK backend are currently in progress with Consensys and the techniques are being formalized into a research paper.  
 
 
 #### Github

@@ -108,14 +108,9 @@ ZKMail and ZKWebAuthn are  systems that allow users to prove ownership of an ema
 This note described several optimizations to improve both security and UX (reducing the prover computations, i.e the latency of the phone/labtop) for the most popular ZK applications. While GLV remains restricted to small discriminant curves (such as Bandersatch), the FakeGLV + 2MSM technique can be applied (with a lower gain) to generic curves. The provided python code is a first step before developing the circuits for an integration into proving backends. When moving to BLS12-381, Bandersnatch outperforms Jubjub and is a better choice in terms of efficiency.
 
 
-#### Acknowledment
+##### Acknowledgments
 
 The FakeGLV technique is an original idea from Youssef El Housni. Combining it with GLV has been discussed in [ethresearch]((https://ethresear.ch/t/fake-glv-you-dont-need-an-efficient-endomorphism-to-implement-glv-like-scalar-multiplication-in-snark-circuits/20394)) by Liam Eagen. The developments into ZK backend are currently in progress with Consensys and the techniques are being formalized into a research paper.  
-
-
-#### Github
-
-Find python implementation of the discussed algorithm here:
 
 
 🚀 Let’s future-proof Ethereum together!

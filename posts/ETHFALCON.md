@@ -116,13 +116,13 @@ Generate keys, sign and verify onchain with FALCON in less than 2 minutes.
 # generate a signature for the message "This is a demo"
 ./sign_cli.py sign --privkey='private_key.pem' --data=546869732069732061207472616e73616374696f6e
 # verify onchain the  signature using address of contract specified below (ensure --version is compliant with address)
-./sign_cli.py verifyonchain --pubkey='public_key.pem' --data=546869732069732061207472616e73616374696f6e --signature='sig' --contractaddress='0x5dc45800383d30c2c4c8f7e948090b38b22025f9' --rpc='https://ethereum-holesky-rpc.publicnode.com'
+./sign_cli.py verifyonchain --pubkey='public_key.pem' --data=546869732069732061207472616e73616374696f6e --signature='sig' --contractaddress='0xD088Ede58BD1736477d66d114D842bDE279A41Fa' --rpc='https://sepolia.optimism.io'
 ```
 The contract address refers to the contract implementing FALCON in Solidity. This should output:
 ```
 0x0000000000000000000000000000000000000000000000000000000000000001
 ```
-Congratulation, you just verified your first Post quantum signature on chain. So much happyness deserves starring the repo to support our Open source work.
+Congratulation, you just verified your first Post quantum signature on chain. So much happiness deserves starring the repo to support our Open source work.
 
 ## Conclusion
 

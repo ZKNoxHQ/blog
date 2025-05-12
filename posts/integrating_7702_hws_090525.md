@@ -23,7 +23,7 @@ Note that at the moment EIP-7702 is only officially supported for Ledger devices
 
 EIP-7702 support is officially available for all Ledger devices (X, S+, Stax, Flex) but the Nano S. It could be easily backported if desired.
 
-The Ethereum application running on devices is available at https://github.com/LedgerHQ/app-ethereum
+The Ethereum application running on devices is available at [https://github.com/LedgerHQ/app-ethereum](https://github.com/LedgerHQ/app-ethereum)
 
 ### EIP-7702 authorization tuple signing flow
 
@@ -42,7 +42,7 @@ The device expects an unsigned Type 4 transaction containing an authorization li
 
 ### I/O documentation
 
-The parameters for the ```SIGN EIP-7702 AUTHORIZATION``` command are described in https://github.com/LedgerHQ/app-ethereum/blob/develop/doc/ethapp.adoc#sign-eip-7702-authorization
+The parameters for the ```SIGN EIP-7702 AUTHORIZATION``` command are described in [https://github.com/LedgerHQ/app-ethereum/blob/develop/doc/ethapp.adoc#sign-eip-7702-authorization](https://github.com/LedgerHQ/app-ethereum/blob/develop/doc/ethapp.adoc#sign-eip-7702-authorization)
 
 The ```AUTH_7702``` structure uses a DER (Distinguished Encoding Rules) TLV (Tag/Length/Value) encoding which can be summarized as follows for this use case : 
 
@@ -56,7 +56,7 @@ A DER TLV is encoded as the DER encoding of the tag, concatenated with the DER e
 
 You'll need to rebuild the application if you're testing an EIP-7702 delegate that isn't in the [whitelist](https://github.com/LedgerHQ/app-ethereum/blob/develop/src_features/signAuthorizationEIP7702/whitelist_7702.c) for the current version loaded by Ledger Live.
 
-The device application can be rebuilt and side loaded on any device following the instructions given on https://github.com/LedgerHQ/app-ethereum/blob/develop/README.md - it's recommended to use a Linux system and Docker from the CLI.
+The device application can be rebuilt and side loaded on any device following the instructions given on [https://github.com/LedgerHQ/app-ethereum/blob/develop/README.md](https://github.com/LedgerHQ/app-ethereum/blob/develop/README.md) - it's recommended to use a Linux system and Docker from the CLI.
 
 If you're not comfortable with running Docker in privileged mode, you can remove it, use the container to build the application then load it from your OS.
 
@@ -66,7 +66,7 @@ To test a new delegate address you can either add it to the [whitelist](https://
 
 EIP-7702 support will be ultimately integrated into Ledger new client architecture, the [Device Management Kit](https://github.com/LedgerHQ/device-sdk-ts) - it's recommended for all integrators to switch to this client to support all clear signing features.
 
-In the meantime for a faster integration you can use the former client, ```@ledgerhq/hw-app-eth``` (https://github.com/LedgerHQ/ledger-live/tree/develop/libs/ledgerjs/packages/hw-app-eth)
+In the meantime for a faster integration you can use the former client, [@ledgerhq/hw-app-eth](https://github.com/LedgerHQ/ledger-live/tree/develop/libs/ledgerjs/packages/hw-app-eth)
 
 The [client](https://github.com/LedgerHQ/ledger-live/blob/develop/libs/ledgerjs/packages/hw-app-eth/src/Eth.ts) will need to be modified to add support for the ```SIGN EIP-7702 AUTHORIZATION``` command.
 

@@ -9,11 +9,11 @@
 
 ## Introduction
 
-We've illustrated in a previous blog post [how Hardware Wallet vendors could use [EIP-7702](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-7702.md) quickly and efficiently](https://zknox.eth.limo/posts/2025/05/07/7702_for_hw_070525.html). We'll now take a different perspective and see how a wallet vendor could integrate a Hardware Wallet supporting EIP-7702 today. 
+We've illustrated in a previous [blog post](https://zknox.eth.limo/posts/2025/05/07/7702_for_hw_070525.html) _how Hardware Wallet vendors could use [EIP-7702](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-7702.md) quickly and efficiently_. We'll now take a different perspective and see how a wallet vendor could integrate a Hardware Wallet supporting EIP-7702 today. 
 
 Support scope and data flow is different from one vendor to another, but they'll be offering the same functionalities from a high level point of view : signing an EIP-7702 authorization tuple and a type 4 transaction. It's expected that delegate addresses will be filtered for security purposes.
 
-We'll be looking at 3 Hardware Wallet vendors : [Keystone](https://keyst.one/), [Ledger](https://www.ledger.com) and [Trezor](https://trezor.io)
+We'll be looking at 3 Hardware Wallet vendors : [Keystone](https://keyst.one/), [Ledger](https://www.ledger.com) and [Trezor](https://trezor.io).
 
 Note that at the moment EIP-7702 is only officially supported for Ledger devices. Data parameters and flow for other vendors may change as the Pull Requests evolve. 
 

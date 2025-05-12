@@ -23,11 +23,11 @@ Note that at the moment EIP-7702 is only officially supported for Ledger devices
 
 EIP-7702 support is officially available for all Ledger devices (X, S+, Stax, Flex) but the Nano S. It could be easily backported if desired.
 
-The Ethereum application running on devices is available at [https://github.com/LedgerHQ/app-ethereum](https://github.com/LedgerHQ/app-ethereum)
+The Ethereum application running on devices is available at [https://github.com/LedgerHQ/app-ethereum](https://github.com/LedgerHQ/app-ethereum).
 
 ### EIP-7702 authorization tuple signing flow
 
-The following parameters are provided when signing an EIP-7702 authorization tuple
+The following parameters are provided when signing an EIP-7702 authorization tuple :
 
 - BIP-32 path to the key signing the authorization tuple
 - Delegate address
@@ -42,7 +42,7 @@ The device expects an unsigned Type 4 transaction containing an authorization li
 
 ### I/O documentation
 
-The parameters for the ```SIGN EIP-7702 AUTHORIZATION``` command are described in [https://github.com/LedgerHQ/app-ethereum/blob/develop/doc/ethapp.adoc#sign-eip-7702-authorization](https://github.com/LedgerHQ/app-ethereum/blob/develop/doc/ethapp.adoc#sign-eip-7702-authorization)
+The parameters for the ```SIGN EIP-7702 AUTHORIZATION``` command are described in [https://github.com/LedgerHQ/app-ethereum/blob/develop/doc/ethapp.adoc#sign-eip-7702-authorization](https://github.com/LedgerHQ/app-ethereum/blob/develop/doc/ethapp.adoc#sign-eip-7702-authorization).
 
 The ```AUTH_7702``` structure uses a DER (Distinguished Encoding Rules) TLV (Tag/Length/Value) encoding which can be summarized as follows for this use case : 
 
@@ -66,7 +66,7 @@ To test a new delegate address you can either add it to the [whitelist](https://
 
 EIP-7702 support will be ultimately integrated into Ledger new client architecture, the [Device Management Kit](https://github.com/LedgerHQ/device-sdk-ts) - it's recommended for all integrators to switch to this client to support all clear signing features.
 
-In the meantime for a faster integration you can use the former client, [@ledgerhq/hw-app-eth](https://github.com/LedgerHQ/ledger-live/tree/develop/libs/ledgerjs/packages/hw-app-eth)
+In the meantime for a faster integration you can use the former client, [ledgerhq/hw-app-eth](https://github.com/LedgerHQ/ledger-live/tree/develop/libs/ledgerjs/packages/hw-app-eth).
 
 The [client](https://github.com/LedgerHQ/ledger-live/blob/develop/libs/ledgerjs/packages/hw-app-eth/src/Eth.ts) will need to be modified to add support for the ```SIGN EIP-7702 AUTHORIZATION``` command.
 
@@ -76,7 +76,7 @@ You can get some inspiration from this [sample Python script](https://github.com
 
 ### Overview
 
-EIP-7702 support is avaiable in [PR #1727 for the firmware](https://github.com/KeystoneHQ/keystone3-firmware/pull/1727) and [PR #112 for the SDK](https://github.com/KeystoneHQ/keystone-sdk-rust/pull/112)
+EIP-7702 support is avaiable in [PR #1727 for the firmware](https://github.com/KeystoneHQ/keystone3-firmware/pull/1727) and [PR #112 for the SDK](https://github.com/KeystoneHQ/keystone-sdk-rust/pull/112).
 
 ### EIP-7702 authorization tuple signing flow
 
@@ -95,21 +95,21 @@ You can reuse [the following code sample](https://github.com/KeystoneHQ/keystone
 - modify the master fingerprint in ```signKeyPath``` by the one of your mnemonic
 - set ```dataType``` to 5 in ```ethSignRequest``` 
 
-The response encoded as an ```EthSignature``` UR can be decoded with [the following code sample](https://github.com/KeystoneHQ/keystone-sdk-base/blob/master/packages/ur-registry-eth/__tests__/EthSignature.test.ts)
+The response encoded as an ```EthSignature``` UR can be decoded with [the following code sample](https://github.com/KeystoneHQ/keystone-sdk-base/blob/master/packages/ur-registry-eth/__tests__/EthSignature.test.ts).
 
 ### Building the device application
 
-There's no official way to run a modified firmware on your device. If you're running a version with an older firmware (version 1.2.2 or 1.2.4) you might be able to use an exploit to do it nonetheless - see [ks3-devkit](https://github.com/ZKNoxHQ/ks3-devkit)
+There's no official way to run a modified firmware on your device. If you're running a version with an older firmware (version 1.2.2 or 1.2.4) you might be able to use an exploit to do it nonetheless - see [ks3-devkit](https://github.com/ZKNoxHQ/ks3-devkit).
 
-In that case, you can build the [```auth_7702``` branch](https://github.com/btchip/keystone3-firmware/tree/auth_7702) as described in the [README.md](https://github.com/btchip/keystone3-firmware/blob/auth_7702/README.md)
+In that case, you can build the [```auth_7702``` branch](https://github.com/btchip/keystone3-firmware/tree/auth_7702) as described in the [README.md](https://github.com/btchip/keystone3-firmware/blob/auth_7702/README.md).
 
-After building, you can sign the firmware with [signFirmware.py](https://github.com/ZKNoxHQ/ks3-devkit/blob/main/signFirmware.py) or [signFirmwareOta2.py](https://github.com/ZKNoxHQ/ks3-devkit/blob/main/signFirmwareOta2.py) if you updated the bootloader with firmware 2.0.4 - using the private key associated to the public key you injected earlier with [setUpdateKey.py](https://github.com/ZKNoxHQ/ks3-devkit/blob/main/setUpdateKey.py)
+After building, you can sign the firmware with [signFirmware.py](https://github.com/ZKNoxHQ/ks3-devkit/blob/main/signFirmware.py) or [signFirmwareOta2.py](https://github.com/ZKNoxHQ/ks3-devkit/blob/main/signFirmwareOta2.py) if you updated the bootloader with firmware 2.0.4 - using the private key associated to the public key you injected earlier with [setUpdateKey.py](https://github.com/ZKNoxHQ/ks3-devkit/blob/main/setUpdateKey.py).
 
-You can then load the firmware either with [uploadFirmware.py](https://github.com/ZKNoxHQ/ks3-devkit/blob/main/uploadFirmware.py), or rename it ```keystone3.bin``` and put it on a SD card or use the [Recovery Mode](https://keystonewallet.crisp.help/en/article/my-keystone-3-pro-cannot-turn-on-1e0c2p2/) 
+You can then load the firmware either with [uploadFirmware.py](https://github.com/ZKNoxHQ/ks3-devkit/blob/main/uploadFirmware.py), or rename it ```keystone3.bin``` and put it on a SD card or use the [Recovery Mode](https://keystonewallet.crisp.help/en/article/my-keystone-3-pro-cannot-turn-on-1e0c2p2/).
 
 ### Integrating the client
 
-You can refer to the [web SDK demonstration](https://github.com/KeystoneHQ/keystone-sdk-web-demo) or the [USB SDK](https://github.com/KeystoneHQ/keystone-sdk-usb) - you'll need to support a new ```DataType``` as described in the I/O chapter
+You can refer to the [web SDK demonstration](https://github.com/KeystoneHQ/keystone-sdk-web-demo) or the [USB SDK](https://github.com/KeystoneHQ/keystone-sdk-usb) - you'll need to support a new ```DataType``` as described in the I/O chapter.
 
 ## Trezor support 
 
@@ -122,7 +122,7 @@ EIP-7702 support is avaiable in [PR #4945 for the firmware](https://github.com/t
 
 New [Protocol Buffers](https://github.com/btchip/trezor-firmware/blob/main/common/protob/messages-ethereum.proto) messages ```EthereumSignAuth7702``` and ```EthereumAuth7702Signature``` are introduced to support EIP-7702 authorization tuple signing.
 
-When receiving an ```EthereumSignAuth7702``` message, the device will display the ```delegate```, ```nonce``` and ```chain_id```, asks the user for confirmation and returns the authorization tuple signature as an ```EthereumAuth7702Signature``` message in ```signature_v```, ```signature_r``` and ```signature_s```
+When receiving an ```EthereumSignAuth7702``` message, the device will display the ```delegate```, ```nonce``` and ```chain_id```, asks the user for confirmation and returns the authorization tuple signature as an ```EthereumAuth7702Signature``` message in ```signature_v```, ```signature_r``` and ```signature_s```.
 
 ### TX type 4 signing flow
 
@@ -132,7 +132,7 @@ When receiving an ```EthereumSignTx``` message containing an ```EthereumSignedAu
 
 ### I/O documentation
 
-I/O parameters are self described by the Protocol Buffers messages
+I/O parameters are self described by the Protocol Buffers messages.
 
 ### Building the device application
 
@@ -142,4 +142,4 @@ Follow the [documentation](https://docs.trezor.io/trezor-firmware/core/build/emb
 
 You can use the modified Protocol Buffer definitions with your existing client.
 
-You can also directly try the EIP-7702 functionalities from the CLI with ```trezorctl eth sign-auth-7702``` and ```trezorctl eth sign-tx``` with the ```--auth-list``` parameter
+You can also directly try the EIP-7702 functionalities from the CLI with ```trezorctl eth sign-auth-7702``` and ```trezorctl eth sign-tx``` with the ```--auth-list``` parameter.

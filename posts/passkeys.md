@@ -2,6 +2,11 @@
 [date]: <> (2025/12/03)
 [title]: <> (3 Years of passkey)
 
+<p align="center">
+<img src="../../../../../images/passkeys.png" alt="drawing" class="center" width="350"/>
+<p align="center">
+<small>(The Passkey UX)</small>
+
 *A cryptographic odyssey from the Starknet ecosystem to Ethereum, from promises to disillusionment and rebirth.*
 
 ---
@@ -246,10 +251,15 @@ Our work contributed to the ecosystem in several ways:
 Passkeys remain a promising technology for mainstream onboarding. But they cannot be the sole security pillar of a crypto wallet.
 
 The future we're building at ZKNOX combines:
+
 - **Passkeys** for onboarding UX
+
 - **Hardware wallets** for long-term security
+
 - **Threshold signatures** for resilience
+
 - **Post-quantum cryptography** for longevity
+
 - **Zero Knowledge Proofs** for privacy and traditional finance compliance
 
 Three years of passkeys taught us humility in the face of technological promises, and the necessity of a multi-layered approach to security.

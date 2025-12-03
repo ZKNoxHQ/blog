@@ -51,7 +51,7 @@ My optimization work reduced this cost by nearly **50%**. This performance attra
 
 November 2022 marked a turning point. I presented our results at **StarknetCC in Lisbon**, before an audience of developers and researchers from the ecosystem.
 
-But the highlight of the conference was elsewhere: our team won the **CTF** (Capture The Flag) organized alongside the event. An anecdote illustrates our team's caliber: "Nix," a member of our employer's security offensive team (the "Donjon"), found an elegant solution to the hardest problem — a solution requiring only a few minutes on a laptop, while other teams assumed the challenge had been brute-forced by powerful servers.
+But the highlight of the conference was elsewhere: our team won the **CTF** (Capture The Flag) organized alongside the event. An anecdote illustrates our team's caliber: "Nix" a member of our employer's security offensive team (the "Donjon"), found an elegant solution to the hardest problem — a solution requiring only a few minutes on a laptop, while other teams assumed the challenge had been brute-forced by powerful servers.
 
 ---
 
@@ -130,8 +130,11 @@ We began designing a transparent onboarding solution: **Smoo.th**. The ambition 
 
 The concept relied on several innovations:
 - **Identity/wallet separation**: Users authenticate via their web2 identity (email, Google account), the wallet is created in the background
+
 - **Passkey as signer**: The private key is automatically generated and secured by biometrics (Touch ID, Face ID)
+
 - **Account Abstraction**: The smart contract wallet offers flexibility and advanced features
+
 - **Paymaster**: Transactions can be sponsored, eliminating the need to own crypto
 
 ### A road full of obstacles
@@ -207,8 +210,11 @@ For a technology supposed to offer "hardware wallet" level security, this is a m
 ### The accumulation of signals
 
 Facing this accumulation of negative signals:
+
 - **Distribution**: Without distribution power comparable to giants, it's hard to break through
+
 - **Security**: Passkeys don't deliver on their promises
+
 - **Market**: Even Coinbase isn't making their wallet a financial success story
 
 We made a strategic decision: refocus our activities on **generalist R&D** rather than "passkey only." Some of smoo.th cofounders decided to leave the adventure for AI and Defi closer to direct product development. 
@@ -243,7 +249,9 @@ In the end it was the beginning of my journey from an industry (defense) to anot
 
 Our work contributed to the ecosystem in several ways:
 - **FCL (Fresh Crypto Library)**: Our P256 optimization library became a reference
+
 - **Academic paper**: XYZZ coordinates techniques are documented and reusable. To date it is still the fastest generic ECC implementation, not meant to be limited to secp256r1 but also Jujub, ed25519 and any other. While r1 makes no more sense with fusaka, it could still be of some use.
+
 - **Inspiration for Braavos, Clave and others**: Our approach influenced the ecosystem.
 
 ### Toward the future

@@ -1,6 +1,6 @@
 [category]: <> (General)
 [date]: <> (2025/02/24)
-[title]: <> (Practical results on Lattice onchain verfiers)
+[title]: <> (Practical results on Lattice onchain verifiers)
 
 
 

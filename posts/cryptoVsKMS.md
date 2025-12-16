@@ -74,6 +74,7 @@ The key derivation architecture would extend BIP32/BIP39 with new derivation pat
 In this optimistic scenario, the cryptographic community provides sufficient warning — perhaps a decade or more — before cryptographically relevant quantum computers (CRQCs) emerge. Users, DeFi protocols, and infrastructure providers have ample time to migrate.
 
 **What happens:**
+
 - PQ signature verification is added to the EVM via new precompiles (EIPs for ML-DSA, Falcon, and hash-based signatures)
 
 - Wallet vendors roll out firmware updates supporting PQ key derivation from existing seed phrases
@@ -104,6 +105,7 @@ This is the scenario everyone hopes for. It requires no emergency measures, no f
 In this scenario, quantum computing progress outpaces initial estimates, but the community responds in time. Strong signals, perhaps a demonstration of Shor's algorithm on increasingly large key sizes, trigger coordinated action.
 
 **What happens:**
+
 - Most sophisticated users (whales, institutions, active DeFi participants) migrate to PQ accounts before the threat becomes imminent
 
 - Major DeFi protocols prioritize PQ compatibility
@@ -113,6 +115,7 @@ In this scenario, quantum computing progress outpaces initial estimates, but the
 - A hard fork freezes legacy secp256k1-based EOAs, particularly those that have been inactive (no recent transactions exposing their public key are safer, but still frozen as a precaution)
 
 **Post-freeze recovery:**
+
 The ZK recovery mechanism activates. Users with frozen accounts can recover by generating a WHIR-aggregated proof locally (using their seed phrase) and submitting it alongside their new PQ public key. The proof demonstrates: "I know the seed that generated this frozen address, and here's my new PQ key derived from the same seed."
 
 **Wallet vendor support:** Hardware and software wallet vendors ship "recovery mode" firmware. The user connects their device, enters their seed phrase (or it's already stored securely), and the wallet generates the witness data for the ZK prover. The UX could be as simple as: *"Your account was frozen for quantum security. Click here to recover with your new quantum-resistant key."*
@@ -158,6 +161,7 @@ In this scenario, the transition is underway but incomplete when quantum capabil
 
 **The rollback calculus:**
 A rollback is technically possible but socially catastrophic. It would:
+
 - Destroy confidence in Ethereum's immutability
 
 - Create legal chaos (which transactions are "real"?)
@@ -183,6 +187,7 @@ The 2016 DAO hack rollback worked because the community was smaller and the dama
 In this scenario, quantum computing is available tomorrow. No warning. No preparation complete. Shor's algorithm runs on a machine that can break secp256k1 in hours or days.
 
 **Immediate impact:**
+
 - Every EOA with an exposed public key is vulnerable
 
 - Every validator's BLS signature is compromised (BLS12-381 also falls to quantum attacks)
@@ -203,6 +208,7 @@ A hastily-deployed consensus mechanism where each validator signs using a PQ sig
 - Verification: Single pairing check, ~1-2ms
 
 **Naive PQ replacement (FALCON512):**
+
 - Signature size: 666 bytes × ~300,000 validators = **~200Mo per epoch just for attestations**
 
 - Verification: Each signature verified individually, ~0.5ms × 300,000 = **~150 seconds per epoch**
@@ -210,6 +216,7 @@ A hastily-deployed consensus mechanism where each validator signs using a PQ sig
 This is obviously unworkable for normal operation. The network would grind to a halt or require massive validator set reduction (e.g., only 1,000 validators, re-introducing centralization), or some recursion.
 
 **A more realistic emergency consensus:**
+
 - Dramatically reduce validator count to a trusted emergency set
 
 - Accept centralization as temporary survival mode

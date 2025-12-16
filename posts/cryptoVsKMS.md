@@ -266,6 +266,7 @@ The Nuke may never come, or may come so slowly we barely notice the transition. 
 ## References
 
 [Post-Quantum Readiness in EdDSA Chains]( https://eprint.iacr.org/2025/1368.pdf)
+
 [How to hard-fork to save most users’ funds in a quantum emergency](https://ethresear.ch/t/how-to-hard-fork-to-save-most-users-funds-in-a-quantum-emergency/18901)
 
 ---

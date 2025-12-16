@@ -265,7 +265,7 @@ The Nuke may never come, or may come so slowly we barely notice the transition. 
 
 
 <p align="center">
-<img src="../../../../../images/keymig/image-5a.png" alt="pektra" class="center"/>
+<img src="../../../../../images/keymig/image-5.png" alt="broken" class="center"/>
 <p align="center">
 <small>(*Quantum Apocalypse Clock is ticking*)</small>
 

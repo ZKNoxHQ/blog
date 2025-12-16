@@ -197,7 +197,7 @@ In this scenario, quantum computing is available tomorrow. No warning. No prepar
 **Emergency possibilities:**
 
 ### 1. Centralized Currency Freeze
-USDT, USDC, and other centralized stablecoins can freeze all transfers via admin functions. This is actually the *safest* money in this scenario — a perverse outcome where centralization becomes a feature. These issuers would wait until a recovery mechanism is designed, then selectively unfreeze based on proof of legitimate ownership.
+USDT, USDC, and other centralized stablecoins can freeze all transfers via admin functions. These issuers would wait until a recovery mechanism is designed, then selectively unfreeze based on proof of legitimate ownership.
 
 ### 2. Naive Consensus Fallback
 A hastily-deployed consensus mechanism where each validator signs using a PQ signature (e.g., Dilithium) before BLS aggregation could theoretically work, but the performance impact would be severe:
@@ -265,7 +265,7 @@ The Nuke may never come, or may come so slowly we barely notice the transition. 
 
 
 <p align="center">
-<img src="../../../../../images/keymig/image-5.png" alt="pektra" class="center"/>
+<img src="../../../../../images/keymig/image-5a.png" alt="pektra" class="center"/>
 <p align="center">
 <small>(*Quantum Apocalypse Clock is ticking*)</small>
 

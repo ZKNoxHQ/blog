@@ -87,7 +87,7 @@ In this optimistic scenario, the cryptographic community provides sufficient war
 
 **The timeline is comfortable:** perhaps 2-3 years for protocol changes, another 2-3 years for ecosystem adoption, all completed well before any quantum threat materializes.
 
-**User experience:** Seamless. A wallet notification prompts upgrade, user confirms, and their account is now quantum-resistant — still controlled by the same seed phrase.
+**User experience:** Seamless. A wallet notification prompts upgrade, user confirms, and their account is now quantum-resistant, still controlled by the same seed phrase.
 
 This is the scenario everyone hopes for. It requires no emergency measures, no frozen funds, no losses. The migration diagram for this path is straightforward: a simple upgrade flow from legacy EOA to PQ-secured account.
 
@@ -112,7 +112,7 @@ In this scenario, quantum computing progress outpaces initial estimates, but the
 
 - The community, seeing clear warning signs, achieves rough consensus on an EOA freeze date
 
-- A hard fork freezes legacy secp256k1-based EOAs, particularly those that have been inactive (no recent transactions exposing their public key are safer, but still frozen as a precaution)
+- A hard fork freezes legacy secp256k1-based EOAs, particularly those that have been inactive (no recent transactions exposing their public key are safer, but frozen as a precaution)
 
 **Post-freeze recovery:**
 
@@ -122,7 +122,7 @@ The ZK recovery mechanism activates. Users with frozen accounts can recover by g
 
 **Economic assumption:** The cost of mounting a Shor attack (requiring a fault-tolerant quantum computer with thousands of logical qubits) exceeds the value of most individual wallets. Attackers would target the largest honeypots first, giving smaller holders time to recover.
 
-**Losses:** Minimal. Some long-lost wallets (Satoshi-era ETH, forgotten accounts) remain frozen forever — their owners either lost their seeds or are unreachable. But active economic participants recover successfully.
+**Losses:** Minimal. Some long-lost wallets (Satoshi-era ETH, forgotten accounts) remain frozen forever, their owners either lost their seeds or are unreachable. But active economic participants recover successfully.
 
 
 ---
@@ -157,7 +157,7 @@ In this scenario, the transition is underway but incomplete when quantum capabil
 **Emergency response:**
 - **Centralized stablecoins freeze:** Tether (USDT) and Circle (USDC) have admin keys capable of blacklisting addresses. They freeze all movement pending resolution. This contains ~$100B+ in value but requires trusting centralized actors.
 - **CEX circuit breakers:** Major exchanges halt withdrawals and deposits.
-- **Rollback debate:** The community faces an agonizing choice — roll back the chain to before the attacks, losing potentially days or weeks of legitimate transactions, or accept the losses and move forward.
+- **Rollback debate:** The community faces an agonizing choice, roll back the chain to before the attacks, losing potentially days or weeks of legitimate transactions, or accept the losses and move forward.
 
 **The rollback calculus:**
 A rollback is technically possible but socially catastrophic. It would:
@@ -172,7 +172,7 @@ A rollback is technically possible but socially catastrophic. It would:
 
 The 2016 DAO hack rollback worked because the community was smaller and the damage was contained. A quantum attack could be far more distributed and harder to cleanly separate from legitimate activity.
 
-**Likely outcome:** A messy compromise — partial freezes, emergency hard fork to disable secp256k1, rapid deployment of ZK recovery, and significant but not total losses. Some whales get rekt. Trust is damaged but Ethereum survives.
+**Likely outcome:** A messy compromise, partial freezes, emergency hard fork to disable secp256k1, rapid deployment of ZK recovery, and significant but not total losses. Some whales get rekt. Trust is damaged but Ethereum survives.
 
 ---
 
@@ -267,7 +267,7 @@ The Nuke may never come, or may come so slowly we barely notice the transition. 
 <p align="center">
 <img src="../../../../../images/keymig/image-5.png" alt="pektra" class="center"/>
 <p align="center">
-<small>(*Quantum Apocalypse*)</small>
+<small>(*Quantum Apocalypse Clock is ticking*)</small>
 
 
 ## References

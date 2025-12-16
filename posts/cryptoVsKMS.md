@@ -227,12 +227,15 @@ If L2s can quickly deploy PQ verification and their sequencers aren't compromise
 ---
 
 ## Conclusion
-![alt text](image-2.png)
 
-We need a **red button** .
+<p align="center">
+<img src="../../../../../images/keymig/image-2.png" alt="pektra" class="center"/>
+<p align="center">
+<small>(We need a **red button** .)</small>
 
 
-Not to use — hopefully never to use — but to have ready as a mitigation against the nightmare scenario. This means:
+
+A kill switch is required, not to use, hopefully never to use, but to have ready as a mitigation against the nightmare scenario. This means:
 
 1. **Implemented ZK recovery circuits**, tested and audited, ready for emergency deployment
 

@@ -1,0 +1,520 @@
+
+
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<style>
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1c1c1c;
+        color: white;
+    }
+    .markdown-body table tr {
+        background-color: #1c1c1c;
+    }
+    .markdown-body table tr:nth-child(2n) {
+        background-color: black;
+    }
+}
+</style>
+
+
+
+<link rel="alternate" type="application/rss+xml" href="../../../../feed.xml" title="EIP-7702 for Hardware Wallet vendors">
+
+
+
+<link rel="stylesheet" type="text/css" href="../../../../css/common-vendor.b8ecfc406ac0b5f77a26.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
+
+<script type="text/x-mathjax-config">
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']]
+  },
+  svg: {
+    fontCache: 'global',
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../scripts/tex-svg.js">
+</script>
+
+<style>
+</style>
+
+<div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
+
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="EIP-7702 for Hardware Wallet vendors" />
+<meta name="twitter:image" content="" />
+
+
+<br>
+<h1 style="margin-bottom:7px"> EIP-7702 for Hardware Wallet vendors </h1>
+<small style="float:left; color: #888"> 2025 May 07 </small>
+<small style="float:right; color: #888"><a href="../../../../index.html">See all posts</a></small>
+<br> <br> <br>
+<title> EIP-7702 for Hardware Wallet vendors </title>
+
+<p align="center">
+<img src="../../../../../images/pectra7702.jpeg" alt="pektra" class="center"/>
+<p align="center">
+<p><small>(Pectra dealing with Twixtter FUD)</small></p>
+<h2 id="introduction">Introduction</h2>
+<p>As a minimalistic perspective on my upcoming <a
+href="https://ethcc.io/speakers/btchip">EthCC[8] presentation</a>, this
+blog entry describes how Hardware Wallet vendors could quickly benefit
+from turning their Externally Owned Accounts into smarter account with
+<a
+href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-7702.md">EIP-7702</a>
+available with Pectra today, with as little impact on their
+infrastructure as possible.</p>
+<h2 id="high-level-overview-of-eip-7702">High level overview of
+EIP-7702</h2>
+<p>EIP-7702 introduces a new transaction type (v4), adding the concept
+of authorization lists - each element of the list provides the following
+crytographically authenticated elements :</p>
+<ul>
+<li>an EOA address</li>
+<li>the address of a delegate, to which the code of the EOA will be
+set</li>
+<li>validity conditions for the authorization (chain ID and EOA
+nonce)</li>
+</ul>
+<p>After the authorization list is processed, the EOA code execution
+flow is similar to the delegate's, with its own storage, and it can
+still originate transactions.</p>
+<p><a
+href="https://github.com/ethereum/ercs/blob/master/ERCS/erc-4337.md">ERC-4337</a>,
+the reference implementation for standardized and censorship resistant
+smart accounts architecture has also been updated to support
+EIP-7702</p>
+<p>Choice of the delegate is critical as a malicious or buggy delegate
+could drain the account - wallets are expected to filter those
+carefully.</p>
+<p>Since the EOA can still originate transactions, some use cases do not
+make sense if its private key is known - typically you wouldn't delegate
+to a threshold multi signature contract such as <a
+href="https://safe.global">Safe</a>, as the threshold could be
+bypassed.</p>
+<h2 id="why-focus-on-hardware-wallet-vendors">Why focus on Hardware
+Wallet vendors ?</h2>
+<p>Hardware Wallet vendors are an interesting group because they grew up
+with EOAs, are very conservative (at least security wise), but still
+need to provide appealing features to their user base to prevent mass
+migration and loss of the revenue brought by users staying in their
+ecosystem (such as swaps). This is especially important as 7702 makes
+the migration to smart accounts transparent and could enable "vampire
+attacks" from other wallets.</p>
+<p>We'll consider the minimal but still impactful feature set that 7702
+could provide considering the following requirements :</p>
+<ul>
+<li>the deployed delegate is audited and immutable</li>
+<li>the security model and attack surface don't get significantly more
+complex - smart contracts can by design do anything, we'll only consider
+very basic functionalities (see me at EthCC for more fancy stuff, last
+ad I promise)</li>
+<li>the security features don't get significantly worse - specifically
+Hardware Wallets vendors spent resources on "clear signing" (making sure
+that what you see is what you sign, and that users understand what
+they're signing) and it'd be great to still be able to use it</li>
+<li>the migration doesn't involve too much extra development for the
+Hardware Wallet, the wallet and a few selected critical dapps.</li>
+</ul>
+<p>Taking this into account, the easiest thing a smart account could
+provide is <strong>transaction batching</strong> (atomic multi
+operations) and optionally <strong>gas sponsoring</strong>.</p>
+<p>Batching makes all dapp interactions easier by getting rid of the
+approval then action dance, which is good for the user experience, an
+easy way to remove some MEV signals, and overall improves the security
+of the interaction by limiting the appeal of infinite approvals.</p>
+<p>Gas sponsoring also removes important friction when the user doesn't
+have native tokens on a given chain.</p>
+<p>We'll now compare different strategies to implement that.</p>
+<h2 id="transaction-batching-implementations">Transaction batching
+implementations</h2>
+<h3 id="back-to-basics---eth-function-calls">Back to basics - ETH
+function calls</h3>
+<p>An arbitrary ETH smart contract function is called using the
+following parameters of the transaction :</p>
+<ul>
+<li>The <code>destination</code>, coding the address of the smart
+contract</li>
+<li>The <code>value</code>, coding the amount of native asset made
+accessible to the <code>payable</code> smart contract function</li>
+<li>The <code>data</code>, coding the function name in the first 4 bytes
+(called the <strong>selector</strong>), and the function parameters in
+the following bytes</li>
+</ul>
+<p>Batching is just a matter of defining how an array of those elements
+can be transferred as parameters of the batching function, then issue a
+transaction that'll perform the batched calls.</p>
+<p>This also means that in the best case scenario, if the Hardware
+Wallet is able to parse the data field of the transaction when clear
+signing, it'd require a modification of the parsing logic to iterate
+over the different elements, and display each one.</p>
+<h3 id="safe-case-study-and-most-simple-batching">Safe case study and
+most simple batching</h3>
+<p>Safe is a popular implementation of transaction batching through the
+third party <a
+href="https://github.com/safe-global/safe-smart-account/blob/main/contracts/libraries/MultiSend.sol">MultiSend
+contract</a></p>
+<p>The different transaction elements are simply chained together using
+<code>abi.encodePacked</code> along with a flag indicating the call type
+(regular or delegate).</p>
+<p>However being a third party contract, MultiSend needs to be called by
+the account contract using a <code>DELEGATECALL</code> to act as the
+account (having a similar <code>msg.sender</code>). This also gives
+access to the account storage and creates an additional security risk
+that was exploited during the <a
+href="https://learn.bybit.com/this-week-in-bybit/bybit-security-incident-timeline/">Bybit
+Lazarus incident</a> by replacing the implementation of the account in
+place.</p>
+<p>This highlights the need to implement the batching mechanism directly
+in the account contract rather than delegating it as an external
+feature.</p>
+<h3 id="standardizing-simple-batching">Standardizing simple
+batching</h3>
+<p><a
+href="https://github.com/ethereum/ERCs/blob/master/ERCS/erc-7821.md">ERC-7821</a>
+provides a standardization of simple batching using
+<code>abi.encode</code> to encode the destination, value and data
+parameters.</p>
+<p>Compared to <a
+href="https://github.com/ethereum/ERCs/blob/master/ERCS/erc-7579.md">ERC-7579</a>
+which it reuses it doesn't support delegate calls, making it safer to
+validate.</p>
+<p>Account contracts can offer an ERC-7821 interface either directly or
+through another execution mechanism, such as EIP-4337.</p>
+<h3 id="batching-with-more-sophisticated-actions">Batching with more
+sophisticated actions</h3>
+<p>Experiments have been made in the Starknet ecosystem to create a
+batch structure where the data of a previous call can be reused in the
+next one with the <a
+href="https://community.starknet.io/t/proposal-to-improve-multicall-allowing-to-chain-transactions/2038">Better
+Multicall</a> proposal - I don't think there has been a similar proposal
+in the Ethereum ecosystem but it could be something interesting to
+investigate for more complex scenario without needing a specific smart
+account or a smart account plugin to handle them.</p>
+<h3 id="batching-with-erc-4337">Batching with ERC-4337</h3>
+<p>ERC-4337 doesn't specify a batching or execution mechanism directly,
+and a compliant smart account only has to implement a method to verify
+that a transaction intent (<code>UserOperation</code>) is valid.</p>
+<p>The batching mechanism will be decided by the contract and
+implemented in the <code>callData</code> field of the
+<code>UserOperation</code> - typically the reference ERC-4337 account
+implementation, <a
+href="https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/core/BaseAccount.sol">BaseAccount</a>
+implements a simple batching strategy using <code>abi.encode</code></p>
+<p>As the user only signs <code>UserOperation</code> with ERC-4337 and
+doesn't submit transactions directly to the account (this is done
+through the <code>EntryPoint</code> by the <code>Bundler</code>), it is
+important for the Hardware Wallet to be able to parse the
+<code>callData</code> field of the <code>UserOperation</code>. This is
+standardized by <a
+href="https://github.com/eth-infinitism/account-abstraction/commit/7cbc19bf35691e2f6655868e5d4871ccc80d6e1f">version
+8</a> of the <code>EntryPoint</code> defining an <a
+href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md">EIP-712</a>
+compliant signature scheme - of course, the Hardware Wallet parsing
+logic would still have to be modified to support the baching mechanism
+on top.</p>
+<p>Smart accounts supporting a previous version of the
+<code>EntryPoint</code> could support their own, proprietary mechanism
+for signing the <code>UserOperation</code> also compatible with
+EIP-712.</p>
+<h2 id="transaction-sponsoring-implementations">Transaction sponsoring
+implementations</h2>
+<h3 id="before-erc-4337">Before ERC-4337</h3>
+<p>There were already attemps to sponsor transactions before ERC-4337
+(such transaction intents were called in a generic way <strong>meta
+transactions</strong>), but some parts were proprietary, especially on
+the backend side.</p>
+<p>Proposals such as <a
+href="https://github.com/ethereum/ERCs/blob/master/ERCS/erc-2771.md">ERC-2771</a>
+attempted to standardize the onchain part, establishing a set of minimal
+constraints between the different parties.</p>
+<h3 id="erc-4337">ERC-4337</h3>
+<p>ERC-4337 introduces a decentralized and censorship resistant approach
+for transaction sponsorship, as all the routing is done onchain and can
+be observed, which comes with some formalism - transaction intents
+(<code>UserOperations</code>) are sent to <code>Bundlers</code>,
+creating a secondary mempool. <code>Bundlers</code> execute
+<code>UserOperations</code> through the <code>Entrypoint</code>
+contract. <code>UserOperations</code> can include a reference to a
+<code>paymaster</code> contract that'll be in charge of sponsoring the
+transaction.</p>
+<p>To use ERC-4337, the wallet provider first has to choose a
+<code>Bundler</code> - considering that the ERC-4337 mempool is <a
+href="https://mirror.xyz/0x836F73BE367a8215FCab4C15E5012DaF574b9Ce4/F3CTe3nmBbm_X_Ee9hD2RyezBDueKnBZts1ZmUY8138">not
+fully decentralized yet</a>, if the wallet provider had some MEV deals
+with its current architecture provider it's recommended to pick a
+<code>Bundler</code> recommended by this provider rather than operating
+its own.</p>
+<p>Choosing a <code>paymaster</code> creates less constraints - the
+<code>Bundler</code> provider could suggest one, or you could pick one
+freely or run your own (making sure it's audited)</p>
+<h3 id="vibing-with-intents">Vibing with Intents</h3>
+<p>Intents offer a different take on sponsorship and consider higher
+level transactions (typically, swapping a token for another one on
+different chains), that can be executed with more offchain or
+proprietary components compared to ERC-4337.</p>
+<p><a
+href="https://github.com/ethereum/ERCs/blob/master/ERCS/erc-7683.md">ERC-7683</a>
+provides an overview of how cross-chain intents could be
+implemented.</p>
+<p>Considering the scope of Intents targets a much higher level than
+just transactions, they'd be an interesting scheme to explore for a new
+wallet but not really for what we're targeting here.</p>
+<h2 id="using-batching-and-sponsoring-in-a-dapp">Using batching and
+sponsoring in a dapp</h2>
+<h3 id="state-of-current-implementations">State of current
+implementations</h3>
+<p>Current implementations are mostly targeting embedded wallets, as
+there are few wallets operating with smart accounts and even fewer dapps
+using their capabilities.</p>
+<h3 id="standardization-of-the-wallet-interface">Standardization of the
+wallet interface</h3>
+<p><a href="https://eips.ethereum.org/EIPS/eip-5792">EIP-5792</a>
+provides a standardized mechanism that dapps can use to support
+transaction batching and sponsoring. This has to be implemented by the
+wallet, and customized to the batching mechanism used by the smart
+account.</p>
+<h3 id="standardization-of-a-simple-call">Standardization of a simple
+call</h3>
+<p>ERC-7821 describes a scenario to perform transaction batching by
+inspecting the interface implemented by the smart account. Compared to
+EIP-5792, it doesn't specify a mechanism to specifically track the
+status of those calls. The dapp can watch the status of the transaction
+calling the smart account and know that all operations in the batch were
+successful when the transaction is included into a block.</p>
+<h2 id="review-of-a-few-delegate-candidates">Review of a few delegate
+candidates</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Smart contract</th>
+<th>Deployment</th>
+<th>Audits</th>
+<th>4337 version</th>
+<th>4337 clear signing</th>
+<th>4337 batching</th>
+<th>Direct batching</th>
+<th>Extra features</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alchemy</td>
+<td><a
+href="https://github.com/alchemyplatform/modular-account">SemiModularAccount7702</a></td>
+<td>0x69007702764179f14F51cdce752f4f775d74E139
+(ETH,Polygon,OP,Arbitrum,Base,Berachain)</td>
+<td><a
+href="https://github.com/alchemyplatform/modular-account/tree/develop/audits">Multiple</a>,
+might not be up to date with latest version</td>
+<td>v7</td>
+<td>No (ERC-191)</td>
+<td><code>abi.encodeCall</code></td>
+<td>No</td>
+<td><a
+href="https://github.com/ethereum/ERCs/blob/master/ERCS/erc-6900.md">ERC-6900</a></td>
+</tr>
+<tr>
+<td>Ambire</td>
+<td><a
+href="https://github.com/AmbireTech/ambire-common">AmbireAccount7702</a></td>
+<td>0x5A7FC11397E9a8AD41BF10bf13F22B0a63f96f6d (ETH,BNB,Gnosis)</td>
+<td><a
+href="https://github.com/AmbireTech/ambire-common/tree/v2/audits">Multiple</a>,
+might not be up to date with latest version</td>
+<td>v7</td>
+<td>Yes, EIP-712 on proprietary domain</td>
+<td><code>abi.encodeCall</code></td>
+<td><code>abi.encodeCall</code></td>
+<td>External signature validation, account recovery</td>
+</tr>
+<tr>
+<td>MetaMask</td>
+<td><a href="https://github.com/MetaMask/delegation-framework">MetaMask
+EIP7702StatelessDeleGator</a></td>
+<td>0x63c0c19a282a1B52b07dD5a65b58948A07DAE32B
+(ETH,BNB,Gnosis,Polygon,OP,Arbitrum,Base,Linea)</td>
+<td><a
+href="https://github.com/MetaMask/delegation-framework/blob/main/audits/cyfrin/cyfrin-4-25.pdf">Cyfrin</a>,
+<a
+href="https://github.com/MetaMask/delegation-framework/blob/main/audits/diligence/diligence-2-25.pdf">Diligence</a></td>
+<td>v7</td>
+<td>Yes, EIP-712 on proprietary domain</td>
+<td>extended ERC-7821</td>
+<td>Yes, extended ERC-7821</td>
+<td><a
+href="https://github.com/ethereum/ERCs/blob/master/ERCS/erc-7710.md">ERC-7710</a></td>
+</tr>
+<tr>
+<td>ERC-4337</td>
+<td><a
+href="https://github.com/eth-infinitism/account-abstraction">Simple7702Account</a></td>
+<td>0x4Cd241E8d1510e30b2076397afc7508Ae59C66c9
+(ETH,BNB,Avalanche,OP,Arbitrum,Base,Taiko)</td>
+<td><a
+href="https://github.com/eth-infinitism/account-abstraction/blob/develop/audits/SpearBit%20Account%20Abstraction%20Security%20Review%20-%20Mar%202025.pdf">SpearBit</a></td>
+<td>v8</td>
+<td>Yes, native EIP-712</td>
+<td><code>abi.encodeCall</code></td>
+<td><code>abi.encodeCall</code></td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p>On the complexity side, ERC-4337 account is definitely the most
+simple as it doesn't implement any extra functionality other than basic
+management of the account - but it doesn't support a standardized
+interface for batching calls directly.</p>
+<p>MetaMask account is a bit more complex, but the DeleGator
+functionality could be disabled by deploying it with a different
+constructor parameter setting the delegation manager to the null address
+- also it supports a standardized interface for batching calls
+directly.</p>
+<p>Ambire and Alchemy support additional functionalities that cannot be
+disabled.</p>
+<h2 id="conclusion">Conclusion</h2>
+<h3 id="fastest-track-for-batching">Fastest track for batching</h3>
+<p>A fast track for batching would be to support a smart account with
+ERC-7821 support (either by using MetaMask EIP7702StatelessDeleGator
+implementation or adding support to ERC-4337 Simple7702Account
+implementation), and ask selected dapps to support ERC-7821
+natively.</p>
+<p>Support for ERC-7821 would be faster to achieve than support for
+EIP-5792 as there are no changes on the wallet side but it's less
+standard on the dapp side.</p>
+<p>In this scenario, the Hardware Wallet transaction parsing code would
+need to be updated to support ERC-7821 for clear signing
+(<code>abi.encode</code> of the destination, value and data
+parameters)</p>
+<p>Transactions are originated by the EOA, and call the delegated
+<code>execute</code> method on the EOA address.</p>
+<h3 id="fast-track-for-batching">Fast track for batching</h3>
+<p>Alternatively, the wallet can add support for EIP-5792 and the
+batching scenario for the selected smart account implementation, then
+ask selected dapps to support EIP-5792.</p>
+<p>In this scenario, the Hardware Wallet transaction parsing code would
+need to be updated to support the method used by the smart account
+implementation for direct batching.</p>
+<p>Transactions are originated by the EOA, and call the delegated
+specific execution method on the EOA address.</p>
+<h3 id="batching-and-sponsoring">Batching and sponsoring</h3>
+<p>When both batching and sponsoring are desired, it's recommended to
+use ERC-4337.</p>
+<p>The wallet would need to add support for EIP-5792, choose a
+<code>Bundler</code> and a <code>Paymaster</code>, then ask selected
+dapps to support EIP-5792.</p>
+<p>In this scenario, the Hardware Wallet EIP-712 signing code would need
+to be updated to recognize the <code>callData</code> of the
+<code>UserOperation</code> structure, parse it and link it back to the
+transaction parsing code according to the batching mechanism used by the
+smart account implementation.</p>
+<p>Signed <code>UserOperation</code> are sent to the
+<code>Bundler</code> using an RPC call.</p>
+<p>🚀 Let's future-proof Ethereum together!</p>
+<h2 id="references">References</h2>
+<ul>
+<li><p><a
+href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md">EIP-712
+- Typed structured data hashing and signing</a></p></li>
+<li><p><a
+href="https://github.com/ethereum/ERCs/blob/master/ERCS/erc-2771.md">ERC-2771
+- Secure Protocol for Native Meta Transactions</a></p></li>
+<li><p><a
+href="https://github.com/ethereum/ercs/blob/master/ERCS/erc-4337.md">ERC-4337
+- Account Abstraction Using Alt Mempool</a></p></li>
+<li><p><a
+href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-5792.md">EIP-5792
+- Wallet Call API</a></p></li>
+<li><p><a
+href="https://github.com/ethereum/ERCs/blob/master/ERCS/erc-7579.md">ERC-7579
+- Minimal Modular Smart Accounts</a></p></li>
+<li><p><a
+href="https://github.com/ethereum/ERCs/blob/master/ERCS/erc-7683.md">ERC-7683
+- Cross Chain Intents</a></p></li>
+<li><p><a
+href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-7702.md">EIP-7702
+- Set Code for EOAs</a></p></li>
+<li><p><a
+href="https://github.com/ethereum/ERCs/blob/master/ERCS/erc-7821.md">ERC-7821
+- Minimal Batch Executor Interface</a></p></li>
+</ul>
+<h2 id="reach-us">Reach us</h2>
+<p>🔐 Practical security on the whole chain.</p>
+<p><a href="https://github.com/zknoxhq">Github</a> | <a
+href="https://www.zknox.com">Website</a> | <a
+href="https://x.com/zknoxhq">Twitter</a> | <a
+href="https://zknox.eth.limo">Blog</a> | <a
+href="mailto:gm@zknox.com">Contact Info</a></p>
+<p><small>Found typo, or want to improve the note ? Our blog is open to
+PRs.</small></p>
+ </div> 

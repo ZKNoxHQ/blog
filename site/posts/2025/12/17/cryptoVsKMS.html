@@ -1,0 +1,522 @@
+
+
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<style>
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1c1c1c;
+        color: white;
+    }
+    .markdown-body table tr {
+        background-color: #1c1c1c;
+    }
+    .markdown-body table tr:nth-child(2n) {
+        background-color: black;
+    }
+}
+</style>
+
+
+
+<link rel="alternate" type="application/rss+xml" href="../../../../feed.xml" title="Scenarios for Post-Quantum Migrations">
+
+
+
+<link rel="stylesheet" type="text/css" href="../../../../css/common-vendor.b8ecfc406ac0b5f77a26.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
+
+<script type="text/x-mathjax-config">
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']]
+  },
+  svg: {
+    fontCache: 'global',
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../scripts/tex-svg.js">
+</script>
+
+<style>
+</style>
+
+<div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
+
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Scenarios for Post-Quantum Migrations" />
+<meta name="twitter:image" content="" />
+
+
+<br>
+<h1 style="margin-bottom:7px"> Scenarios for Post-Quantum Migrations </h1>
+<small style="float:left; color: #888"> 2025 Dec 17 </small>
+<small style="float:right; color: #888"><a href="../../../../index.html">See all posts</a></small>
+<br> <br> <br>
+<title> Scenarios for Post-Quantum Migrations </title>
+
+<p>A meme in the cryptographic domain is "Cryptography is easy, Key
+Management is hard". While current efforts to bring Ethereum to the
+Post-Quantum Era are underway, deployment will still take years. This
+post does not venture to make any bet or commitment on which scenario is
+most probable for which deadline. But first, let's examine how to handle
+a risk.</p>
+<p>Basically, risk resource allocation follows:</p>
+<p><span
+class="math display"><em>r</em><em>i</em><em>s</em><em>k</em>_<em>m</em><em>a</em><em>t</em><em>e</em><em>r</em><em>i</em><em>a</em><em>l</em><em>i</em><em>z</em><em>a</em><em>t</em><em>i</em><em>o</em><em>n</em>_<em>c</em><em>o</em><em>s</em><em>t</em> × <em>r</em><em>i</em><em>s</em><em>k</em>_<em>p</em><em>r</em><em>o</em><em>b</em><em>a</em><em>b</em><em>i</em><em>l</em><em>i</em><em>t</em><em>y</em> = <em>r</em><em>e</em><em>s</em><em>o</em><em>u</em><em>r</em><em>c</em><em>e</em>_<em>a</em><em>l</em><em>l</em><em>o</em><em>c</em><em>a</em><em>t</em><em>i</em><em>o</em><em>n</em></span></p>
+<p>Looking at today's risk management in the Ethereum ecosystem, it
+seems to be handled more as a binary ‘0/1' problem, either quantum
+computers are a threat or they aren't. There's no widely accepted model
+to extrapolate quantum computing progress, making probabilistic planning
+difficult. What we can do is prepare for multiple scenarios. First let's
+have a look at the exposure:</p>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 19%" />
+<col style="width: 25%" />
+<col style="width: 30%" />
+<col style="width: 10%" />
+</colgroup>
+<thead>
+<tr>
+<th>Category</th>
+<th>Description</th>
+<th>Estimated Value</th>
+<th>Vulnerability Level</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ETH in EOAs (exposed pubkey)</strong></td>
+<td>Any EOA that has ever sent a transaction</td>
+<td>$140-175B</td>
+<td>🔴 Critical</td>
+<td>~40-50M ETH, pubkey on-chain</td>
+</tr>
+<tr>
+<td><strong>Staked ETH (validators)</strong></td>
+<td>32 ETH × ~1M validators</td>
+<td>~$110B</td>
+<td>🔴 Critical</td>
+<td>BLS keys compromised, consensus at risk</td>
+</tr>
+<tr>
+<td><strong>DeFi Protocol Treasuries</strong></td>
+<td>DAO treasuries in EOAs/multisigs</td>
+<td>$5-15B</td>
+<td>🔴 Critical</td>
+<td>Many use EOA signers</td>
+</tr>
+<tr>
+<td><strong>Bridge Hot Wallets</strong></td>
+<td>Cross-chain bridge reserves</td>
+<td>$8-12B</td>
+<td>🔴 Critical</td>
+<td>Multisigs with EOA keys</td>
+</tr>
+<tr>
+<td><strong>CEX Hot Wallets</strong></td>
+<td>Exchange operational wallets</td>
+<td>$15-25B</td>
+<td>🔴 Critical</td>
+<td>High-value targets</td>
+</tr>
+<tr>
+<td><strong>CEX Cold Storage</strong></td>
+<td>Offline/MPC storage</td>
+<td>$50-100B</td>
+<td>🟡 Medium</td>
+<td>May have airgapped keys</td>
+</tr>
+<tr>
+<td><strong>ERC-20 Tokens in EOAs</strong></td>
+<td>All tokens in vulnerable addresses</td>
+<td>$80-120B</td>
+<td>🔴 Critical</td>
+<td>Multiplier effect</td>
+</tr>
+<tr>
+<td><strong>Centralized Stablecoins (USDT/USDC/etc.)</strong></td>
+<td>Centralized</td>
+<td>$120B+</td>
+<td>🟢 Low (USDT/USDC)</td>
+<td>Centralized can freeze</td>
+</tr>
+<tr>
+<td><strong>NFTs (major collections)</strong></td>
+<td>BAYC, Punks, Art Blocks, etc.</td>
+<td>$2-5B</td>
+<td>🔴 Critical</td>
+<td>Sell them now, they are already dead</td>
+</tr>
+<tr>
+<td><strong>L2 Sequencer Keys</strong></td>
+<td>Rollup operational keys</td>
+<td>N/A (control risk)</td>
+<td>🔴 Critical</td>
+<td>Can censor/manipulate L2</td>
+</tr>
+<tr>
+<td><strong>ENS Names</strong></td>
+<td>Valuable domain names</td>
+<td>$0.5-1B</td>
+<td>🔴 Critical</td>
+<td>In EOAs</td>
+</tr>
+</tbody>
+</table>
+<p>This post explores various scenarios of key migration in the face of
+the Quantum Computing <strong>Nuke</strong>.</p>
+<p align="center">
+<img src="../../../../../images/keymig/image-7.png" alt="pektra" class="center"/>
+<p align="center">
+<p><small>(<em>Now pick your difficulty level</em>)</small></p>
+<hr />
+<h2 id="the-current-efforts">The Current Efforts</h2>
+<p>The Ethereum community is actively working on post-quantum migration
+strategies. The emerging consensus points toward a layered approach:
+aggregating PQ signatures into Post-Quantum SNARKs (specifically STARK
+or WHIR-based proofs) to manage the significant size overhead of PQ
+signatures on-chain.</p>
+<p>Several concrete implementations already exist. <strong>Post-Quantum
+Smart Accounts</strong> based on ERC-4337 have been developed, notably
+hash-based schemes like XMSS with ZK-friendly Poseidon hashing and
+ZKNOX's implementation supporting Falcon, Dilithium (ML-DSA). These
+allow users to transition to quantum-resistant security today, without
+waiting for protocol-level changes.</p>
+<p>The concept of <strong>ZK-based key migration for frozen
+accounts</strong> has been <a
+href="https://ethresear.ch/t/how-to-hard-fork-to-save-most-users-funds-in-a-quantum-emergency/18901">described</a>
+by Vitalik Buterin. The mechanism is elegant: users don't need to
+pre-register anything. They simply keep their BIP39 seed phrase. After a
+freeze of legacy EOAs, recovery works by submitting a ZK proof
+demonstrating knowledge of the master seed that generated both the
+legacy ETH address AND a new PQ public key. The proof links the old
+identity to the new key without revealing the secret. To date, however,
+no production implementation of this recovery mechanism exists.</p>
+<p>The key derivation architecture would extend BIP32/BIP39 with new
+derivation paths for each PQ algorithm, using the same master seed to
+derive both legacy secp256k1 keys and new PQ keys (Falcon at
+<code>m/44'/9002'/...</code>, Dilithium at <code>m/44'/9003'/...</code>,
+etc.). The following diagram illustrates the foresight mechanism,
+adapted to the ZKNOX Post Quantum key derivation scheme.</p>
+<p align="center">
+<img src="../../../../../images/keymig/image-3.png" alt="pektra" class="center"/>
+<p align="center">
+<p><small>(ZK Based Key Migration)</small></p>
+<h2 id="piece-of-cake-easy-mode-the-smooth-migration">Piece of Cake
+(Easy Mode): The Smooth Migration</h2>
+<p align="center">
+<img src="../../../../../images/keymig/image-4.png" alt="pektra" class="center"/>
+<p align="center">
+<p><small>(<em>The world is cute when everything goes
+fine</em>)</small></p>
+<p>In this optimistic scenario, the cryptographic community provides
+sufficient warning — perhaps a decade or more — before cryptographically
+relevant quantum computers (CRQCs) emerge. Users, DeFi protocols, and
+infrastructure providers have ample time to migrate.</p>
+<p><strong>What happens:</strong> - PQ signature verification is added
+to the EVM via new precompiles (EIPs for ML-DSA, Falcon, and hash-based
+signatures)</p>
+<ul>
+<li><p>Wallet vendors roll out firmware updates supporting PQ key
+derivation from existing seed phrases</p></li>
+<li><p>Users upgrade their EOAs to smart accounts with PQ verification,
+or the protocol itself evolves to support PQ EOAs natively</p></li>
+<li><p>DeFi protocols update their signature verification logic</p></li>
+<li><p>L2s and bridges implement PQ-compatible verification</p></li>
+</ul>
+<p><strong>The timeline is comfortable:</strong> perhaps 2-3 years for
+protocol changes, another 2-3 years for ecosystem adoption, all
+completed well before any quantum threat materializes.</p>
+<p><strong>User experience:</strong> Seamless. A wallet notification
+prompts upgrade, user confirms, and their account is now
+quantum-resistant — still controlled by the same seed phrase.</p>
+<p>This is the scenario everyone hopes for. It requires no emergency
+measures, no frozen funds, no losses. The migration diagram for this
+path is straightforward: a simple upgrade flow from legacy EOA to
+PQ-secured account.</p>
+<hr />
+<h2 id="lets-rock-normal-mode-quantum-computing-accelerates">Let's Rock
+(Normal Mode): Quantum Computing Accelerates</h2>
+<p align="center">
+<img src="../../../../../images/keymig/image-11.png" alt="pektra" class="center"/>
+<p align="center">
+<p><small>(<em>Let's be cautious</em>)</small></p>
+<p>In this scenario, quantum computing progress outpaces initial
+estimates, but the community responds in time. Strong signals, perhaps a
+demonstration of Shor's algorithm on increasingly large key sizes,
+trigger coordinated action.</p>
+<p><strong>What happens:</strong> - Most sophisticated users (whales,
+institutions, active DeFi participants) migrate to PQ accounts before
+the threat becomes imminent</p>
+<ul>
+<li><p>Major DeFi protocols prioritize PQ compatibility</p></li>
+<li><p>The community, seeing clear warning signs, achieves rough
+consensus on an EOA freeze date</p></li>
+<li><p>A hard fork freezes legacy secp256k1-based EOAs, particularly
+those that have been inactive (no recent transactions exposing their
+public key are safer, but still frozen as a precaution)</p></li>
+</ul>
+<p><strong>Post-freeze recovery:</strong> The ZK recovery mechanism
+activates. Users with frozen accounts can recover by generating a
+WHIR-aggregated proof locally (using their seed phrase) and submitting
+it alongside their new PQ public key. The proof demonstrates: "I know
+the seed that generated this frozen address, and here's my new PQ key
+derived from the same seed."</p>
+<p><strong>Wallet vendor support:</strong> Hardware and software wallet
+vendors ship "recovery mode" firmware. The user connects their device,
+enters their seed phrase (or it's already stored securely), and the
+wallet generates the witness data for the ZK prover. The UX could be as
+simple as: <em>"Your account was frozen for quantum security. Click here
+to recover with your new quantum-resistant key."</em></p>
+<p><strong>Economic assumption:</strong> The cost of mounting a Shor
+attack (requiring a fault-tolerant quantum computer with thousands of
+logical qubits) exceeds the value of most individual wallets. Attackers
+would target the largest honeypots first, giving smaller holders time to
+recover.</p>
+<p><strong>Losses:</strong> Minimal. Some long-lost wallets (Satoshi-era
+ETH, forgotten accounts) remain frozen forever — their owners either
+lost their seeds or are unreachable. But active economic participants
+recover successfully.</p>
+<hr />
+<h2 id="come-get-some-losses-hard-mode-wow-didnt-see-it-that-fast">Come
+Get Some Losses (Hard Mode): Wow, Didn't See It That Fast</h2>
+<p align="center">
+<img src="../../../../../images/keymig/image-10.png" alt="pektra" class="center"/>
+<p align="center">
+<p><small>(<em>That was close</em>)</small></p>
+<p>In this scenario, the transition is underway but incomplete when
+quantum capabilities arrive. The freeze hasn't happened yet. Some major
+actors are caught exposed.</p>
+<p><strong>What happens:</strong> - A cryptographically relevant quantum
+computer is demonstrated or credibly rumored - Panic ensues;
+sophisticated attackers (nation-states, well-funded groups) begin
+targeting high-value addresses - The public keys of any address that has
+ever sent a transaction are now vulnerable — attackers can derive
+private keys from exposed public keys</p>
+<p><strong>Immediate damage assessment:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Estimated Exposure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ETH in EOAs with exposed pubkeys</td>
+<td>~70% of all EOA-held ETH</td>
+</tr>
+<tr>
+<td>Top 100 non-contract addresses</td>
+<td>~$10-15B (varies with price)</td>
+</tr>
+<tr>
+<td>DeFi protocol treasuries (EOA-held)</td>
+<td>~$2-5B</td>
+</tr>
+<tr>
+<td>Bridge hot wallets</td>
+<td>~$1-3B</td>
+</tr>
+<tr>
+<td>CEX hot wallets</td>
+<td>~$5-10B</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Total potential loss: $20-40B+ in immediate
+exposure</strong>, assuming current (2024-2025) valuations. The actual
+extracted value would depend on attacker capacity and speed.</p>
+<p><strong>Emergency response:</strong> - <strong>Centralized
+stablecoins freeze:</strong> Tether (USDT) and Circle (USDC) have admin
+keys capable of blacklisting addresses. They freeze all movement pending
+resolution. This contains ~$100B+ in value but requires trusting
+centralized actors. - <strong>CEX circuit breakers:</strong> Major
+exchanges halt withdrawals and deposits. - <strong>Rollback
+debate:</strong> The community faces an agonizing choice — roll back the
+chain to before the attacks, losing potentially days or weeks of
+legitimate transactions, or accept the losses and move forward.</p>
+<p><strong>The rollback calculus:</strong> A rollback is technically
+possible but socially catastrophic. It would: - Destroy confidence in
+Ethereum's immutability</p>
+<ul>
+<li><p>Create legal chaos (which transactions are "real"?)</p></li>
+<li><p>Set a precedent for future interventions</p></li>
+<li><p>Potentially split the community (those who lost funds vs. those
+who benefited from legitimate post-attack transactions)</p></li>
+</ul>
+<p>The 2016 DAO hack rollback worked because the community was smaller
+and the damage was contained. A quantum attack could be far more
+distributed and harder to cleanly separate from legitimate activity.</p>
+<p><strong>Likely outcome:</strong> A messy compromise — partial
+freezes, emergency hard fork to disable secp256k1, rapid deployment of
+ZK recovery, and significant but not total losses. Some whales get rekt.
+Trust is damaged but Ethereum survives.</p>
+<hr />
+<h2 id="damn-im-not-good-nightmare-mode-we-are-so-rekt">Damn I'm (not)
+Good (Nightmare Mode): We Are So Rekt</h2>
+<p align="center">
+<img src="../../../../../images/keymig/image-13.png" alt="pektra" class="center"/>
+<p align="center">
+<p><small>(<em>REKT</em>)</small></p>
+<p>In this scenario, quantum computing is available tomorrow. No
+warning. No preparation complete. Shor's algorithm runs on a machine
+that can break secp256k1 in hours or days.</p>
+<p><strong>Immediate impact:</strong> - Every EOA with an exposed public
+key is vulnerable</p>
+<ul>
+<li><p>Every validator's BLS signature is compromised (BLS12-381 also
+falls to quantum attacks)</p></li>
+<li><p>Consensus itself is at risk</p></li>
+</ul>
+<p><strong>Emergency possibilities:</strong></p>
+<h3 id="centralized-currency-freeze">1. Centralized Currency Freeze</h3>
+<p>USDT, USDC, and other centralized stablecoins can freeze all
+transfers via admin functions. This is actually the <em>safest</em>
+money in this scenario — a perverse outcome where centralization becomes
+a feature. These issuers would wait until a recovery mechanism is
+designed, then selectively unfreeze based on proof of legitimate
+ownership.</p>
+<h3 id="naive-consensus-fallback">2. Naive Consensus Fallback</h3>
+<p>A hastily-deployed consensus mechanism where each validator signs
+using a PQ signature (e.g., Dilithium) before BLS aggregation could
+theoretically work, but the performance impact would be severe:</p>
+<p><strong>Current BLS aggregation:</strong> - Signature size: 96 bytes
+(aggregated from all attesters)</p>
+<ul>
+<li>Verification: Single pairing check, ~1-2ms</li>
+</ul>
+<p><strong>Naive PQ replacement (FALCON512):</strong> - Signature size:
+666 bytes × ~300,000 validators = <strong>~200Mo per epoch just for
+attestations</strong></p>
+<ul>
+<li>Verification: Each signature verified individually, ~0.5ms × 300,000
+= <strong>~150 seconds per epoch</strong></li>
+</ul>
+<p>This is obviously unworkable for normal operation. The network would
+grind to a halt or require massive validator set reduction (e.g., only
+1,000 validators, re-introducing centralization), or some recursion.</p>
+<p><strong>A more realistic emergency consensus:</strong> - Dramatically
+reduce validator count to a trusted emergency set</p>
+<ul>
+<li><p>Accept centralization as temporary survival mode</p></li>
+<li><p>Block times increase from 12 seconds to perhaps minutes</p></li>
+</ul>
+<h3 id="erc-4337-account-abstraction-refuge">3. ERC-4337 Account
+Abstraction Refuge</h3>
+<p>Users with existing 4337 smart accounts using PQ verification (like
+ZKNOX accounts) would be the only ones with secure, self-custodial
+access. These accounts become lifeboats. However, if the underlying L1
+consensus is compromised, even these accounts are only as secure as the
+chain they're on.</p>
+<h3 id="l2-evacuation">4. L2 Evacuation</h3>
+<p>If L2s can quickly deploy PQ verification and their sequencers aren't
+compromised, they might serve as temporary safe havens. Assets could be
+bridged to L2s that implement emergency PQ measures faster than L1 can
+hard fork.</p>
+<p><strong>Realistic outcome:</strong> Catastrophic even if not
+terminal. Ethereum would survive in a very diminished, emergency form.
+Massive value destruction occurs. Recovery takes months or years. The
+"immutable ledger" narrative is permanently damaged, but the technology
+eventually rebuilds with proper quantum resistance.</p>
+<hr />
+<h2 id="conclusion">Conclusion</h2>
+<figure>
+<img src="image-2.png" alt="alt text" />
+<figcaption aria-hidden="true">alt text</figcaption>
+</figure>
+<p>We need a <strong>red button</strong> .</p>
+<p>Not to use — hopefully never to use — but to have ready as a
+mitigation against the nightmare scenario. This means:</p>
+<ol type="1">
+<li><p><strong>Implemented ZK recovery circuits</strong>, tested and
+audited, ready for emergency deployment</p></li>
+<li><p><strong>WHIR aggregation infrastructure</strong> that can handle
+mass recovery operations</p></li>
+<li><p><strong>Wallet vendor integration</strong> so recovery UX is
+ready, not improvised</p></li>
+<li><p><strong>Emergency consensus specifications</strong> that trade
+decentralization for survival</p></li>
+<li><p><strong>Coordination mechanisms</strong> between major
+stakeholders (client teams, large stakers, centralized issuers) for
+rapid response</p></li>
+</ol>
+<p>The cost of building this infrastructure is trivial compared to the
+potential losses. Even if the probability of a nightmare scenario is
+low, the expected value calculation clearly favors preparation:</p>
+<p><span
+class="math display">$4<em>M</em><sub><em>p</em><em>r</em><em>e</em><em>p</em><em>a</em><em>r</em><em>a</em><em>t</em><em>i</em><em>o</em><em>n</em></sub> ≪ 0.1% × $40<em>B</em><sub><em>l</em><em>o</em><em>s</em><em>s</em></sub> = $400<em>M</em><sub><em>e</em><em>x</em><em>p</em><em>e</em><em>c</em><em>t</em><em>e</em><em>d</em>_<em>l</em><em>o</em><em>s</em><em>s</em></sub></span></p>
+<p>The Nuke may never come, or may come so slowly we barely notice the
+transition. But if it comes fast, we need to be ready.</p>
+<p><strong>Keep your seed phrase safe. It may be your only recovery
+path.</strong></p>
+<p align="center">
+<img src="../../../../../images/keymig/image-5.png" alt="pektra" class="center"/>
+<p align="center">
+<p><small>(<em>Quantum Apocalypse</em>)</small></p>
+<h2 id="references">References</h2>
+<p><a href="https://eprint.iacr.org/2025/1368.pdf">Post-Quantum
+Readiness in EdDSA Chains</a> <a
+href="https://ethresear.ch/t/how-to-hard-fork-to-save-most-users-funds-in-a-quantum-emergency/18901">How
+to hard-fork to save most users' funds in a quantum emergency</a></p>
+<hr />
+<p><em>ZKNOX — Post-Quantum Cryptography for Ethereum</em></p>
+ </div> 

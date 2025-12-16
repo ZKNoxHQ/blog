@@ -1,0 +1,489 @@
+
+
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<style>
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1c1c1c;
+        color: white;
+    }
+    .markdown-body table tr {
+        background-color: #1c1c1c;
+    }
+    .markdown-body table tr:nth-child(2n) {
+        background-color: black;
+    }
+}
+</style>
+
+
+
+<link rel="alternate" type="application/rss+xml" href="../../../../feed.xml" title="3 Years of passkey">
+
+
+
+<link rel="stylesheet" type="text/css" href="../../../../css/common-vendor.b8ecfc406ac0b5f77a26.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
+
+<script type="text/x-mathjax-config">
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']]
+  },
+  svg: {
+    fontCache: 'global',
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../scripts/tex-svg.js">
+</script>
+
+<style>
+</style>
+
+<div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
+
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="3 Years of passkey" />
+<meta name="twitter:image" content="" />
+
+
+<br>
+<h1 style="margin-bottom:7px"> 3 Years of passkey </h1>
+<small style="float:left; color: #888"> 2025 Dec 03 </small>
+<small style="float:right; color: #888"><a href="../../../../index.html">See all posts</a></small>
+<br> <br> <br>
+<title> 3 Years of passkey </title>
+
+<p align="center">
+<img src="../../../../../images/passkeys.png" alt="drawing" class="center" width="350"/>
+<p align="center">
+<p><small>(The Passkey UX)</small></p>
+<p><em>A cryptographic odyssey from the Starknet ecosystem to Ethereum,
+from promises to disillusionment and rebirth.</em></p>
+<hr />
+<h2 id="introduction">Introduction</h2>
+<p>Three years. That's how long it took to transform an intuition into
+conviction, and then into partial disillusionment. Three years exploring
+passkeys, a technology that promised to revolutionize Web3 onboarding.
+Here's the story of a team that believed, innovated, and ultimately
+pivoted in the face of market and security realities to what is ZKNOX
+today.</p>
+<h2 id="part-i-the-origins-2022">Part I: The Origins (2022)</h2>
+<h3 id="from-defense-to-hardware-wallets">From defense to hardware
+wallets</h3>
+<p>In 2022, I left the defense industry to join a leading hardware
+wallet manufacturer — a French company that had grown into a unicorn.
+The innovation team welcomed me, and I quickly began exploring a subject
+I was passionate about: threshold signatures.</p>
+<p>My first experiments focused on <strong>MuSig2</strong>, an
+aggregated signature protocol considered the ancestor of FROST (Flexible
+Round-Optimized Schnorr Threshold). The architecture was ambitious: the
+signer was implemented on the Nano hardware wallet, and the verifier in
+<strong>Cairo0</strong> — a language notoriously difficult to grasp at
+the time, but offering unique properties for proof verification.</p>
+<h3 id="discovering-cartridge">Discovering Cartridge</h3>
+<p>It was during this period that we noticed the work of an
+unconventional team: <strong>Cartridge</strong>, a company developing
+gaming infrastructure on Starknet. Their bold project: integrating
+passkeys into a Starknet account.</p>
+<p>At the time, <strong>Account Abstraction</strong> was under
+discussion for Ethereum but only existed on mainnet on Starknet. This
+particularity made the StarkWare ecosystem an ideal testing ground.</p>
+<blockquote>
+<p><em>"The noncustodial Cartridge Controller is actually a web-based
+wallet that interacts with StarkNet. Instead of private keys, it makes
+use of Android or Apple Passkeys, which are both based on the WebAuthn
+standard."</em></p>
+<p>— Cointelegraph, March 2023</p>
+</blockquote>
+<p>We got in touch with the Cartridge team, and I dove into optimizing
+their implementation of <strong>secp256r1</strong> (P256) signature
+verification on-chain.</p>
+<h3 id="the-optimization-that-changed-everything">The optimization that
+changed everything</h3>
+<p>The problem was clear: verifying a P256 signature on-chain cost a
+fortune in gas. The first implementations required about <strong>240,000
+computational steps</strong> on Starknet.</p>
+<p>My optimization work reduced this cost by nearly
+<strong>50%</strong>. This performance attracted attention from the
+ecosystem, notably from <strong>Braavos</strong>, who coined the term
+"Hardware Signer" for this approach — terminology that stuck.</p>
+<blockquote>
+<p><em>"The Hardware Signer utilizes the secure subsystem built-in in
+users' device — iPhone's Secure Enclave or Android Phone's Titan HSM –
+to protect the account. It generates the keys using an internal True
+Random Number Generator (TRNG) and signs messages over the NIST-P256
+elliptic curve (secp256r1)."</em></p>
+<p>— Braavos Documentation</p>
+</blockquote>
+<h3 id="starknetcc-lisbon-the-breakthrough">StarknetCC Lisbon: The
+breakthrough</h3>
+<p>November 2022 marked a turning point. I presented our results at
+<strong>StarknetCC in Lisbon</strong>, before an audience of developers
+and researchers from the ecosystem.</p>
+<p>But the highlight of the conference was elsewhere: our team won the
+<strong>CTF</strong> (Capture The Flag) organized alongside the event.
+An anecdote illustrates our team's caliber: "Nix" a member of our
+employer's security offensive team (the "Donjon"), found an elegant
+solution to the hardest problem — a solution requiring only a few
+minutes on a laptop, while other teams assumed the challenge had been
+brute-forced by powerful servers.</p>
+<hr />
+<h2 id="part-ii-expansion-to-ethereum-2023">Part II: Expansion to
+Ethereum (2023)</h2>
+<h3 id="eip-4337-account-abstraction-arrives-on-ethereum">EIP-4337:
+Account Abstraction arrives on Ethereum</h3>
+<p>2023 began with a major announcement: <strong>EIP-4337</strong>
+brought Account Abstraction on-chain to Ethereum mainnet. This was the
+signal we'd been waiting for.</p>
+<p>Our team had a bold idea: export the innovation imagined by Cartridge
+for on-chain gaming to Ethereum, but with a more generalist approach.
+The goal: create a universal onboarding wallet based on passkeys.</p>
+<h3 id="the-gas-challenge-on-ethereum">The gas challenge on
+Ethereum</h3>
+<p>The problem was significant. At that time, the gas cost of emulating
+the R1 curve (secp256r1) on-chain exceeded <strong>1 million
+gas</strong> — a prohibitive cost on Ethereum mainnet.</p>
+<p>My embedded systems experience proved crucial. Writing in
+<strong>Yul</strong> (the EVM's assembly language) is actually similar
+to the low-level optimization I practiced in the defense world. Combined
+with my expertise in cryptographic algorithms, this experience allowed
+me to develop significant optimizations.</p>
+<h3 id="the-academic-publication">The academic publication</h3>
+<p>This work was formalized in an academic paper published on
+<strong>IACR ePrint</strong>:</p>
+<blockquote>
+<p><strong>"Speeding up elliptic computations for Ethereum Account
+Abstraction"</strong></p>
+<p><em>"Our optimizations rely on EVM dedicated XYZZ elliptic
+coordinates system, hacked precomputations, and assembly tricks to cut
+from more than 1M to 200K/62K (with or without
+precomputations)"</em></p>
+<p>— <a href="https://eprint.iacr.org/2023/939">ePrint 2023/939</a></p>
+</blockquote>
+<p>The results were spectacular: - <strong>6x reduction</strong> for a
+version without precomputation - <strong>15x reduction</strong> with
+precomputation (at the cost of on-chain storage)</p>
+<h3 id="recognition-from-clave">Recognition from Clave</h3>
+<p>This work was praised by the team that would become
+<strong>Clave</strong>, a Turkish project pushing an EIP to integrate
+the secp256r1 curve directly into Ethereum nodes. This proposal would
+become <strong>RIP-7212</strong> (Rollup Improvement Proposal), the
+first RIP in Ethereum's history.</p>
+<blockquote>
+<p><em>"RIP-7212 proposes to create a precompiled contract for the
+secp256r1 curve. With RIP-7212 verifying P256 only costs 3450 gas, a
+100x reduction from the best non-protocol change option."</em></p>
+<p>— Alchemy Blog</p>
+</blockquote>
+<p>On our side, we made a different bet: with a sufficiently low gas
+cost thanks to our optimizations, the solution was <strong>immediately
+usable</strong>, without waiting for an EIP whose adoption would take
+years.</p>
+<p>History would prove us right on timing: nearly 3 years have passed,
+and RIP-7212 is still not universally deployed.</p>
+<h3 id="the-vision-passkeys-as-an-onboarding-funnel">The vision:
+Passkeys as an onboarding funnel</h3>
+<p>At this point, our conviction was strong. We believed that the UX
+benefits, coupled with enhanced security (passkey key management in the
+secure enclave), represented a <strong>tremendous funnel</strong> for a
+first-time onboarding wallet.</p>
+<p>The strategy was clear: 1. Onboard users with a simple, secure
+passkey wallet 2. Gradually migrate them to a more complete hardware
+wallet 3. Offer a multisig architecture combining passkey and hardware
+wallet</p>
+<p>The performance was praised by the community. Unfortunately, we
+couldn't convince internal stakeholders of this scenario.</p>
+<hr />
+<h2 id="part-iii-the-smoo.th-adventure-2023-2024">Part III: The Smoo.th
+Adventure (2023-2024)</h2>
+<h3 id="leaving-our-employer">Leaving our employer</h3>
+<p>The decision matured. Our employer was going through difficulties and
+initiated voluntary departure plans. The timing was perfect — we
+volunteered.</p>
+<p>The founding team coalesced around <strong>Nicolas Bacca</strong>
+(btchip), a historic co-founder of our former employer and inventor of
+the modern "smartcard for the internet" concept.</p>
+<h3 id="ethglobal-validation">ETHGlobal: Validation</h3>
+<p>Our first step: validate the concept. We won the <strong>ETHGlobal
+hackathon</strong>, which reinforced our conviction. The
+<strong>FreshCryptoLib</strong>, (while not from Bel-Air), we developed
+became a reference for on-chain P256 signature verification, before we
+forked it to <strong>Smooth Crypto Library</strong>.</p>
+<blockquote>
+<p><em>"We extended Smooth Crypto Library, the reference library for
+on-chain Passkey validation built by our team."</em></p>
+<p>— ETHGlobal Showcase</p>
+</blockquote>
+<h3 id="smoo.th-the-stripe-of-web3">Smoo.th: The "Stripe of Web3"</h3>
+<p>We began designing a transparent onboarding solution:
+<strong>Smoo.th</strong>. The ambition was to become the "Stripe of
+Web3" — invisible infrastructure allowing any application to integrate a
+wallet in just a few lines of code.</p>
+<p>The concept relied on several innovations: - <strong>Identity/wallet
+separation</strong>: Users authenticate via their web2 identity (email,
+Google account), the wallet is created in the background</p>
+<ul>
+<li><p><strong>Passkey as signer</strong>: The private key is
+automatically generated and secured by biometrics (Touch ID, Face
+ID)</p></li>
+<li><p><strong>Account Abstraction</strong>: The smart contract wallet
+offers flexibility and advanced features</p></li>
+<li><p><strong>Paymaster</strong>: Transactions can be sponsored,
+eliminating the need to own crypto</p></li>
+</ul>
+<h3 id="a-road-full-of-obstacles">A road full of obstacles</h3>
+<p>A fundraising phase followed, along with hesitation. We quickly
+realized an uncomfortable truth: <strong>without distribution,
+Go-To-Market is uncertain</strong>.</p>
+<p>Although we were halfway to our planned raise, we abandoned following
+negative VC feedback. The message was clear: the technology is
+impressive, but the distribution strategy isn't convincing.</p>
+<blockquote>
+<p><em>"We've decided not to move forward with Smoo.th - we reconsidered
+our go to market strategy during our road show and couldn't figure any
+that would be suitable for the growth scenario we envisioned as a
+team."</em></p>
+<p>— Nicolas Bacca (<span class="citation"
+data-cites="BTChip">@BTChip</span>), Twitter</p>
+</blockquote>
+<h3 id="coinbase-integrates-our-code">Coinbase integrates our code</h3>
+<p>Ironically, simultaneously with our decision to stop Smoo.th,
+<strong>Coinbase Wallet</strong> integrated our open source code (as <a
+href="https://etherscan.io/address/0x0ba5ed0c6aa8c49038f819e587e2633c4a9f428a#code#F13#L1">here</a>
+) for P256 verification on chains that don't implement RIP-7212.</p>
+<p>Our technical work has impact, but we don't have Coinbase's
+distribution power. And even they don't seem to be making their wallet a
+cash machine.</p>
+<hr />
+<h2 id="part-iv-the-security-disillusionment">Part IV: The Security
+Disillusionment</h2>
+<h3 id="passkeys-arent-what-we-were-sold">Passkeys aren't what we were
+sold</h3>
+<p>A new fact darkened the picture: passkey security isn't what we
+expected.</p>
+<p>The initial promise was seductive: private keys are generated and
+stored in the phone's <strong>secure enclave</strong> (Secure Enclave on
+iOS, Titan on Android), a hardware environment isolated from the main
+processor. This architecture was supposed to guarantee that keys never
+leave the device.</p>
+<p>Reality is different.</p>
+<h3 id="btchips-technical-analysis">btchip's technical analysis</h3>
+<p>Nicolas Bacca (btchip) conducted an <a
+href="https://github.com/btchip/passkeys-devcon7">in-depth analysis</a>
+and managed to demonstrate that enclave-to-enclave encryption isn't done
+via a secure tunnel. At some point in the iCloud synchronization
+process, keys are written <strong>in clear text</strong>.</p>
+<p>This discovery is documented in a technical article with the
+evocative title <strong>"The good, the bad and the ugly"</strong>
+(published by SlashID):</p>
+<blockquote>
+<p><em>"These two security safeguards are lost with passkeys, because,
+despite being stored in the Secure Enclave, the private key is exported
+to iCloud and hence its strength is only as good as the iCloud recovery
+process."</em></p>
+<p><em>"iOS 16 makes it impossible to use device-bound WebAuthn keys,
+effectively downgrading WebAuthn security on Apple devices to an AppleID
+reset flow."</em></p>
+<p>— <a href="https://www.slashid.dev/blog/passkeys-deepdive/">SlashID:
+The good, the bad and the ugly of Apple Passkeys</a></p>
+</blockquote>
+<h3 id="the-synchronization-mechanism-exposed">The synchronization
+mechanism exposed</h3>
+<p>Code analysis reveals the mechanism:</p>
+<pre><code>When a user enables iCloud Keychain for the first time, the device 
+establishes a circle of trust and creates a syncing identity for itself.
+The syncing identity consists of a private key and a public key.</code></pre>
+<p>When a key is marked as <code>kSecAttrSynchronizable</code>, it's no
+longer protected by a key that never leaves the device. It's encrypted
+with a key that can be reconstructed during iCloud restoration.</p>
+<blockquote>
+<p><em>"In other words, the private key used to encrypt
+kSecAttrSynchronizable keys in the Secure Enclave is backed in iCloud.
+As such, when a new device needs to restore the keychain it can
+reconstruct the private key."</em></p>
+</blockquote>
+<h3 id="the-impossibility-of-verifying-provenance">The impossibility of
+verifying provenance</h3>
+<p>Worse still: Apple has removed the ability to verify authenticator
+authenticity. The AAGUID (Authenticator Attestation Global Unique
+Identifier) is replaced by zeros, and the attestation statement is
+empty.</p>
+<p>This means it's impossible to prove: - That the key was generated in
+a secure environment - That the key is stored securely - The
+authenticator's provenance</p>
+<p>For a technology supposed to offer "hardware wallet" level security,
+this is a major regression.</p>
+<hr />
+<h2 id="part-v-the-pivot-to-zknox">Part V: The Pivot to ZKNOX</h2>
+<h3 id="the-accumulation-of-signals">The accumulation of signals</h3>
+<p>Facing this accumulation of negative signals:</p>
+<ul>
+<li><p><strong>Distribution</strong>: Without distribution power
+comparable to giants, it's hard to break through</p></li>
+<li><p><strong>Security</strong>: Passkeys don't deliver on their
+promises</p></li>
+<li><p><strong>Market</strong>: Even Coinbase isn't making their wallet
+a financial success story</p></li>
+</ul>
+<p>We made a strategic decision: refocus our activities on
+<strong>generalist R&amp;D</strong> rather than "passkey only." Some of
+smoo.th cofounders decided to leave the adventure for AI and Defi closer
+to direct product development.</p>
+<h3 id="the-birth-of-zknox">The birth of ZKNOX</h3>
+<p><strong>ZKNOX</strong> was born from this reflection. The team was
+strengthened by a researcher specializing in Zero-Knowledge Proofs,
+expanding our scope to: - Post-quantum cryptography (Dilithium, Falcon)
+- Threshold protocols (FROST) - Hardware wallet / blockchain integration
+- Zero-knowledge proofs</p>
+<p>Our expertise in cryptographic optimization remains our DNA, but we
+now apply it to a broader spectrum of challenges.</p>
+<hr />
+<h2 id="conclusion-lessons-from-three-years">Conclusion: Lessons from
+three years</h2>
+<p>In the end it was the beginning of my journey from an industry
+(defense) to another and my first on-chain steps. Switching from a very
+traditional context to the high pic of Serotonine web3 offers was an
+amazing chance, as well as all the encounters made along the way.</p>
+<h3 id="what-we-learned">What we learned</h3>
+<ol type="1">
+<li><p><strong>Technology alone isn't enough</strong>: Our optimizations
+were state of the art, but without distribution, impact remains
+limited.</p></li>
+<li><p><strong>Promised security isn't always real security</strong>:
+Passkeys seemed like the perfect solution. Technical analysis reveals
+significant compromises.</p></li>
+<li><p><strong>Timing matters as much as technology</strong>: RIP-7212
+is taking years to be adopted. Our bet on offering an immediately usable
+solution was justified.</p></li>
+<li><p><strong>Open source creates value, even without capture</strong>:
+Our code is used by Coinbase and others. Impact exists, even if economic
+value is captured elsewhere.</p></li>
+</ol>
+<h3 id="the-technical-legacy">The technical legacy</h3>
+<p>Our work contributed to the ecosystem in several ways: - <strong>FCL
+(Fresh Crypto Library)</strong>: Our P256 optimization library became a
+reference</p>
+<ul>
+<li><p><strong>Academic paper</strong>: XYZZ coordinates techniques are
+documented and reusable. To date it is still the fastest generic ECC
+implementation, not meant to be limited to secp256r1 but also Jujub,
+ed25519 and any other. While r1 makes no more sense with fusaka, it
+could still be of some use.</p></li>
+<li><p><strong>Inspiration for Braavos, Clave and others</strong>: Our
+approach influenced the ecosystem.</p></li>
+</ul>
+<h3 id="toward-the-future">Toward the future</h3>
+<p>Passkeys remain a promising technology for mainstream onboarding. But
+they cannot be the sole security pillar of a crypto wallet.</p>
+<p>The future we're building at ZKNOX combines:</p>
+<ul>
+<li><p><strong>Passkeys</strong> for onboarding UX</p></li>
+<li><p><strong>Hardware wallets</strong> for long-term security</p></li>
+<li><p><strong>Threshold signatures</strong> for resilience</p></li>
+<li><p><strong>Post-quantum cryptography</strong> for longevity</p></li>
+<li><p><strong>Zero Knowledge Proofs</strong> for privacy and
+traditional finance compliance</p></li>
+</ul>
+<p>Three years of passkeys taught us humility in the face of
+technological promises, and the necessity of a multi-layered approach to
+security.</p>
+<hr />
+<h2 id="references">References</h2>
+<h3 id="technical-publications">Technical publications</h3>
+<ul>
+<li><a href="https://eprint.iacr.org/2023/939">Speeding up elliptic
+computations for Ethereum Account Abstraction</a> - ePrint 2023/939</li>
+<li><a
+href="https://github.com/ethereum/RIPs/blob/master/RIPS/rip-7212.md">RIP-7212:
+Precompile for secp256r1 Curve Support</a> - Ethereum RIPs</li>
+</ul>
+<h3 id="reference-articles">Reference articles</h3>
+<ul>
+<li><a href="https://www.slashid.dev/blog/passkeys-deepdive/">The good,
+the bad and the ugly of Apple Passkeys</a> - SlashID</li>
+<li><a href="https://www.alchemy.com/blog/what-is-rip-7212">What is
+RIP-7212?</a> - Alchemy</li>
+<li><a
+href="https://braavos.app/hardware-signer-2fa-security-crypto-smart-contract-wallets/">Hardware
+Signer: Secure Your Crypto Wallet</a> - Braavos</li>
+</ul>
+<h3 id="repositories">Repositories</h3>
+<ul>
+<li><a
+href="https://github.com/rdubois-crypto/FreshCryptoLib">FreshCryptoLib</a>
+- Used by Coinbase Smart Wallet</li>
+<li><a href="https://github.com/myBraavos/braavos-account-cairo">Braavos
+Account Cairo</a> - Starknet implementation</li>
+<li><a
+href="https://github.com/argentlabs/starknet-plugin-account">Starknet
+Plugin Account</a> - Argent/Cartridge collaboration</li>
+</ul>
+<h3 id="media">Media</h3>
+<ul>
+<li><a
+href="https://www.bbschool.fr/main-blog/bitcoin-ledger-nicolas-bacca">Bitcoin,
+Ledger, Smoo.th: Nicolas Bacca redefines crypto adoption</a> - BBS</li>
+<li><a
+href="https://cointelegraph.com/news/account-abstraction-supercharges-ethereum-wallets-dummies-guide">Account
+abstraction supercharges Ethereum wallets</a> - Cointelegraph</li>
+</ul>
+<hr />
+<p><em>Published on the ZKNOX technical blog</em> <em>Author: Renaud
+Dubois, CTO</em></p>
+ </div> 

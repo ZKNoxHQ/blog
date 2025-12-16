@@ -1,0 +1,334 @@
+
+
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<style>
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1c1c1c;
+        color: white;
+    }
+    .markdown-body table tr {
+        background-color: #1c1c1c;
+    }
+    .markdown-body table tr:nth-child(2n) {
+        background-color: black;
+    }
+}
+</style>
+
+
+
+<link rel="alternate" type="application/rss+xml" href="../../../../feed.xml" title="Integrating EIP-7702 with Hardware Wallets">
+
+
+
+<link rel="stylesheet" type="text/css" href="../../../../css/common-vendor.b8ecfc406ac0b5f77a26.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
+
+<script type="text/x-mathjax-config">
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']]
+  },
+  svg: {
+    fontCache: 'global',
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../scripts/tex-svg.js">
+</script>
+
+<style>
+</style>
+
+<div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
+
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Integrating EIP-7702 with Hardware Wallets" />
+<meta name="twitter:image" content="" />
+
+
+<br>
+<h1 style="margin-bottom:7px"> Integrating EIP-7702 with Hardware Wallets </h1>
+<small style="float:left; color: #888"> 2025 May 09 </small>
+<small style="float:right; color: #888"><a href="../../../../index.html">See all posts</a></small>
+<br> <br> <br>
+<title> Integrating EIP-7702 with Hardware Wallets </title>
+
+<p align="center">
+<img src="../../../../../images/pectra7702hws.jpeg" alt="pektra" class="center"/>
+<p align="center">
+<p><small>(Pectra adding support for Hardware Wallets)</small></p>
+<h2 id="introduction">Introduction</h2>
+<p>We've illustrated in a previous <a
+href="https://zknox.eth.limo/posts/2025/05/07/7702_for_hw_070525.html">blog
+post</a> <em>how Hardware Wallet vendors could use <a
+href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-7702.md">EIP-7702</a>
+quickly and efficiently</em>. We'll now take a different perspective and
+see how a wallet vendor could integrate a Hardware Wallet supporting
+EIP-7702 today.</p>
+<p>Support scope and data flow is different from one vendor to another,
+but they'll be offering the same functionalities from a high level point
+of view : signing an EIP-7702 authorization tuple and a type 4
+transaction. It's expected that delegate addresses will be filtered for
+security purposes.</p>
+<p>We'll be looking at 3 Hardware Wallet vendors : <a
+href="https://keyst.one/">Keystone</a>, <a
+href="https://www.ledger.com">Ledger</a> and <a
+href="https://trezor.io">Trezor</a>.</p>
+<p>Note that at the moment EIP-7702 is only officially supported for
+Ledger devices. Data parameters and flow for other vendors may change as
+the Pull Requests evolve.</p>
+<h2 id="ledger-support">Ledger support</h2>
+<h3 id="overview">Overview</h3>
+<p>EIP-7702 support is officially available for all Ledger devices (X,
+S+, Stax, Flex) but the Nano S. It could be easily backported if
+desired.</p>
+<p>The Ethereum application running on devices is available at <a
+href="https://github.com/LedgerHQ/app-ethereum">https://github.com/LedgerHQ/app-ethereum</a>.</p>
+<h3 id="eip-7702-authorization-tuple-signing-flow">EIP-7702
+authorization tuple signing flow</h3>
+<p>The following parameters are provided when signing an EIP-7702
+authorization tuple :</p>
+<ul>
+<li>BIP-32 path to the key signing the authorization tuple</li>
+<li>Delegate address</li>
+<li>Chain ID</li>
+<li>Nonce</li>
+</ul>
+<p>The device verifies that the delegate is in the application
+whitelist, displays all parameters related to the authorization tuple,
+asks the user for confirmation and returns the authorization tuple
+signature (<code>v, r, s</code> fields)</p>
+<h3 id="tx-type-4-signing-flow">TX type 4 signing flow</h3>
+<p>The device expects an unsigned Type 4 transaction containing an
+authorization list. After confirmation of the different transaction
+elements the device returns the transaction signature
+(<code>v, r, s</code> fields). The authorization list is not displayed
+to the user.</p>
+<h3 id="io-documentation">I/O documentation</h3>
+<p>The parameters for the <code>SIGN EIP-7702 AUTHORIZATION</code>
+command are described in <a
+href="https://github.com/LedgerHQ/app-ethereum/blob/develop/doc/ethapp.adoc#sign-eip-7702-authorization">https://github.com/LedgerHQ/app-ethereum/blob/develop/doc/ethapp.adoc#sign-eip-7702-authorization</a>.</p>
+<p>The <code>AUTH_7702</code> structure uses a DER (Distinguished
+Encoding Rules) TLV (Tag/Length/Value) encoding which can be summarized
+as follows for this use case :</p>
+<p>The DER encoding of an integer smaller than 0x7F is the integer.</p>
+<p>The DER encoding of an integer greater than 0x7F is 0x8X where X is
+the number of bytes of the smallest representation of the integer,
+followed by the smallest representation of the integer in big endian
+notation. For example <code>0x80</code> will be DER encoded as
+<code>0x81 0x80</code>.</p>
+<p>A DER TLV is encoded as the DER encoding of the tag, concatenated
+with the DER encoding of the length, followed by the value.</p>
+<h3 id="building-the-device-application">Building the device
+application</h3>
+<p>You'll need to rebuild the application if you're testing an EIP-7702
+delegate that isn't in the <a
+href="https://github.com/LedgerHQ/app-ethereum/blob/develop/src_features/signAuthorizationEIP7702/whitelist_7702.c">whitelist</a>
+for the current version loaded by Ledger Live.</p>
+<p>The device application can be rebuilt and side loaded on any device
+following the instructions given on <a
+href="https://github.com/LedgerHQ/app-ethereum/blob/develop/README.md">https://github.com/LedgerHQ/app-ethereum/blob/develop/README.md</a>
+- it's recommended to use a Linux system and Docker from the CLI.</p>
+<p>If you're not comfortable with running Docker in privileged mode, you
+can remove it, use the container to build the application then load it
+from your OS.</p>
+<p>To test a new delegate address you can either add it to the <a
+href="https://github.com/LedgerHQ/app-ethereum/blob/develop/src_features/signAuthorizationEIP7702/whitelist_7702.c">whitelist</a>
+or remove the <code>HAVE_EIP7702_WHITELIST</code> feature from the <a
+href="https://github.com/LedgerHQ/app-ethereum/blob/develop/makefile_conf/features.mk">Makefile</a>.</p>
+<h3 id="integrating-the-client">Integrating the client</h3>
+<p>EIP-7702 support will be ultimately integrated into Ledger new client
+architecture, the <a
+href="https://github.com/LedgerHQ/device-sdk-ts">Device Management
+Kit</a> - it's recommended for all integrators to switch to this client
+to support all clear signing features.</p>
+<p>In the meantime for a faster integration you can use the former
+client, <a
+href="https://github.com/LedgerHQ/ledger-live/tree/develop/libs/ledgerjs/packages/hw-app-eth">ledgerhq/hw-app-eth</a>.</p>
+<p>The <a
+href="https://github.com/LedgerHQ/ledger-live/blob/develop/libs/ledgerjs/packages/hw-app-eth/src/Eth.ts">client</a>
+will need to be modified to add support for the
+<code>SIGN EIP-7702 AUTHORIZATION</code> command.</p>
+<p>You can get some inspiration from this <a
+href="https://github.com/LedgerHQ/app-ethereum/blob/develop/examples/signAuthorizationEIP7702.py">sample
+Python script</a>.</p>
+<h2 id="keystone-support">Keystone support</h2>
+<h3 id="overview-1">Overview</h3>
+<p>EIP-7702 support is avaiable in <a
+href="https://github.com/KeystoneHQ/keystone3-firmware/pull/1727">PR
+#1727 for the firmware</a> and <a
+href="https://github.com/KeystoneHQ/keystone-sdk-rust/pull/112">PR #112
+for the SDK</a>.</p>
+<h3 id="eip-7702-authorization-tuple-signing-flow-1">EIP-7702
+authorization tuple signing flow</h3>
+<p>The EIP-7702 authorization tuple is RLP encoded without the
+<code>y_parity, r, s</code> fields, along with the path to the key
+signing the authorization, into a QR code that can be scanned by the
+device. When scanned, the device displays all parameters related to the
+authorization tuple, asks the user for confirmation and returns the
+authorization tuple signature (<code>y_parity, r, s</code> fields) as a
+QR code that can be scanned by the client.</p>
+<h3 id="tx-type-4-signing-flow-1">TX type 4 signing flow</h3>
+<p>The device expects an unsigned Type 4 transaction containing an
+authorization list encoded into a dedicated animated QR code, along with
+a path to the key signing this transaction. After confirmation of the
+different transaction elements the device returns the transaction
+signature (<code>y_parity, r, s</code> fields) as a QR code that can be
+scanned by the client. The authorization list is not displayed to the
+user.</p>
+<h3 id="io-documentation-1">I/O documentation</h3>
+<p>You can reuse <a
+href="https://github.com/KeystoneHQ/keystone-sdk-base/blob/master/packages/ur-registry-eth/__tests__/EthSignRequest.test.ts">the
+following code sample</a> to generate the content of the QR code to sign
+an EIP-7702 authorization tuple with some modifications :</p>
+<ul>
+<li>run the code independently by importing
+<code>@keystonehq/bc-ur-registry-eth</code> instead of importing from
+<code>../src</code></li>
+<li>set the RLP encoded unsigned authorization tuple
+<code>[chain_id, address, nonce]</code> as <code>rlpData</code></li>
+<li>modify the master fingerprint in <code>signKeyPath</code> by the one
+of your mnemonic</li>
+<li>set <code>dataType</code> to 5 in <code>ethSignRequest</code></li>
+</ul>
+<p>The response encoded as an <code>EthSignature</code> UR can be
+decoded with <a
+href="https://github.com/KeystoneHQ/keystone-sdk-base/blob/master/packages/ur-registry-eth/__tests__/EthSignature.test.ts">the
+following code sample</a>.</p>
+<h3 id="building-the-device-application-1">Building the device
+application</h3>
+<p>There's no official way to run a modified firmware on your device. If
+you're running a version with an older firmware (version 1.2.2 or 1.2.4)
+you might be able to use an exploit to do it nonetheless - see <a
+href="https://github.com/ZKNoxHQ/ks3-devkit">ks3-devkit</a>.</p>
+<p>In that case, you can build the <a
+href="https://github.com/btchip/keystone3-firmware/tree/auth_7702"><code>auth_7702</code>
+branch</a> as described in the <a
+href="https://github.com/btchip/keystone3-firmware/blob/auth_7702/README.md">README.md</a>.</p>
+<p>After building, you can sign the firmware with <a
+href="https://github.com/ZKNoxHQ/ks3-devkit/blob/main/signFirmware.py">signFirmware.py</a>
+or <a
+href="https://github.com/ZKNoxHQ/ks3-devkit/blob/main/signFirmwareOta2.py">signFirmwareOta2.py</a>
+if you updated the bootloader with firmware 2.0.4 - using the private
+key associated to the public key you injected earlier with <a
+href="https://github.com/ZKNoxHQ/ks3-devkit/blob/main/setUpdateKey.py">setUpdateKey.py</a>.</p>
+<p>You can then load the firmware either with <a
+href="https://github.com/ZKNoxHQ/ks3-devkit/blob/main/uploadFirmware.py">uploadFirmware.py</a>,
+or rename it <code>keystone3.bin</code> and put it on a SD card or use
+the <a
+href="https://keystonewallet.crisp.help/en/article/my-keystone-3-pro-cannot-turn-on-1e0c2p2/">Recovery
+Mode</a>.</p>
+<h3 id="integrating-the-client-1">Integrating the client</h3>
+<p>You can refer to the <a
+href="https://github.com/KeystoneHQ/keystone-sdk-web-demo">web SDK
+demonstration</a> or the <a
+href="https://github.com/KeystoneHQ/keystone-sdk-usb">USB SDK</a> -
+you'll need to support a new <code>DataType</code> as described in the
+I/O chapter.</p>
+<h2 id="trezor-support">Trezor support</h2>
+<h3 id="overview-2">Overview</h3>
+<p>EIP-7702 support is avaiable in <a
+href="https://github.com/trezor/trezor-firmware/pull/4945">PR #4945 for
+the firmware</a> for Trezor T, Trezor Safe 3 and Trezor Safe 5.</p>
+<h3 id="eip-7702-authorization-tuple-signing-flow-2">EIP-7702
+authorization tuple signing flow</h3>
+<p>New <a
+href="https://github.com/btchip/trezor-firmware/blob/main/common/protob/messages-ethereum.proto">Protocol
+Buffers</a> messages <code>EthereumSignAuth7702</code> and
+<code>EthereumAuth7702Signature</code> are introduced to support
+EIP-7702 authorization tuple signing.</p>
+<p>When receiving an <code>EthereumSignAuth7702</code> message, the
+device will display the <code>delegate</code>, <code>nonce</code> and
+<code>chain_id</code>, asks the user for confirmation and returns the
+authorization tuple signature as an
+<code>EthereumAuth7702Signature</code> message in
+<code>signature_v</code>, <code>signature_r</code> and
+<code>signature_s</code>.</p>
+<h3 id="tx-type-4-signing-flow-2">TX type 4 signing flow</h3>
+<p>A new Protocol Buffers message <code>EthereumSignedAuth7702</code> is
+introduced in the <code>EthereumSignTx</code> message to add the
+EIP-7702 authorization list, containing all elements of the
+authentication tuple (<code>chain_id</code>, <code>delegate</code>,
+<code>nonce</code>, <code>signature_v</code>, <code>signature_r</code>,
+<code>signature_s</code>)</p>
+<p>When receiving an <code>EthereumSignTx</code> message containing an
+<code>EthereumSignedAuth7702</code>, the device will handle it as a Type
+4 transaction. After confirmation of the different transaction elements
+the device returns the transaction signature in a
+<code>EthereumTxRequest</code> message (<code>signature_v</code>,
+<code>signature_r</code>, <code>signature_s</code>). The authorization
+list is not displayed to the user.</p>
+<h3 id="io-documentation-2">I/O documentation</h3>
+<p>I/O parameters are self described by the Protocol Buffers
+messages.</p>
+<h3 id="building-the-device-application-2">Building the device
+application</h3>
+<p>Follow the <a
+href="https://docs.trezor.io/trezor-firmware/core/build/embedded.html">documentation</a>
+to build the firmware and load it on a device. Note that this operation
+turns definitely the device into a developer unit for Trezor Safe 3 and
+5.</p>
+<h3 id="integrating-the-client-2">Integrating the client</h3>
+<p>You can use the modified Protocol Buffer definitions with your
+existing client.</p>
+<p>You can also directly try the EIP-7702 functionalities from the CLI
+with <code>trezorctl eth sign-auth-7702</code> and
+<code>trezorctl eth sign-tx</code> with the <code>--auth-list</code>
+parameter.</p>
+ </div> 

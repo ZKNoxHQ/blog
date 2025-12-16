@@ -271,10 +271,10 @@ fine</em>)</small></p>
 sufficient warning — perhaps a decade or more — before cryptographically
 relevant quantum computers (CRQCs) emerge. Users, DeFi protocols, and
 infrastructure providers have ample time to migrate.</p>
-<p><strong>What happens:</strong> - PQ signature verification is added
-to the EVM via new precompiles (EIPs for ML-DSA, Falcon, and hash-based
-signatures)</p>
+<p><strong>What happens:</strong></p>
 <ul>
+<li><p>PQ signature verification is added to the EVM via new precompiles
+(EIPs for ML-DSA, Falcon, and hash-based signatures)</p></li>
 <li><p>Wallet vendors roll out firmware updates supporting PQ key
 derivation from existing seed phrases</p></li>
 <li><p>Users upgrade their EOAs to smart accounts with PQ verification,
@@ -287,7 +287,7 @@ protocol changes, another 2-3 years for ecosystem adoption, all
 completed well before any quantum threat materializes.</p>
 <p><strong>User experience:</strong> Seamless. A wallet notification
 prompts upgrade, user confirms, and their account is now
-quantum-resistant — still controlled by the same seed phrase.</p>
+quantum-resistant, still controlled by the same seed phrase.</p>
 <p>This is the scenario everyone hopes for. It requires no emergency
 measures, no frozen funds, no losses. The migration diagram for this
 path is straightforward: a simple upgrade flow from legacy EOA to
@@ -303,23 +303,24 @@ PQ-secured account.</p>
 estimates, but the community responds in time. Strong signals, perhaps a
 demonstration of Shor's algorithm on increasingly large key sizes,
 trigger coordinated action.</p>
-<p><strong>What happens:</strong> - Most sophisticated users (whales,
-institutions, active DeFi participants) migrate to PQ accounts before
-the threat becomes imminent</p>
+<p><strong>What happens:</strong></p>
 <ul>
+<li><p>Most sophisticated users (whales, institutions, active DeFi
+participants) migrate to PQ accounts before the threat becomes
+imminent</p></li>
 <li><p>Major DeFi protocols prioritize PQ compatibility</p></li>
 <li><p>The community, seeing clear warning signs, achieves rough
 consensus on an EOA freeze date</p></li>
 <li><p>A hard fork freezes legacy secp256k1-based EOAs, particularly
 those that have been inactive (no recent transactions exposing their
-public key are safer, but still frozen as a precaution)</p></li>
+public key are safer, but frozen as a precaution)</p></li>
 </ul>
-<p><strong>Post-freeze recovery:</strong> The ZK recovery mechanism
-activates. Users with frozen accounts can recover by generating a
-WHIR-aggregated proof locally (using their seed phrase) and submitting
-it alongside their new PQ public key. The proof demonstrates: "I know
-the seed that generated this frozen address, and here's my new PQ key
-derived from the same seed."</p>
+<p><strong>Post-freeze recovery:</strong></p>
+<p>The ZK recovery mechanism activates. Users with frozen accounts can
+recover by generating a WHIR-aggregated proof locally (using their seed
+phrase) and submitting it alongside their new PQ public key. The proof
+demonstrates: "I know the seed that generated this frozen address, and
+here's my new PQ key derived from the same seed."</p>
 <p><strong>Wallet vendor support:</strong> Hardware and software wallet
 vendors ship "recovery mode" firmware. The user connects their device,
 enters their seed phrase (or it's already stored securely), and the
@@ -332,9 +333,9 @@ logical qubits) exceeds the value of most individual wallets. Attackers
 would target the largest honeypots first, giving smaller holders time to
 recover.</p>
 <p><strong>Losses:</strong> Minimal. Some long-lost wallets (Satoshi-era
-ETH, forgotten accounts) remain frozen forever — their owners either
-lost their seeds or are unreachable. But active economic participants
-recover successfully.</p>
+ETH, forgotten accounts) remain frozen forever, their owners either lost
+their seeds or are unreachable. But active economic participants recover
+successfully.</p>
 <hr />
 <h2 id="come-get-some-losses-hard-mode-wow-didnt-see-it-that-fast">Come
 Get Some Losses (Hard Mode): Wow, Didn't See It That Fast</h2>
@@ -391,13 +392,13 @@ keys capable of blacklisting addresses. They freeze all movement pending
 resolution. This contains ~$100B+ in value but requires trusting
 centralized actors. - <strong>CEX circuit breakers:</strong> Major
 exchanges halt withdrawals and deposits. - <strong>Rollback
-debate:</strong> The community faces an agonizing choice — roll back the
+debate:</strong> The community faces an agonizing choice, roll back the
 chain to before the attacks, losing potentially days or weeks of
 legitimate transactions, or accept the losses and move forward.</p>
 <p><strong>The rollback calculus:</strong> A rollback is technically
-possible but socially catastrophic. It would: - Destroy confidence in
-Ethereum's immutability</p>
+possible but socially catastrophic. It would:</p>
 <ul>
+<li><p>Destroy confidence in Ethereum's immutability</p></li>
 <li><p>Create legal chaos (which transactions are "real"?)</p></li>
 <li><p>Set a precedent for future interventions</p></li>
 <li><p>Potentially split the community (those who lost funds vs. those
@@ -406,9 +407,9 @@ who benefited from legitimate post-attack transactions)</p></li>
 <p>The 2016 DAO hack rollback worked because the community was smaller
 and the damage was contained. A quantum attack could be far more
 distributed and harder to cleanly separate from legitimate activity.</p>
-<p><strong>Likely outcome:</strong> A messy compromise — partial
-freezes, emergency hard fork to disable secp256k1, rapid deployment of
-ZK recovery, and significant but not total losses. Some whales get rekt.
+<p><strong>Likely outcome:</strong> A messy compromise, partial freezes,
+emergency hard fork to disable secp256k1, rapid deployment of ZK
+recovery, and significant but not total losses. Some whales get rekt.
 Trust is damaged but Ethereum survives.</p>
 <hr />
 <h2 id="damn-im-not-good-nightmare-mode-we-are-so-rekt">Damn I'm (not)
@@ -420,9 +421,9 @@ Good (Nightmare Mode): We Are So Rekt</h2>
 <p>In this scenario, quantum computing is available tomorrow. No
 warning. No preparation complete. Shor's algorithm runs on a machine
 that can break secp256k1 in hours or days.</p>
-<p><strong>Immediate impact:</strong> - Every EOA with an exposed public
-key is vulnerable</p>
+<p><strong>Immediate impact:</strong></p>
 <ul>
+<li><p>Every EOA with an exposed public key is vulnerable</p></li>
 <li><p>Every validator's BLS signature is compromised (BLS12-381 also
 falls to quantum attacks)</p></li>
 <li><p>Consensus itself is at risk</p></li>
@@ -430,11 +431,9 @@ falls to quantum attacks)</p></li>
 <p><strong>Emergency possibilities:</strong></p>
 <h3 id="centralized-currency-freeze">1. Centralized Currency Freeze</h3>
 <p>USDT, USDC, and other centralized stablecoins can freeze all
-transfers via admin functions. This is actually the <em>safest</em>
-money in this scenario — a perverse outcome where centralization becomes
-a feature. These issuers would wait until a recovery mechanism is
-designed, then selectively unfreeze based on proof of legitimate
-ownership.</p>
+transfers via admin functions. These issuers would wait until a recovery
+mechanism is designed, then selectively unfreeze based on proof of
+legitimate ownership.</p>
 <h3 id="naive-consensus-fallback">2. Naive Consensus Fallback</h3>
 <p>A hastily-deployed consensus mechanism where each validator signs
 using a PQ signature (e.g., Dilithium) before BLS aggregation could
@@ -444,19 +443,20 @@ theoretically work, but the performance impact would be severe:</p>
 <ul>
 <li>Verification: Single pairing check, ~1-2ms</li>
 </ul>
-<p><strong>Naive PQ replacement (FALCON512):</strong> - Signature size:
-666 bytes × ~300,000 validators = <strong>~200Mo per epoch just for
-attestations</strong></p>
+<p><strong>Naive PQ replacement (FALCON512):</strong></p>
 <ul>
-<li>Verification: Each signature verified individually, ~0.5ms × 300,000
-= <strong>~150 seconds per epoch</strong></li>
+<li><p>Signature size: 666 bytes × ~300,000 validators = <strong>~200Mo
+per epoch just for attestations</strong></p></li>
+<li><p>Verification: Each signature verified individually, ~0.5ms ×
+300,000 = <strong>~150 seconds per epoch</strong></p></li>
 </ul>
 <p>This is obviously unworkable for normal operation. The network would
 grind to a halt or require massive validator set reduction (e.g., only
 1,000 validators, re-introducing centralization), or some recursion.</p>
-<p><strong>A more realistic emergency consensus:</strong> - Dramatically
-reduce validator count to a trusted emergency set</p>
+<p><strong>A more realistic emergency consensus:</strong></p>
 <ul>
+<li><p>Dramatically reduce validator count to a trusted emergency
+set</p></li>
 <li><p>Accept centralization as temporary survival mode</p></li>
 <li><p>Block times increase from 12 seconds to perhaps minutes</p></li>
 </ul>
@@ -479,13 +479,13 @@ Massive value destruction occurs. Recovery takes months or years. The
 eventually rebuilds with proper quantum resistance.</p>
 <hr />
 <h2 id="conclusion">Conclusion</h2>
-<figure>
-<img src="image-2.png" alt="alt text" />
-<figcaption aria-hidden="true">alt text</figcaption>
-</figure>
-<p>We need a <strong>red button</strong> .</p>
-<p>Not to use — hopefully never to use — but to have ready as a
-mitigation against the nightmare scenario. This means:</p>
+<p align="center">
+<img src="../../../../../images/keymig/image-2.png" alt="pektra" class="center"/>
+<p align="center">
+<p><small>(We need a <strong>red button</strong> .)</small></p>
+<p>A kill switch is required, not to use, hopefully never to use, but to
+have ready as a mitigation against the nightmare scenario. This
+means:</p>
 <ol type="1">
 <li><p><strong>Implemented ZK recovery circuits</strong>, tested and
 audited, ready for emergency deployment</p></li>
@@ -509,12 +509,13 @@ transition. But if it comes fast, we need to be ready.</p>
 <p><strong>Keep your seed phrase safe. It may be your only recovery
 path.</strong></p>
 <p align="center">
-<img src="../../../../../images/keymig/image-5.png" alt="pektra" class="center"/>
+<img src="../../../../../images/keymig/image-5a.png" alt="pektra" class="center"/>
 <p align="center">
-<p><small>(<em>Quantum Apocalypse</em>)</small></p>
+<p><small>(<em>Quantum Apocalypse Clock is ticking</em>)</small></p>
 <h2 id="references">References</h2>
 <p><a href="https://eprint.iacr.org/2025/1368.pdf">Post-Quantum
-Readiness in EdDSA Chains</a> <a
+Readiness in EdDSA Chains</a></p>
+<p><a
 href="https://ethresear.ch/t/how-to-hard-fork-to-save-most-users-funds-in-a-quantum-emergency/18901">How
 to hard-fork to save most users' funds in a quantum emergency</a></p>
 <hr />

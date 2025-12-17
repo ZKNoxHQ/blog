@@ -49,7 +49,7 @@ The Ethereum community is actively working on post-quantum migration strategies.
 Several concrete implementations already exist. **Post-Quantum Smart Accounts** based on ERC-4337 have been developed, notably hash-based schemes like XMSS with ZK-friendly Poseidon hashing and ZKNOX's implementation supporting Falcon, Dilithium (ML-DSA). These allow users to transition to quantum-resistant security today, without waiting for protocol-level changes.
 
 
-The key derivation architecture would extend BIP32/BIP39 with new derivation paths for each PQ algorithm, using the same master seed to derive both legacy secp256k1 keys and new PQ keys (Falcon at `m/44'/9002'/...`, Dilithium at `m/44'/9003'/...`, etc.). The following diagram illustrates the foresight mechanism, adapted to the ZKNOX Post Quantum key derivation scheme.
+The key derivation architecture would extend BIP32/BIP39 with new derivation paths for each PQ algorithm, using the same master seed to derive both legacy secp256k1 keys and new PQ keys (Falcon at `m/44'/9002'/...`, Dilithium at `m/44'/9003'/...`, etc.). The following diagram illustrates the foresight mechanism, adapted to the [ZKNOX](https://github.com/ZKNoxHQ/PQBIP39) Post Quantum key derivation scheme.
 
 <p align="center">
 <img src="../../../../../images/keymig/image-0.png" alt="pektra" class="center" />
@@ -285,6 +285,15 @@ The Nuke may never come, or may come so slowly we barely notice the transition. 
 [How to hard-fork to save most users’ funds in a quantum emergency](https://ethresear.ch/t/how-to-hard-fork-to-save-most-users-funds-in-a-quantum-emergency/18901)
 
 ---
+
+
+## Reach us
+
+🔐 Practical security on the whole chain.
+
+[Github](https://github.com/zknoxhq) | [Website](https://www.zknox.com) | [Twitter](https://x.com/zknoxhq) | [Blog](https://zknox.eth.limo) | [Contact Info](mailto:gm@zknox.com)
+
+<small>Found typo, or want to improve the note ? Our blog is open to PRs.</small>
 
 *ZKNOX — Post-Quantum Cryptography for Ethereum*
 

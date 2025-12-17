@@ -48,10 +48,18 @@ The Ethereum community is actively working on post-quantum migration strategies.
 
 Several concrete implementations already exist. **Post-Quantum Smart Accounts** based on ERC-4337 have been developed, notably hash-based schemes like XMSS with ZK-friendly Poseidon hashing and ZKNOX's implementation supporting Falcon, Dilithium (ML-DSA). These allow users to transition to quantum-resistant security today, without waiting for protocol-level changes.
 
-The concept of **ZK-based key migration for frozen accounts** has been [described](https://ethresear.ch/t/how-to-hard-fork-to-save-most-users-funds-in-a-quantum-emergency/18901) by Vitalik Buterin. The mechanism is elegant: users don't need to pre-register anything. They simply keep their BIP39 seed phrase. After a freeze of legacy EOAs, recovery works by submitting a ZK proof demonstrating knowledge of the master seed that generated both the legacy ETH address AND a new PQ public key. The proof links the old identity to the new key without revealing the secret. To date, however, no production implementation of this recovery mechanism exists.
 
 The key derivation architecture would extend BIP32/BIP39 with new derivation paths for each PQ algorithm, using the same master seed to derive both legacy secp256k1 keys and new PQ keys (Falcon at `m/44'/9002'/...`, Dilithium at `m/44'/9003'/...`, etc.). The following diagram illustrates the foresight mechanism, adapted to the ZKNOX Post Quantum key derivation scheme.
 
+<p align="center">
+<img src="../../../../../images/keymig/image-0.png" alt="pektra" class="center" />
+<p align="center">
+<small>(*ZKNOX Key Derivation Standard for PQC*)</small>
+
+
+The concept of **ZK-based key migration for frozen accounts** has been [described](https://ethresear.ch/t/how-to-hard-fork-to-save-most-users-funds-in-a-quantum-emergency/18901) by Vitalik Buterin. The mechanism is elegant: users don't need to pre-register anything. They simply keep their BIP39 seed phrase. After a freeze of legacy EOAs, recovery works by submitting a ZK proof demonstrating knowledge of the master seed that generated both the legacy ETH address AND a new PQ public key. The proof links the old identity to the new key without revealing the secret. To date, however, no production implementation of this recovery mechanism exists.
+
+The following diagram illustrates the circuit related to the ZK-BIP39 proof.
 
 <p align="center">
 <img src="../../../../../images/keymig/image-3.png" alt="pektra" class="center"/>

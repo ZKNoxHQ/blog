@@ -38,6 +38,11 @@ PQbeat evaluates entities across five stages (0-4) based on verifiable, deployed
 
 The progression is intentionally strict. A chain reaches Stage 1 only when users can create and operate post-quantum smart accounts in production — not on testnets, not in audits, but deployed and functional.
 
+
+**The consensus layer is the easy part.** When the time comes, a coordinated hard fork will migrate all validators at once — a single, synchronized upgrade.
+
+**The execution layer is the real challenge.** There is no hard fork for user accounts, smart contracts, or protocol governance. Each wallet must adopt PQ signatures. Each protocol must accept smart accounts. Each user must migrate their assets. This fragmented landscape — millions of independent actors with no forced upgrade path — will take years of advocacy, tooling, and incremental adoption.
+
 ### <span style="color: #6D28D9;">Stage Progression</span>
 
 ```

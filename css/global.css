@@ -1,39 +1,39 @@
 /*
-  Light Mode Color Scheme
+  ZKNOX Blog - Light Mode Color Scheme
 */
 :root {
-  --color-anchor: #337ab7;
-  --color-bg: #fff;
-  --color-blockquote-text: #777;
-  --color-code-bg: #f7f7f7;
-  --color-code-text: #333;
-  --color-divider: #cdcdcd;
-  --color-heading: #333;
-  --color-table-border: #c2c2c2;
-  --color-table-row-even: #f0f0f0;
-  --color-table-row-header: #e8e6e6;
-  --color-table-row-odd: #fbfbfb;
-  --color-toggle-accent: #c3a554;
-  --color-text: #333;
+  --color-anchor: #7c3aed;
+  --color-bg: #ffffff;
+  --color-blockquote-text: #718096;
+  --color-code-bg: #f0f2f5;
+  --color-code-text: #1a1a2e;
+  --color-divider: #e2e8f0;
+  --color-heading: #1a1a2e;
+  --color-table-border: #e2e8f0;
+  --color-table-row-even: #f8f9fa;
+  --color-table-row-header: #f0f2f5;
+  --color-table-row-odd: #ffffff;
+  --color-toggle-accent: #7c3aed;
+  --color-text: #4a5568;
 }
 
 /*
-  Dark Mode Color Scheme
+  ZKNOX Blog - Dark Mode Color Scheme
 */
 html.dark {
-  --color-anchor: #77e1cd;
-  --color-bg: #1c1c1c;
-  --color-blockquote-text: #c0bcbc;
-  --color-code-bg: #313030;
-  --color-code-text: #fefefe;
-  --color-divider: #8b8b8b;
-  --color-heading: #dfdfdf;
-  --color-table-border: #767676;
-  --color-table-row-even: #181818;
-  --color-table-row-header: #000;
-  --color-table-row-odd: #333333;
-  --color-toggle-accent: #a076ce;
-  --color-text: #fafafa;
+  --color-anchor: #a78bfa;
+  --color-bg: #0a0a0f;
+  --color-blockquote-text: #a0aec0;
+  --color-code-bg: #1a1a25;
+  --color-code-text: #e2e8f0;
+  --color-divider: #2d3748;
+  --color-heading: #f7fafc;
+  --color-table-border: #2d3748;
+  --color-table-row-even: #12121a;
+  --color-table-row-header: #1a1a25;
+  --color-table-row-odd: #0a0a0f;
+  --color-toggle-accent: #a78bfa;
+  --color-text: #e2e8f0;
 }
 
 /*

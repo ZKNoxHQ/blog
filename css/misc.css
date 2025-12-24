@@ -13,7 +13,7 @@
 
     .post-meta {
       font-size: 14px;
-      color: #828282; }
+      color: #718096; }
 
     .toc-category {
       display: inline-block;
@@ -29,7 +29,7 @@
       display: block; }
     .post-meta {
       font-size: 24px;
-      color: #828282; }
+      color: #718096; }
 
     .toc-category {
       display: inline-block;
@@ -42,13 +42,13 @@
 
 
 .python .dv {
-  color: #0086b3 }
+  color: #0066cc }
 
 .python .kw {
-  color: #a71d5d }
+  color: #7c3aed }
 
 .python .cf {
-  color: #a71d5d }
+  color: #7c3aed }
 
 @font-face {
     font-family: MJXc-TeX-math-Iw;

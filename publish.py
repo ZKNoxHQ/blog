@@ -40,9 +40,61 @@ ZKNOX_NAV_BANNER = """
         
         <div class="nav-links">
             <a href="https://zknox.com" class="nav-link">Home</a>
-            <a href="https://zknox.com/technologies.html" class="nav-link">Technologies</a>
-            <a href="https://zknox.com/products.html" class="nav-link">Products</a>
-            <a href="$root/index.html" class="nav-link active">Blog</a>
+            
+            <div class="nav-dropdown">
+                <a href="https://zknox.com/technologies.html" class="nav-link">Technologies</a>
+                <div class="dropdown-menu">
+                    <a href="https://zknox.com/tech-ecc.html" class="dropdown-item">Elliptic Curves</a>
+                    <a href="https://zknox.com/tech-hw.html" class="dropdown-item">Hardware Wallets</a>
+                    <a href="https://zknox.com/tech-mpc.html" class="dropdown-item">MPC</a>
+                    <a href="https://zknox.com/tech-pqc.html" class="dropdown-item">Post-Quantum Cryptography</a>
+                    <a href="https://zknox.com/tech-zk.html" class="dropdown-item">Zero Knowledge</a>
+                </div>
+            </div>
+            
+            <div class="nav-dropdown">
+                <a href="https://zknox.com/products.html" class="nav-link">Products</a>
+                <div class="dropdown-menu">
+                    <a href="https://zknox.com/products.html#libraries" class="dropdown-item">Cryptographic Libraries</a>
+                    <a href="https://zknox.com/products.html#hardware" class="dropdown-item">Hardware Integration</a>
+                    <a href="https://zknox.com/products.html#contracts" class="dropdown-item">Smart Contracts</a>
+                    <a href="https://zknox.com/products.html#zk" class="dropdown-item">ZK Circuits</a>
+                </div>
+            </div>
+            
+            <div class="nav-dropdown">
+                <a href="https://zknox.com/tools.html" class="nav-link">Tools</a>
+                <div class="dropdown-menu">
+                    <a href="https://zknox.com/demo-pqbip39.html" class="dropdown-item">PQBIP39</a>
+                    <a href="https://zknox.com/zknox-account.html" class="dropdown-item">ZKNOX Account</a>
+                    <a href="https://zknox.com/zknox-blue/official-apps.html" class="dropdown-item">ZKNOX Blue</a>
+                    <a href="https://zknox.com/zknox-orange/sideloader.html" class="dropdown-item">ZKNOX Orange</a>
+                    <a href="https://zknox.com/demo-zk-hardware.html" class="dropdown-item">ZK-Hardware</a>
+                    <a href="https://zknox.com/faucet.html" class="dropdown-item">Faucet</a>
+                </div>
+            </div>
+            
+            <div class="nav-dropdown">
+                <a href="https://zknox.com/research.html" class="nav-link">Research</a>
+                <div class="dropdown-menu">
+                    <a href="$root/index.html" class="dropdown-item">Blog</a>
+                    <a href="https://zknox.com/eips.html" class="dropdown-item">EIPs</a>
+                    <a href="https://zknox.com/hackathons.html" class="dropdown-item">Hackathons</a>
+                    <a href="https://zknox.com/papers.html" class="dropdown-item">Papers</a>
+                    <a href="https://zknox.com/talks.html" class="dropdown-item">Talks</a>
+                </div>
+            </div>
+            
+            <div class="nav-dropdown">
+                <a href="https://zknox.com/services.html" class="nav-link">Services</a>
+                <div class="dropdown-menu">
+                    <a href="https://zknox.com/services.html#audits" class="dropdown-item">Audits</a>
+                    <a href="https://zknox.com/services.html#design" class="dropdown-item">Design</a>
+                    <a href="https://zknox.com/services.html#hardware" class="dropdown-item">Hardware Integration</a>
+                    <a href="https://zknox.com/services.html#implementation" class="dropdown-item">Implementation</a>
+                </div>
+            </div>
+            
             <a href="https://zknox.com/team.html" class="nav-link">Team</a>
             <a href="https://x.com/zknoxHQ" class="nav-link nav-icon" target="_blank" title="X/Twitter">
                 <svg viewBox="0 0 24 24" fill="currentColor">
@@ -70,157 +122,278 @@ ZKNOX_NAV_BANNER = """
 
 ZKNOX_NAV_CSS = """
 <style>
-/* ZKNOX Navigation */
+/* ZKNOX Navigation - Reset and Override */
+.zknox-nav,
+.zknox-nav * {
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.6 !important;
+}
+
 .zknox-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    background: #0a0a0f;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    font-size: 16px;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+    background: #0a0a0f !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    font-size: 16px !important;
+    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif !important;
 }
 
 .zknox-nav .nav-container {
-    max-width: 1140px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    max-width: 1140px !important;
+    margin: 0 auto !important;
+    padding: 0 32px !important;
+    height: 70px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
 }
 
 .zknox-nav .logo {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
+    display: flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
+    padding: 0 !important;
 }
 
 .zknox-nav .logo img {
-    height: 40px;
-    width: auto;
+    height: 48px !important;
+    width: auto !important;
 }
 
 .zknox-nav .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
 }
 
 .zknox-nav .nav-link {
-    color: #a78bfa;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    font-size: 16px;
-    font-weight: 500;
-    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
-    border-radius: 6px;
-    transition: all 0.2s ease;
+    color: #a78bfa !important;
+    text-decoration: none !important;
+    padding: 8px 16px !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    border-radius: 6px !important;
+    transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    background: transparent !important;
+    border: none !important;
 }
 
 .zknox-nav .nav-link:hover {
-    color: #c4b5fd;
-    background: rgba(167, 139, 250, 0.1);
+    color: #c4b5fd !important;
+    background: rgba(167, 139, 250, 0.1) !important;
 }
 
 .zknox-nav .nav-link.active {
-    color: #c4b5fd;
+    color: #c4b5fd !important;
+}
+
+/* Dropdown Navigation */
+.zknox-nav .nav-dropdown {
+    position: relative !important;
+    display: flex !important;
+}
+
+.zknox-nav .nav-dropdown > .nav-link {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+.zknox-nav .nav-dropdown > .nav-link::after {
+    content: '' !important;
+    width: 0 !important;
+    height: 0 !important;
+    border-left: 4px solid transparent !important;
+    border-right: 4px solid transparent !important;
+    border-top: 4px solid currentColor !important;
+    transition: transform 0.2s ease !important;
+}
+
+.zknox-nav .nav-dropdown:hover > .nav-link::after {
+    transform: rotate(180deg) !important;
+}
+
+.zknox-nav .dropdown-menu {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    min-width: 220px !important;
+    background: #1a1a25 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    padding: 8px !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: translateY(10px) !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+    display: block !important;
+}
+
+.zknox-nav .nav-dropdown:hover .dropdown-menu {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(5px) !important;
+}
+
+.zknox-nav .dropdown-item {
+    display: block !important;
+    padding: 10px 16px !important;
+    color: #9ca3af !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    border-radius: 6px !important;
+    transition: all 0.2s ease !important;
+    background: transparent !important;
+}
+
+.zknox-nav .dropdown-item:hover {
+    color: #a78bfa !important;
+    background: rgba(167, 139, 250, 0.1) !important;
 }
 
 .zknox-nav .nav-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    padding: 0;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 40px !important;
+    padding: 8px 0 !important;
 }
 
 .zknox-nav .nav-icon svg {
-    width: 20px;
-    height: 20px;
+    width: 18px !important;
+    height: 18px !important;
 }
 
 .zknox-nav .github-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1.2rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 15px;
-    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-weight: 500;
-    transition: all 0.2s ease;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 8px 16px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
 }
 
 .zknox-nav .github-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: #a78bfa;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: #a78bfa !important;
 }
 
 .zknox-nav .github-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 18px !important;
+    height: 18px !important;
 }
 
 .zknox-nav .mobile-menu-btn {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    padding: 0.5rem;
-    background: none;
-    border: none;
-    cursor: pointer;
+    display: none !important;
+    flex-direction: column !important;
+    gap: 5px !important;
+    padding: 8px !important;
+    background: none !important;
+    border: none !important;
+    cursor: pointer !important;
 }
 
 .zknox-nav .mobile-menu-btn span {
-    width: 24px;
-    height: 2px;
-    background: #ffffff;
-    transition: all 0.3s ease;
+    width: 22px !important;
+    height: 2px !important;
+    background: #ffffff !important;
+    transition: all 0.3s ease !important;
+    display: block !important;
 }
 
 /* Add padding to body to account for fixed nav */
 body {
-    padding-top: 70px;
-    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 16px;
+    padding-top: 70px !important;
 }
 
 /* Mobile responsive */
 @media (max-width: 900px) {
     .zknox-nav .nav-links {
-        display: none;
-        position: absolute;
-        top: 70px;
-        left: 0;
-        right: 0;
-        background: #0a0a0f;
-        flex-direction: column;
-        padding: 1rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: none !important;
+        position: absolute !important;
+        top: 70px !important;
+        left: 0 !important;
+        right: 0 !important;
+        background: #0a0a0f !important;
+        flex-direction: column !important;
+        padding: 16px !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        max-height: calc(100vh - 70px) !important;
+        overflow-y: auto !important;
+        gap: 0 !important;
     }
 
     .zknox-nav .nav-links.active {
-        display: flex;
+        display: flex !important;
     }
 
     .zknox-nav .nav-link {
-        width: 100%;
-        padding: 0.75rem 1rem;
+        width: 100% !important;
+        padding: 12px 16px !important;
+    }
+
+    /* Accordéon mobile */
+    .zknox-nav .nav-dropdown {
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+
+    .zknox-nav .nav-dropdown > .nav-link {
+        justify-content: space-between !important;
+        width: 100% !important;
+    }
+
+    .zknox-nav .nav-dropdown > .nav-link::after {
+        transition: transform 0.3s ease !important;
+    }
+
+    .zknox-nav .nav-dropdown.open > .nav-link::after {
+        transform: rotate(180deg) !important;
+    }
+
+    .zknox-nav .dropdown-menu {
+        position: static !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 0 0 16px !important;
+        display: none !important;
+        max-height: 0 !important;
+        overflow: hidden !important;
+        min-width: auto !important;
+    }
+
+    .zknox-nav .nav-dropdown.open .dropdown-menu {
+        display: block !important;
+        max-height: 500px !important;
     }
 
     .zknox-nav .mobile-menu-btn {
-        display: flex;
+        display: flex !important;
     }
 
     .zknox-nav .github-btn {
-        display: none;
+        display: none !important;
     }
 }
 </style>
@@ -231,6 +404,22 @@ ZKNOX_NAV_JS = """
 function toggleMenu() {
     document.querySelector('.zknox-nav .nav-links').classList.toggle('active');
 }
+
+// Accordéon mobile
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.zknox-nav .nav-dropdown > .nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (window.innerWidth <= 900) {
+                e.preventDefault();
+                const dropdown = this.parentElement;
+                document.querySelectorAll('.zknox-nav .nav-dropdown.open').forEach(d => {
+                    if (d !== dropdown) d.classList.remove('open');
+                });
+                dropdown.classList.toggle('open');
+            }
+        });
+    });
+});
 </script>
 """
 

@@ -8,7 +8,7 @@
 
 ## Introduction
 
-Today we are releasing three things simultaneously: the first complete BLS12-381 pairing implementation running natively inside a hardware wallet secure element, a full Groth16 verifier running in that same device, and a complete ZK clear signing circuit for Aave v3 with working end-to-end examples. Together, they form something we believe has never been done before: end-to-end ZK proof verification entirely within a hardware wallet secure element, applied to a real production protocol.
+Today we are releasing three things simultaneously in this PoC: a complete BLS12-381 pairing implementation running natively inside a hardware wallet secure element, a full Groth16 verifier running in that same device, and a complete ZK clear signing circuit for Aave v3 with working end-to-end examples. Together, they form a end-to-end ZK proof verification entirely within a hardware wallet secure element, applied to a real production protocol.
 
 All three components are functional and released before ETHCC: the verifier, the Circom circuit covering 13 Aave v3 actions, and the test vectors proving the full pipeline from raw calldata to verified proof.
 
@@ -148,11 +148,11 @@ Applied to clear signing, this means a hardware wallet can display a human-reada
 
 The verification key, in turn, can be anchored in the protocol's own governance. This closes the trust loop entirely.
 
-We called it impossible to do. We then did it anyway.
 
 🔐 Let's build trustless hardware wallets.
 
 ## References
+   - [Zklarity -  A ZK clear signing for Defi(Aave) contracts PoC](https://github.com/ZKNoxHQ/ZKlarity)
 
   - [EIP-7730 - Clear Signing Format for Wallets](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-7730.md)
 

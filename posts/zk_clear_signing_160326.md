@@ -14,19 +14,6 @@ All three components are functional and released before ETHCC: the verifier, the
 
 This post describes the general principle behind delegating arbitrary public computations to constrained verifiers, then applies it to clear signing, and finally proposes a trust model that eliminates the need for any metadata signing server by anchoring the verification key directly in the protocol's smart contract.
 
-## A small detour through history
-
-<p align="center">
-<img src="../../../../../images/wrongpillbro.jpeg" alt="wrong pill bro" class="center"/>
-<p align="center">
-<small>Figure 1: official certification</small>
-</p>
-
-When we proposed running ZK proof verification inside a hardware wallet secure element, a major hardware wallet vendor — one whose name you would immediately recognize — was kind enough to formally certify our project as "Wrong Pill Bro." The certificate was framed. We are told it was meant as a deterrent.
-
-We are happy to report that the label was premature. The pairing works. The verifier works. And we are now running a complete Groth16 proof verification — including Miller loop, final exponentiation, and scalar multiplication on G1 — inside a Ledger Nano secure element.
-
-We remain fond of the people who doubted. Skepticism is healthy. Being wrong occasionally is human. To be fair to the spirit of the times: back then, the priorities were elsewhere — NFT projects were being rewarded and celebrated as visionary, which was presumably a more tractable problem than fitting a pairing into 512 KB of flash. Different pills for different moments.
 
 ## The general principle: delegating computation without trust
 
@@ -155,7 +142,7 @@ One direction worth watching is recursive proof composition. A Halo-like system 
 
 ## Conclusion
 
-ZK proofs are frequently described as a privacy tool. Their more underappreciated property is the ability to delegate arbitrary deterministic computation to an untrusted prover, and verify the result in constant time on a constrained device.
+ZK proofs are a privacy tool. Their useful  property here is the ability to delegate arbitrary deterministic computation to an untrusted prover, and verify the result in constant time on a constrained device.
 
 Applied to clear signing, this means a hardware wallet can display a human-readable transaction summary with the same cryptographic guarantee it has over the raw transaction bytes — without relying on any external service, without requiring the device to implement protocol-specific parsing logic, and without trusting anyone except the circuit's verification key.
 

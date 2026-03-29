@@ -220,6 +220,38 @@ Total search space: 8 × 2^52 = **2^55 candidates** for exhaustive coverage, tho
 
 The enumeration is uniform within each shift: no mantissa value is more probable than another. IEEE 754 round-to-nearest-even creates equal-sized bins of ~2^203 original keys per mantissa.
 
+### 2.4 Observed Collisions
+
+Two independent searches produced distinct BIP-39 mnemonics with identical `bytesToNumber` output.
+
+**Collision 1:**
+
+```
+Mnemonic A: room trade caution circle cricket know tower hip crash cereal void tower
+  k0 = 0xfe239091098751e23c55923b0c52b1d0e533f31cf39b5154015f819f254a2ac8
+
+Mnemonic B: piano ramp mobile leaf oak space salute cricket dice neglect curious memory
+  k0 = 0xfe239091098751e4381bd904acac5fc7fd8a98d6aa0b058a14a5a90ffa65323f
+
+bytesToNumber(A) = bytesToNumber(B) = 0xfe23909109875000...000
+```
+
+**Collision 2:**
+
+```
+Mnemonic A: earn since debris impact brain giant kite code erase pumpkin solution input
+  k0 = 0x93303ffc9d8c5cd81f839c615b71178990d23bb28676e1bea02dbe28839cdbe3
+
+Mnemonic B: engine hybrid sword bread despair consider shallow inherit drink alien spot hold
+  k0 = 0x93303ffc9d8c5e9ca8e80a793d50511b240e9728730bc9e85a4cc0ffa47ec980
+
+bytesToNumber(A) = bytesToNumber(B) = 0x93303ffc9d8c6000...000
+```
+
+Both 256-bit keys share the same high-order bits. The remaining 203 low-order bits differ but are discarded by `Number()`. Under correct BIP-32 derivation (256-bit output), a collision of the master keys feeding into Poseidon should be computationally infeasible. With the truncation bug, any two keys in the same 2^203-wide bin produce identical protocol secrets.
+
+These collisions are impossible to produce in a correctly implemented key derivation where the full 256-bit key is preserved through Poseidon hashing.
+
 ---
 
 ## 3. Real-World Attack Cost
@@ -241,11 +273,7 @@ The ADX inline variant performs best on this microarchitecture. Intel Golden Cov
 
 GPU comparison (RTX A500 Laptop, 15W TGP): **25,227 cand/s**, slower than the 14-core CPU at ~59,000 cand/s. Montgomery 256-bit arithmetic on GPU suffers from long dependency chains in 32-bit limb representation.
 
-### 3.2 Validation
-
-End-to-end validation: 1,000 vulnerable deposits generated in JavaScript (circomlibjs, same Poseidon as the SDK), brute-forced in C. Result: **1,000/1,000 keys recovered, 0 false negatives, 0 false positives.**
-
-### 3.3 Cost Estimates
+### 3.2 Cost Estimates
 
 Based on measured throughput scaled to datacenter GPUs:
 
@@ -280,7 +308,11 @@ k0 = privateKey of m/44'/60'/0'/0/0   ← standard Ethereum account #0
 k1 = privateKey of m/44'/60'/1'/0/0   ← standard Ethereum account #1
 ```
 
-These are the same keys MetaMask would derive. If a user shares a mnemonic between their Ethereum wallet and Privacy Pools, the key controlling their ETH is the same key used as a Poseidon input. The SDK documentation warns "this wallet should only be used for using Privacy Pools", which indicates that 0xbow is aware of this issue but chose a workaround over a proper fix.
+These are the same keys MetaMask would derive. If a user shares a mnemonic between their Ethereum wallet and Privacy Pools, the key controlling their ETH is the same key used as a Poseidon input. An attacker who brute-forces the 53-bit `Number(k0)` therefore learns the 53 high-order bits of the user's Ethereum private key.
+
+This directly reduces the ECDLP security of the Ethereum account. Given the public key Q and the leaked prefix, the attacker computes Q' = Q - prefix × (2^203 × G) and obtains Q' = x × G where x is the unknown 203-bit remainder. The discrete log problem shrinks from 256 bits to 203 bits, and Pollard's rho or baby-step giant-step drops from 2^128 to 2^101.5 operations. This remains computationally infeasible today, but represents a meaningful degradation for users who shared their mnemonic between their main wallet and Privacy Pools.
+
+The SDK documentation warns "this wallet should only be used for using Privacy Pools".
 
 ### 4.2 Global Master Keys
 
@@ -332,6 +364,10 @@ export type Keystore = {
 
 Deposits made with the 0xbow SDK cannot be recovered with Kohaku, and vice versa. The two implementations produce entirely different nullifiers and commitments from the same mnemonic. Users who deposited via the 0xbow frontend must use the 0xbow SDK (with the `bytesToBigInt` fix) to recover their funds.
 
+### 5.4 Railgun
+
+As part of Kohaku privacy suite, we also double coded the key derivation of Railgun (Railway&CLI wallet) to check correctness. There is NO truncation vulnerability.
+
 ---
 
 ## 6. Mitigation
@@ -375,7 +411,7 @@ This vulnerability class (implicit type coercion silently truncating cryptograph
 
 Inspection of the JavaScript bundles served by privacypools.com (Vercel deployment `dpl_82oJ1if2qwzw5R6Qxub86wZneXk7`) confirms that both `bytesToNumber` (legacy account support) and `bytesToBigInt` (safe account) are present in the production code, along with `legacyAccount` migration logic. The fix is live.
 
-Note that the published SDK on npm (`@0xbow/privacy-pools-core-sdk` v1.2.0) and the GitHub releases (v1.2.0, v1.2.1) do **not** contain the fix. The frontend deployment uses an unpublished build from the `dev` branch.
+Note that the GitHub repository tags `v1.2.0` and `v1.2.1` are monorepo-level tags that do **not** correspond to SDK version 1.2.0. Both tagged `packages/sdk/src/crypto.ts` files still use `bytesToNumber` in `generateMasterKeys()`. The actual npm package `@0xbow/privacy-pools-core-sdk@1.2.0` was published from the `dev` branch and **does** contain the fix: its `crypto.ts` and `account.service.ts` use `bytesToBigInt` for new accounts, while retaining `bytesToNumber` in `_initializeLegacyAccount()` intentionally for backward-compatible migration of existing deposits.
 
 ### 8.2 Migration Mechanism
 
@@ -467,3 +503,5 @@ We detected a similar type coercion flaw in a client's proof of concept before i
 [Github](https://github.com/zknoxhq) | [Website](https://www.zknox.com) | [Twitter](https://x.com/zknoxhq) | [Blog](https://zknox.eth.limo) | [Contact Info](mailto:gm@zknox.com)
 
 <small>Found typo, or want to improve the note ? Our blog is open to PRs.</small>
+
+<small>*Updated 29/03/26 with 0xbow comments, see [commit history](https://github.com/zknoxhq/blog/commits/main) for details.*</small>

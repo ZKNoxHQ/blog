@@ -1,0 +1,1255 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #0a0a0f;
+        color: white;
+    }
+    .markdown-body table tr {
+        background-color: #0a0a0f;
+    }
+    .markdown-body table tr:nth-child(2n) {
+        background-color: #12121a;
+    }
+}
+</style>
+</head>
+<body>
+
+
+<style>
+/* ZKNOX Navigation - Reset and Override */
+.zknox-nav,
+.zknox-nav * {
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.6 !important;
+}
+
+.zknox-nav {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+    background: #0a0a0f !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    font-size: 16px !important;
+    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+.zknox-nav .nav-container {
+    max-width: 1140px !important;
+    margin: 0 auto !important;
+    padding: 0 32px !important;
+    height: 70px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+.zknox-nav .logo {
+    display: flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
+    padding: 0 !important;
+}
+
+.zknox-nav .logo img {
+    height: 48px !important;
+    width: auto !important;
+}
+
+.zknox-nav .nav-links {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+.zknox-nav .nav-link {
+    color: #a78bfa !important;
+    text-decoration: none !important;
+    padding: 8px 16px !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    border-radius: 6px !important;
+    transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.zknox-nav .nav-link:hover {
+    color: #c4b5fd !important;
+    background: rgba(167, 139, 250, 0.1) !important;
+}
+
+.zknox-nav .nav-link.active {
+    color: #c4b5fd !important;
+}
+
+/* Dropdown Navigation */
+.zknox-nav .nav-dropdown {
+    position: relative !important;
+    display: flex !important;
+}
+
+.zknox-nav .nav-dropdown > .nav-link {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+.zknox-nav .nav-dropdown > .nav-link::after {
+    content: '' !important;
+    width: 0 !important;
+    height: 0 !important;
+    border-left: 4px solid transparent !important;
+    border-right: 4px solid transparent !important;
+    border-top: 4px solid currentColor !important;
+    transition: transform 0.2s ease !important;
+}
+
+.zknox-nav .nav-dropdown:hover > .nav-link::after {
+    transform: rotate(180deg) !important;
+}
+
+.zknox-nav .dropdown-menu {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    min-width: 220px !important;
+    background: #1a1a25 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    padding: 8px !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: translateY(10px) !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+    display: block !important;
+}
+
+.zknox-nav .nav-dropdown:hover .dropdown-menu {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(5px) !important;
+}
+
+.zknox-nav .dropdown-item {
+    display: block !important;
+    padding: 10px 16px !important;
+    color: #9ca3af !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    border-radius: 6px !important;
+    transition: all 0.2s ease !important;
+    background: transparent !important;
+}
+
+.zknox-nav .dropdown-item:hover {
+    color: #a78bfa !important;
+    background: rgba(167, 139, 250, 0.1) !important;
+}
+
+.zknox-nav .nav-icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 40px !important;
+    padding: 8px 0 !important;
+}
+
+.zknox-nav .nav-icon svg {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.zknox-nav .github-btn {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 8px 16px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+}
+
+.zknox-nav .github-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: #a78bfa !important;
+}
+
+.zknox-nav .github-btn svg {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.zknox-nav .mobile-menu-btn {
+    display: none !important;
+    flex-direction: column !important;
+    gap: 5px !important;
+    padding: 8px !important;
+    background: none !important;
+    border: none !important;
+    cursor: pointer !important;
+}
+
+.zknox-nav .mobile-menu-btn span {
+    width: 22px !important;
+    height: 2px !important;
+    background: #ffffff !important;
+    transition: all 0.3s ease !important;
+    display: block !important;
+}
+
+/* Add padding to body to account for fixed nav */
+body {
+    padding-top: 70px !important;
+}
+
+/* Mobile responsive */
+@media (max-width: 900px) {
+    .zknox-nav .nav-links {
+        display: none !important;
+        position: absolute !important;
+        top: 70px !important;
+        left: 0 !important;
+        right: 0 !important;
+        background: #0a0a0f !important;
+        flex-direction: column !important;
+        padding: 16px !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        max-height: calc(100vh - 70px) !important;
+        overflow-y: auto !important;
+        gap: 0 !important;
+    }
+
+    .zknox-nav .nav-links.active {
+        display: flex !important;
+    }
+
+    .zknox-nav .nav-link {
+        width: 100% !important;
+        padding: 12px 16px !important;
+    }
+
+    /* Accordéon mobile */
+    .zknox-nav .nav-dropdown {
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+
+    .zknox-nav .nav-dropdown > .nav-link {
+        justify-content: space-between !important;
+        width: 100% !important;
+    }
+
+    .zknox-nav .nav-dropdown > .nav-link::after {
+        transition: transform 0.3s ease !important;
+    }
+
+    .zknox-nav .nav-dropdown.open > .nav-link::after {
+        transform: rotate(180deg) !important;
+    }
+
+    .zknox-nav .dropdown-menu {
+        position: static !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 0 0 16px !important;
+        display: none !important;
+        max-height: 0 !important;
+        overflow: hidden !important;
+        min-width: auto !important;
+    }
+
+    .zknox-nav .nav-dropdown.open .dropdown-menu {
+        display: block !important;
+        max-height: 500px !important;
+    }
+
+    .zknox-nav .mobile-menu-btn {
+        display: flex !important;
+    }
+
+    .zknox-nav .github-btn {
+        display: none !important;
+    }
+}
+</style>
+
+<!-- ZKNOX Navigation Banner -->
+<nav class="zknox-nav">
+    <div class="nav-container">
+        <a href="https://zknox.com" class="logo">
+            <img src="../../../../images/zknox-logo.png" alt="ZKNOX">
+        </a>
+        
+        <div class="nav-links">
+            <a href="https://zknox.com" class="nav-link">Home</a>
+            
+            <div class="nav-dropdown">
+                <a href="https://zknox.com/technologies.html" class="nav-link">Technologies</a>
+                <div class="dropdown-menu">
+                    <a href="https://zknox.com/tech-ecc.html" class="dropdown-item">Elliptic Curves</a>
+                    <a href="https://zknox.com/tech-hw.html" class="dropdown-item">Hardware Wallets</a>
+                    <a href="https://zknox.com/tech-mpc.html" class="dropdown-item">MPC</a>
+                    <a href="https://zknox.com/tech-pqc.html" class="dropdown-item">Post-Quantum Cryptography</a>
+                    <a href="https://zknox.com/tech-zk.html" class="dropdown-item">Zero Knowledge</a>
+                </div>
+            </div>
+            
+            <div class="nav-dropdown">
+                <a href="https://zknox.com/products.html" class="nav-link">Products</a>
+                <div class="dropdown-menu">
+                    <a href="https://zknox.com/products.html#libraries" class="dropdown-item">Cryptographic Libraries</a>
+                    <a href="https://zknox.com/products.html#hardware" class="dropdown-item">Hardware Integration</a>
+                    <a href="https://zknox.com/products.html#contracts" class="dropdown-item">Smart Contracts</a>
+                    <a href="https://zknox.com/products.html#zk" class="dropdown-item">ZK Circuits</a>
+                </div>
+            </div>
+            
+            <div class="nav-dropdown">
+                <a href="https://zknox.com/tools.html" class="nav-link">Tools</a>
+                <div class="dropdown-menu">
+                    <a href="https://zknox.com/demo-pqbip39.html" class="dropdown-item">PQBIP39</a>
+                    <a href="https://zknox.com/zknox-account.html" class="dropdown-item">ZKNOX Account</a>
+                    <a href="https://zknox.com/zknox-blue/official-apps.html" class="dropdown-item">ZKNOX Blue</a>
+                    <a href="https://zknox.com/zknox-orange/sideloader.html" class="dropdown-item">ZKNOX Orange</a>
+                    <a href="https://zknox.com/demo-zk-hardware.html" class="dropdown-item">ZK-Hardware</a>
+                    <a href="https://zknox.com/faucet.html" class="dropdown-item">Faucet</a>
+                </div>
+            </div>
+            
+            <div class="nav-dropdown">
+                <a href="https://zknox.com/research.html" class="nav-link">Research</a>
+                <div class="dropdown-menu">
+                    <a href="../../../../index.html" class="dropdown-item">Blog</a>
+                    <a href="https://zknox.com/eips.html" class="dropdown-item">EIPs</a>
+                    <a href="https://zknox.com/hackathons.html" class="dropdown-item">Hackathons</a>
+                    <a href="https://zknox.com/papers.html" class="dropdown-item">Papers</a>
+                    <a href="https://zknox.com/talks.html" class="dropdown-item">Talks</a>
+                </div>
+            </div>
+            
+            <div class="nav-dropdown">
+                <a href="https://zknox.com/services.html" class="nav-link">Services</a>
+                <div class="dropdown-menu">
+                    <a href="https://zknox.com/services.html#audits" class="dropdown-item">Audits</a>
+                    <a href="https://zknox.com/services.html#design" class="dropdown-item">Design</a>
+                    <a href="https://zknox.com/services.html#hardware" class="dropdown-item">Hardware Integration</a>
+                    <a href="https://zknox.com/services.html#implementation" class="dropdown-item">Implementation</a>
+                </div>
+            </div>
+            
+            <a href="https://zknox.com/team.html" class="nav-link">Team</a>
+            <a href="https://x.com/zknoxHQ" class="nav-link nav-icon" target="_blank" title="X/Twitter">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+            </a>
+        </div>
+
+        <a href="https://github.com/ZKNoxHQ" class="github-btn" target="_blank">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            GitHub
+        </a>
+
+        <button class="mobile-menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</nav>
+<!-- End ZKNOX Navigation Banner -->
+
+
+<link rel="alternate" type="application/rss+xml" href="../../../../feed.xml" title="Unlimited working memory in constrained hardware using authenticated streaming — FALCON1024 with 32KB of RAM - Ledger/ST33">
+
+
+
+<link rel="stylesheet" type="text/css" href="../../../../css/common-vendor.b8ecfc406ac0b5f77a26.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
+
+<script type="text/x-mathjax-config">
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']]
+  },
+  svg: {
+    fontCache: 'global',
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="../../../../scripts/tex-svg.js">
+</script>
+
+<style>
+</style>
+
+<div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
+
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Unlimited working memory in constrained hardware using authenticated streaming — FALCON1024 with 32KB of RAM - Ledger/ST33" />
+<meta name="twitter:image" content="" />
+
+
+<br>
+<h1 style="margin-bottom:7px"> Unlimited working memory in constrained hardware using authenticated streaming — FALCON1024 with 32KB of RAM - Ledger/ST33 </h1>
+<small style="float:left; color: #888"> 2026 Apr 30 </small>
+<small style="float:right; color: #888"><a href="../../../../index.html">See all posts</a></small>
+<br> <br> <br>
+<title> Unlimited working memory in constrained hardware using authenticated streaming — FALCON1024 with 32KB of RAM - Ledger/ST33 </title>
+
+<p align="center">
+<img src="../../../../../images/falconstreaming.png" alt="falcon streaming" class="center" width="350"/>
+</p>
+<p><small>(ST33 FALCON)</small></p>
+<h2 id="introduction">Introduction</h2>
+<p>We are releasing a complete implementation of the Falcon post-quantum
+signature scheme — both <strong>Falcon-512</strong> and
+<strong>Falcon-1024</strong> parameter sets, running natively inside a
+Ledger Nano S+ secure element. The implementation covers BIP-32 derived
+seed, on-device key generation, full streaming key expansion, on-device
+hash-to-point, and a working sign-then-verify chain. As far as we know,
+no other hardware wallet runs Falcon at full parameter size with
+mnemonic-only recovery.</p>
+<p>The construction is the counterpart of <a
+href="https://zknox.eth.limo/posts/2026/03/13/zk_clear_signing_160326.html">the
+ZK clear signing work we shipped earlier</a>: in that one, public
+computation was delegated to an untrusted prover and the device verified
+a constant-size proof. In this one, secret-bearing memory is delegated
+to an untrusted host and the device authenticates each chunk before
+consuming it.</p>
+<p>This post explains the underlying principle: delegate bounded-RAM
+working state to an untrusted host, applies it to Falcon, whose expanded
+private key is three to four times larger than the entire SRAM available
+on the device, and gives the test results that establish conformance
+with the NIST round 3 reference.</p>
+<h2 id="the-general-principle-delegating-memory-without-trust">The
+general principle: delegating memory without trust</h2>
+<p>When a cryptographic operation needs more working memory than the
+device can hold, there are two options. Drop the algorithm and pick one
+that fits. Or keep the working memory on a host machine and let the
+device read from it as needed. The host is untrusted, so any value the
+device pulls back must be assumed adversarial unless we do something
+about it.</p>
+<p>The standard fix is symmetric authenticated encryption. The device
+generates a fresh symmetric key <code>k</code> from its own secret
+material, encrypts each block of working memory under <code>k</code>
+with an authenticated cipher (or a stream cipher plus a MAC), and writes
+the encrypted blocks to the host. When the device later needs a block,
+it pulls it back, verifies the tag, decrypts, and uses it.</p>
+<pre><code>                   encrypted blob (large)
+   ┌────────────┐ ────────────────────────────────►  ┌──────────────┐
+   │  Device SE │                                    │  Host RAM    │
+   │  (small)   │                                    │  (large)     │
+   │            │ ◄──── chunk request                │              │
+   │            │                                    │              │
+   │  k = f(    │ ──── chunk_i = enc(plain_i, k) ─►  │  store(i, ct)│
+   │   secret)  │                                    │              │
+   │            │ ◄──── chunk request ────────────── │              │
+   │            │                                    │              │
+   │  verify    │ ◄─── (ct_i, tag_i) ────────────────│  fetch(i)    │
+   │  decrypt   │                                    │              │
+   └────────────┘                                    └──────────────┘</code></pre>
+<p>The host only ever sees ciphertext, and any tampering produces a tag
+mismatch the device catches before using the block. Trust reduces to the
+strength of the AEAD primitive, which the device already relies on for
+everything else it protects.</p>
+<p>The host plays the role of a memory bus extender. It does not learn
+the plaintext, it cannot modify it without detection, and if each tag
+commits to its position in the wire, it cannot reorder either.</p>
+<p>A Ledger Nano S+ secure element has 40 KB of SRAM, less than 33 when
+counting the OS. Falcon-1024 sign with an expanded private key needs
+about 122 KB of working tree state; Falcon-512 needs about 57 KB.
+Without the streaming construction, neither variant fits on this
+device.</p>
+<h2
+id="the-falcon-problem-a-57-kb-122-kb-secret-tree-on-a-40-kb-device">The
+Falcon problem: a 57 KB / 122 KB secret tree on a 40 KB device</h2>
+<p>Falcon is a lattice-based signature scheme selected by NIST in 2022
+for post-quantum standardization (FIPS 206 in progress). Its signatures
+are the smallest in their security tier (~666 B compressed for n=512,
+~1.3 KB for n=1024, vs ~2.4 KB for ML-DSA-44) and verification is fast
+which makes it the best candidate, cause every byte costs gas. The cost
+is on the signer side: signing requires an <strong>LDL tree</strong>
+derived from the private key, a binary tree of complex polynomials
+produced by the recursive Babai nearest-plane reduction over NTRU
+lattices. That tree is what makes Falcon’s gaussian sampler fast and its
+signatures small. It is also what makes Falcon’s signer hard to fit on
+embedded hardware.</p>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parameter set</th>
+<th style="text-align: right;">Public key</th>
+<th style="text-align: right;">Compressed signature</th>
+<th style="text-align: right;">LDL tree</th>
+<th style="text-align: right;">NIST level</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Falcon-512</td>
+<td style="text-align: right;">897 B</td>
+<td style="text-align: right;">~666 B</td>
+<td style="text-align: right;">~57 KB</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td>Falcon-1024</td>
+<td style="text-align: right;">1 793 B</td>
+<td style="text-align: right;">~1.3 KB</td>
+<td style="text-align: right;">~122 KB</td>
+<td style="text-align: right;">5</td>
+</tr>
+</tbody>
+</table>
+<p>The reference implementation expects the LDL tree in a single
+contiguous buffer. The Nano S+ has 40 KB of SRAM total, of which roughly
+32 KB is available to the application (the rest goes to stack, BLE/USB
+stacks, and SDK overhead). Even for Falcon-512, the working set is about
+25 KB short of fitting; for Falcon-1024 it is a factor of four short.
+Some algorithmic tricks are implemented to reduce the footprint, but
+still out of reach without breaking some constraints, as explained by
+Ledger</p>
+<p>So we cheated to break the constraint, made a sidestep and took a
+different approach. The device generates the tree in a depth-first walk,
+holding only the active path through the tree at any moment (~24 KB of
+stack at logn=10, ~12 KB at logn=9), and emits each completed node to
+the host encrypted and authenticated. When signing, the device replays
+the same walk in reverse, pulling each node back from the host,
+verifying its tag, and decrypting it just-in-time for the sampler. The
+host stores the entire blob; the device only ever sees one node of
+plaintext at once.</p>
+<h2 id="construction-details">Construction details</h2>
+<p>The construction has four steps. Each step is implemented entirely
+on-device; the host’s only role is to relay APDUs and store opaque
+bytes.</p>
+<h3 id="seed-derivation">Seed derivation</h3>
+<p>The device derives the Falcon seed from the user’s BIP-39 mnemonic
+via SLIP-10 Ed25519 on the path <code>m/44'/9004'/0'/0/0</code>, with
+HMAC modifier <code>"Falcon-1024 seed"</code> for the n=1024 variant and
+<code>"Falcon-512 seed"</code> for the n=512 variant. The two modifiers
+act as a domain separator: the same 24 words produce two unrelated
+seeds, one per variant, and a leak of one tells you nothing about the
+other. Either seed never leaves the secure element. Recovery is by
+mnemonic alone: the same 24 words on any device produce the same Falcon
+key pair, and consequently the same encrypted tree blob.</p>
+<h3 id="key-generation">Key generation</h3>
+<p><code>Zf(keygen)(seed) → (f, g, F, G, h)</code> runs natively on the
+device. The four polynomials of the secret basis stay in BSS inside the
+SE; only the public polynomial <code>h</code> is exposed to the host.
+Cost: ~2.4 s for Falcon-512, ~17.8 s for Falcon-1024 on the Nano S+
+Cortex-M33 at 32 MHz with floating-point emulation.</p>
+<h3 id="streaming-key-expansion">Streaming key expansion</h3>
+<p>The expanded private key is the LDL tree of the basis. The device
+walks the tree depth-first, computing each node from its parent and the
+appropriate row of the basis. As each node is completed, the device:</p>
+<ol type="1">
+<li>Derives <code>tree_key = SHAKE256("falcon-tree-key" ‖  seed)</code>
+and <code>mac_key = SHAKE256("falcon-tree-mac" ‖ seed)</code> once at
+session start.</li>
+<li>Encrypts the node bytes under <code>tree_key</code> (XOR keystream
+from a SHAKE256 PRF keyed by <code>tree_key</code> and the cumulative
+offset).</li>
+<li>Computes a 16-byte tag
+<code>tag = MAC(mac_key, offset ‖ ciphertext)</code> that binds the
+ciphertext to its position in the tree.</li>
+<li>Streams the resulting record <code>(ciphertext ‖ tag)</code> to the
+host through an APDU.</li>
+</ol>
+<p>The host receives a blob structured as three regions, an L0 record
+followed by the right and left subtrees, totaling 57 328 B for
+Falcon-512 and 122 864 B for Falcon-1024. The record format is
+<code>ciphertext (varies) ‖ tag (16 B)</code> per node, and the offset
+binding in the MAC prevents the host from reordering, replaying, or
+substituting nodes between sessions.</p>
+<h3 id="signing">Signing</h3>
+<p>To sign a 32-byte message digest, the device:</p>
+<ol type="1">
+<li>Generates a 40-byte nonce via the secure element’s TRNG (or accepts
+a host-supplied nonce in test mode).</li>
+<li>Computes <code>hm = hash_to_point(nonce ‖ msg)</code> on-device
+using SHAKE256 with rejection sampling. This is the on-device
+clear-signing surface: the device holds the nonce and the message in
+plaintext, displays them to the user before consuming them, and refuses
+to proceed without explicit user approval.</li>
+<li>Drives the gaussian sampler in a depth-first walk over the LDL tree,
+pulling each node from the host, verifying its tag at the expected
+cumulative offset, decrypting it, and discarding it after use.</li>
+<li>Performs the L2 norm check inside the SE.</li>
+<li>Returns the raw <code>s2</code> polynomial (n × int16) and the
+nonce.</li>
+</ol>
+<h2 id="the-trust-model">The trust model</h2>
+<p>Two assumptions: the AEAD construction over the LDL tree, and the
+device-side TRNG.</p>
+<p>The MAC binds each tree node to its cumulative byte offset in the
+wire. A host that controls every byte of the wire still cannot
+substitute a node from a different position (offset mismatch makes the
+tag fail), cannot replay a node from a different signing session
+(<code>tree_key</code> is freshly derived from <code>seed</code>, so
+keys differ across users), and cannot learn anything about the lattice
+basis (<code>tree_key</code> is a PRF output indistinguishable from
+random).</p>
+<p>The TRNG seeds the gaussian sampler at sign time. Falcon’s signature
+value depends jointly on the message hash and a random tape consumed by
+the sampler. A compromised TRNG would not break unforgeability: Falcon
+remains secure even with a deterministic but unpredictable tape, but it
+would degrade unlinkability of multiple signatures from the same key.
+The device’s <code>cx_rng</code> is the same primitive that protects the
+device’s other long-term keys.</p>
+<p>The wire format is a recoverable artifact. The 24 words determine the
+seed, the seed determines the keys, the keys determine the tree, the
+tree determines the wire bytes. A user who loses their device and
+reflashes a new one with the same mnemonic produces an identical wire
+blob and can resume signing without any change to the host-stored
+material.</p>
+<h2 id="conformance-with-nist-round-3">Conformance with NIST round
+3</h2>
+<p>Each layer is testable independently. We validated each one against
+the NIST round 3 Falcon reference, not only against ourselves.</p>
+<h3 id="bip-39-slip-10-derivation">BIP-39 / SLIP-10 derivation</h3>
+<p>The seed derivation passed all six SLIP-10 Ed25519 satoshilabs test
+vectors and three BIP-39 mnemonic vectors. With mnemonic =
+<code>"yellow ×12"</code>, the device produces seed
+<code>416b3bc8...3086</code> for Falcon-1024 and seed
+<code>c9a6a8b2...</code> for Falcon-512, identical to the JavaScript
+oracle in both cases.</p>
+<h3 id="key-generation-determinism">Key generation determinism</h3>
+<p>For mnemonic = <code>"yellow ×12"</code>, the device produces:</p>
+<pre><code>Falcon-1024
+  pk SHA-256:    abda0932325ead2b390ba6542d6ff45b02e03b2ffdafd338f39667dc152a40d3
+  wire SHA-256:  855edeedfacc2b4b56f6b5f5b688bf8b5fed4d7f02984633aeb88fdd48efe3d4
+
+Falcon-512
+  pk SHA-256:    f3c31b60...
+  wire SHA-256:  762097cdab...</code></pre>
+<p>stable across runs and across reflashes.</p>
+<h3 id="verify-path-conformance">Verify path conformance</h3>
+<p>The pure-JavaScript <code>verify_raw</code> and
+<code>hash_to_point_vartime</code> produce the same output as the C
+reference. We then ran 100 vectors generated by <a
+href="https://github.com/PQClean/PQClean">PQClean</a> Falcon-1024
+through a JavaScript verifier:</p>
+<pre><code>═══ PQClean Falcon-1024 cross-validation ═══
+Vectors: 100
+Done in 0.4s.
+  ✅ pass: 100/100
+═══ ALL VECTORS PASSED ═══</code></pre>
+<p>Each vector exercises the full decode chain: <code>modq_decode</code>
+of the public key, <code>comp_decode</code> (Huffman) of the compressed
+signature, <code>hash_to_point</code> over the (nonce, message) pair,
+and the L2 norm check. The harness also accepts the standard NIST
+<code>.rsp</code> KAT format, so the official
+<code>falcon1024-KAT.rsp</code> and <code>falcon512-KAT.rsp</code> files
+from the round 3 submission can be replayed directly.</p>
+<h3 id="sign-chain-end-to-end">Sign chain end-to-end</h3>
+<p>The full chain
+<code>keygen → keygen_expand → sign → verify_raw</code> produces a
+verifiable Falcon signature on both variants, with the host never seeing
+any plaintext from the secret tree.</p>
+<h3 id="performance-summary">Performance summary</h3>
+<p>Measured on a production Ledger Nano S+ (Cortex-M33 @ 32 MHz,
+floating-point emulation, USB HID transport).</p>
+<p><strong>Falcon-1024</strong></p>
+<table>
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 17%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 19%" />
+</colgroup>
+<thead>
+<tr>
+<th>Phase</th>
+<th>When</th>
+<th style="text-align: right;">Time</th>
+<th style="text-align: right;">APDUs</th>
+<th style="text-align: right;">Bytes streamed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FALCON_KEYGEN</code></td>
+<td>once (setup)</td>
+<td style="text-align: right;">17.8 s</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">2 048 (pk)</td>
+</tr>
+<tr>
+<td><code>FALCON_KEYGEN_EXPAND</code></td>
+<td>once (setup)</td>
+<td style="text-align: right;">14.9 s</td>
+<td style="text-align: right;">2 242</td>
+<td style="text-align: right;">122 864 (wire)</td>
+</tr>
+<tr>
+<td><strong>Initial setup total</strong></td>
+<td></td>
+<td style="text-align: right;"><strong>32.7 s</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td><code>FALCON_SIGN</code></td>
+<td>per signature</td>
+<td style="text-align: right;">12.7 s</td>
+<td style="text-align: right;">734</td>
+<td style="text-align: right;">122 864 in / 2 048 out</td>
+</tr>
+<tr>
+<td><code>FALCON_SIGN</code> (SCA-protected)</td>
+<td>per signature</td>
+<td style="text-align: right;">17.4 s</td>
+<td style="text-align: right;">734</td>
+<td style="text-align: right;">same</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Falcon-512</strong></p>
+<table>
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 17%" />
+<col style="width: 13%" />
+<col style="width: 10%" />
+<col style="width: 19%" />
+</colgroup>
+<thead>
+<tr>
+<th>Phase</th>
+<th>When</th>
+<th style="text-align: right;">Time</th>
+<th style="text-align: right;">APDUs</th>
+<th style="text-align: right;">Bytes streamed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FALCON_KEYGEN</code></td>
+<td>once (setup)</td>
+<td style="text-align: right;">2.4 s</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1 024 (pk)</td>
+</tr>
+<tr>
+<td><code>FALCON_KEYGEN_EXPAND</code></td>
+<td>once (setup)</td>
+<td style="text-align: right;">7.1 s</td>
+<td style="text-align: right;">1 106</td>
+<td style="text-align: right;">57 328 (wire)</td>
+</tr>
+<tr>
+<td><strong>Initial setup total</strong></td>
+<td></td>
+<td style="text-align: right;"><strong>9.5 s</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td><code>FALCON_SIGN</code></td>
+<td>per signature</td>
+<td style="text-align: right;">8.5 s</td>
+<td style="text-align: right;">357</td>
+<td style="text-align: right;">57 328 in / 1 024 out</td>
+</tr>
+<tr>
+<td><code>FALCON_SIGN</code> (SCA-protected)</td>
+<td>per signature</td>
+<td style="text-align: right;">12 s*</td>
+<td style="text-align: right;">357</td>
+<td style="text-align: right;">same</td>
+</tr>
+</tbody>
+</table>
+<p>* <em>Projection only, full SCA-protected Falcon-512 sign timing not
+yet measured. Extrapolated from the ×1.36 SCA overhead measured on
+Falcon-1024 applied to the 8.5 s baseline.</em></p>
+<p>Setup is paid once at wallet creation, or after recovery from
+mnemonic on a fresh device. Every subsequent signature reuses the same
+encrypted wire stored on the host. Recovery from the 24-word mnemonic
+produces an identical wire, so a new device pays the setup cost again,
+but the host-side blob need not be regenerated. Throughput is ~6–7 ms
+per APDU end-to-end (compute + USB HID round-trip).</p>
+<h3 id="a-note-on-side-channel-masking">A note on side-channel
+masking</h3>
+<p>The SCA-protected variant uses the <a
+href="https://eprint.iacr.org/2024/1581">Lin et al. (PKC 2025) protected
+sampler</a>. The principle of masking is to split each secret
+intermediate value into several random shares, so that any single power
+trace, EM measurement, or fault on one share alone reveals nothing about
+the underlying secret; an attacker has to recover the same intermediate
+from all shares simultaneously, which is exponentially harder to do
+without being detected. For Falcon, the hardest piece to mask is the
+gaussian sampler over the leaves of the LDL tree: its rejection loop,
+its integer comparisons against fractional thresholds, and the floor
+function used in the round-and-truncate step are all secret-dependent
+and resist standard arithmetic-vs-Boolean conversions. The Lin et
+al. sampler reworks the sampling subroutine to keep all secret-dependent
+intermediates in masked form, at the cost of additional SHAKE state and
+additional FP operations per sample. On our build that produces a ~×1.36
+wall-clock overhead on Falcon-1024 sign (12.7 s → 17.4 s), which is
+consistent with what the paper reports on x86 once the FP overhead is
+factored in. The protection covers the leakage modeled in <a
+href="https://eprint.iacr.org/2023/224">Improved Power Analysis Attacks
+on Falcon</a>; fault injection, total side-channel coverage of the FFT,
+and the streaming layer itself remain out of scope.</p>
+<h2
+id="beyond-falcon-a-case-for-first-class-outsourced-memory-primitives-in-bolos">Beyond
+Falcon: a case for first-class outsourced-memory primitives in
+BOLOS</h2>
+<p>The streaming construction is not Falcon-specific. It instantiates a
+primitive known since <a href="https://eprint.iacr.org/2024/123">Blum,
+Evans, Gemmell, Kannan and Naor (FOCS 1991)</a> as <strong>memory
+checking</strong>: a client with small trusted local storage maintains a
+large memory on an untrusted server, and any tampering is detected with
+overwhelming probability. Add encryption under a key the server does not
+see, then add privacy of the access pattern, and you arrive at <a
+href="https://en.wikipedia.org/wiki/Oblivious_RAM">Oblivious RAM
+(ORAM)</a> (<a
+href="https://dl.acm.org/doi/10.1145/233551.233553">Goldreich &amp;
+Ostrovsky, J. ACM 1996</a>). <a
+href="https://arxiv.org/abs/1202.5150">Path ORAM</a> (Stefanov et al.,
+CCS 2013) is the most practical construction in that family and the one
+most secure-processor designs have adopted.</p>
+<p>Our construction sits closer to memory checking than to full ORAM.
+The host learns <em>which</em> tree node is being read at each moment —
+the access pattern follows the LDL DFS and is public by design, but it
+learns nothing about <em>what</em> the node contains, and any
+modification is detected. For Falcon this is acceptable: the access
+pattern only tells the host that the device is signing, which it knows
+already.</p>
+<p>Any deterministic embedded computation whose working state exceeds
+available SRAM but is read in a known order can be ported to a
+constrained device with the same recipe. Derive a <code>tree_key</code>
+and a <code>mac_key</code> from device-internal entropy, encrypt each
+chunk under the tree key, MAC each chunk with offset binding under the
+mac key, stream the records out, and reverse the process when reading
+back. The cryptographic primitives — a stream cipher (or PRF), a MAC,
+key derivation bound to device secrets are already in <a
+href="https://www.ledger.com/introducing-bolos-blockchain-open-ledger-operating-system">BOLOS</a>
+through the <code>cx_*</code> API. The higher-level abstraction is
+missing.</p>
+<p>A small set of system calls would be enough: allocate, write, and
+read back arbitrarily large encrypted-and-authenticated buffers held on
+the host, with the OS guaranteeing the cryptographic discipline.
+Something along the lines of:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* Hypothetical BOLOS API */</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cx_err_t cx_outsourced_alloc<span class="op">(</span>cx_outsourced_t <span class="op">*</span>ctx<span class="op">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                             <span class="dt">const</span> <span class="dt">uint8_t</span> <span class="op">*</span>kdf_input<span class="op">,</span> <span class="dt">size_t</span> kdf_input_len<span class="op">);</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>cx_err_t cx_outsourced_write<span class="op">(</span>cx_outsourced_t <span class="op">*</span>ctx<span class="op">,</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                             <span class="dt">size_t</span> offset<span class="op">,</span> <span class="dt">const</span> <span class="dt">uint8_t</span> <span class="op">*</span>plaintext<span class="op">,</span> <span class="dt">size_t</span> len<span class="op">,</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                             <span class="dt">uint8_t</span> <span class="op">*</span>out_record<span class="op">);</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>cx_err_t cx_outsourced_read<span class="op">(</span>cx_outsourced_t <span class="op">*</span>ctx<span class="op">,</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                            <span class="dt">size_t</span> offset<span class="op">,</span> <span class="dt">const</span> <span class="dt">uint8_t</span> <span class="op">*</span>record<span class="op">,</span> <span class="dt">size_t</span> len<span class="op">,</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                            <span class="dt">uint8_t</span> <span class="op">*</span>plaintext<span class="op">);</span></span></code></pre></div>
+<p>The OS-level implementation handles key derivation, AEAD construction
+(or encrypt-then-MAC with offset commitment), nonce management, and
+side-channel hardening uniformly across consuming applications. The very
+things <a
+href="https://developers.ledger.com/docs/device-app/integration/requirements/cryptography">BOLOS
+asks application developers not to roll themselves</a>. Applications
+needing the stronger ORAM property could use a second-tier primitive
+built on Path ORAM over the same key material, accepting the <a
+href="https://eprint.iacr.org/2024/123">Ω(log N) bandwidth
+overhead</a>.</p>
+<h3 id="prior-art-vanadium">Prior art: Vanadium</h3>
+<p>Ledger has explored outsourced memory at the level of the <em>whole
+application</em> with the <a
+href="https://github.com/LedgerHQ/vanadium">Vanadium project</a> (and
+its <a href="https://github.com/LedgerHQ/vanadium-legacy">archived
+predecessor vanadium-legacy</a>). Vanadium is a RISC-V virtual machine
+running inside the secure element; V-Apps are RISC-V binaries whose
+code, stack and data live as encrypted-and-authenticated 256-byte pages
+on the host, paged in on demand by the VM. The architecture is described
+in <a href="https://www.ledger.com/blog/app-streaming">Ledger’s
+app-streaming blog post</a> and the <a
+href="https://github.com/LedgerHQ/vanadium/blob/master/docs/security.md">security
+overview</a>. Any RISC-V program can run, with no concern for SRAM
+limits.</p>
+<p>Our construction makes a different tradeoff. The application stays
+native ARM code, compiled and linked normally for the Cortex-M33 secure
+element; only one specific buffer (the LDL tree of Falcon) is streamed.
+Falcon’s FFT, the gaussian sampler, the FPR arithmetic, and the APDU
+dispatcher all execute at full native speed.</p>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 19%" />
+<col style="width: 23%" />
+<col style="width: 32%" />
+</colgroup>
+<thead>
+<tr>
+<th>Approach</th>
+<th>App execution</th>
+<th>Memory granularity</th>
+<th>Per-page crypto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Native + ad-hoc streaming (this work)</td>
+<td>ARM, native</td>
+<td>application-defined nodes</td>
+<td>2× SHAKE256 per node</td>
+</tr>
+<tr>
+<td>Native + <code>cx_outsourced_*</code> (proposed)</td>
+<td>ARM, native</td>
+<td>application-defined</td>
+<td>OS-provided AEAD (potentially HW AES)</td>
+</tr>
+<tr>
+<td>Vanadium VM</td>
+<td>RISC-V interpreted</td>
+<td>256-byte pages, fixed</td>
+<td>AES-CBC + HMAC per page (+ Merkle proof in v2)</td>
+</tr>
+</tbody>
+</table>
+<p>For a workload like Falcon, where the gaussian sampler and FFT
+dominate, the cost of interpreting RISC-V on a 32 MHz Cortex-M33
+dominates everything else. RISC-V interpreters on embedded ARM typically
+run <a href="https://www.ledger.com/blog/app-streaming">10× to 50×
+slower than native code</a> depending on optimization effort. A
+Falcon-1024 sign that takes 12.7 s natively would fall somewhere between
+2 and 10 minutes in a Vanadium-style VM, before counting the per-page
+AES+HMAC overhead added on top.</p>
+<p>The proposed <code>cx_outsourced_*</code> API sits between these two
+extremes. Native execution speed, with the OS providing the streaming
+primitive at the right granularity for each application. For Falcon, the
+realistic gain over our current ad-hoc implementation is modest (on the
+order of 20–30% on <code>FALCON_SIGN</code> if BOLOS uses
+hardware-accelerated AES instead of software SHAKE256). The benefit we
+care about more is removing about 250 lines of bespoke crypto from each
+PQC application that needs the same pattern.</p>
+<p>Vanadium and a targeted <code>cx_outsourced_*</code> are not in
+competition. Vanadium covers transparent virtualization of arbitrary
+apps; the targeted primitive covers performance-sensitive native code
+that needs to externalize one specific buffer. For PQC signing on a
+Cortex-M33, the targeted primitive avoids the VM tax.</p>
+<h3 id="a-primitive-for-the-whole-post-quantum-stack">A primitive for
+the whole post-quantum stack</h3>
+<p>Every post-quantum scheme NIST has selected - <a
+href="https://csrc.nist.gov/pubs/fips/203/final">ML-KEM</a>, - <a
+href="https://csrc.nist.gov/pubs/fips/204/final">ML-DSA</a>, - <a
+href="https://csrc.nist.gov/pubs/fips/205/final">SLH-DSA</a>, and Falcon
+has internal state larger than what fits comfortably in current
+secure-element SRAM. Each scheme today either drops parameter sets,
+accepts a degraded variant, or builds an ad-hoc streaming layer. A
+shared OS-level primitive lets every PQC application target its full
+parameter set without each app reinventing the same encrypt-and-MAC
+discipline, with the security review concentrated in one place rather
+than scattered across N codebases.</p>
+<h3 id="open-problems">Open problems</h3>
+<p>The streaming primitive handles confidentiality, integrity and
+ordering. Several questions remain open for any PQC scheme adopting this
+approach.</p>
+<p><strong>Constant-time across the streaming boundary.</strong>
+Falcon’s gaussian sampler runs in constant time relative to its inputs.
+The streaming layer adds new timing-observable operations: page fetches,
+MAC verifications, keystream generation. The wall-clock time of
+<code>FALCON_SIGN</code> already varies by tens of milliseconds across
+runs because of host scheduling and USB jitter. We have not measured
+whether any of that variance correlates with secret material. A
+primitive exposing a stable, secret-independent timing profile per
+<code>cx_outsourced_read</code> would be needed for any rigorous
+constant-time analysis upstream.</p>
+<p><strong>Side-channel masking under outsourced memory.</strong>
+Boolean masking on the FFT inputs, arithmetic masking on rejection
+sampling, shuffled traversals, all of those assume the working state
+lives in registers or near-CPU SRAM. When part of the state lives
+outside the device, every fetch is a potential leakage trace. The
+literature on <a href="https://eprint.iacr.org/2023/224">side-channel
+attacks against Falcon</a> and on <a
+href="https://eprint.iacr.org/2024/709">masking Falcon’s floor
+function</a> does not yet model the streaming layer. Our SCA-protected
+build adopts the <a href="https://eprint.iacr.org/2024/1581">Lin et
+al. PKC 2025 sampler</a> but does not model the streaming layer as part
+of the leakage surface; that is a question we leave open.</p>
+<p><strong>Access-pattern leakage.</strong> Our construction does not
+hide the access pattern. For Falcon the pattern is the LDL DFS, which
+reveals nothing useful. For other schemes the pattern itself encodes
+secret information, <a href="https://sphincs.org/">SPHINCS+</a> WOTS
+chains, for instance, traverse different paths depending on the chunk
+being signed. For those, either wrap the streaming in a Path ORAM layer
+(paying the <a href="https://eprint.iacr.org/2024/123">Ω(log N)
+overhead</a>) or redesign the access pattern to be input-independent. A
+BOLOS API offering both modes ( <code>cx_outsourced_*</code> for
+pattern-public workloads and <code>cx_oram_*</code> for pattern-secret
+ones) would let each application pick.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Neither Falcon-512 nor Falcon-1024 fits on a Ledger Nano S+. With
+authenticated streaming of the LDL tree to the host, both run, with full
+BIP-39 mnemonic recovery, on-device hash-to-point, and signatures that
+verify against the NIST round 3 reference. Setup is paid in seconds,
+signatures in seconds, and the secure element never holds more than one
+tree node of plaintext at a time.</p>
+<p>This is the counterpart of the ZK clear signing direction: there the
+device verifies what others computed, here the device authenticates what
+others stored. In both cases, the secure element does the smallest
+amount of work compatible with security, and the cryptography handles
+the trust boundary.</p>
+<p>🔐 Let’s build post-quantum hardware wallets.</p>
+<h2 id="references">References</h2>
+<h3 id="falcon-and-post-quantum-standardization">Falcon and post-quantum
+standardization</h3>
+<ul>
+<li><p><a href="https://falcon-sign.info/">Falcon-sign — official
+submission</a></p></li>
+<li><p><a href="https://github.com/PQClean/PQClean">PQClean Falcon-512 /
+Falcon-1024</a> — audited reference implementation</p></li>
+<li><p><a
+href="https://csrc.nist.gov/projects/post-quantum-cryptography">NIST
+FIPS 206 (Falcon)</a> — standardization in progress</p></li>
+<li><p><a href="https://csrc.nist.gov/pubs/fips/203/final">NIST FIPS 203
+(ML-KEM)</a>, <a href="https://csrc.nist.gov/pubs/fips/204/final">FIPS
+204 (ML-DSA)</a>, <a
+href="https://csrc.nist.gov/pubs/fips/205/final">FIPS 205 (SLH-DSA)</a>
+— companion PQC standards</p></li>
+</ul>
+<h3 id="outsourced-memory-foundational-results">Outsourced memory:
+foundational results</h3>
+<ul>
+<li><p>Blum, Evans, Gemmell, Kannan, Naor — <em>Checking the correctness
+of memories</em> — <a
+href="https://link.springer.com/article/10.1007/BF01185207">FOCS
+1991</a> / Algorithmica 1994. Original definition of memory
+checking.</p></li>
+<li><p>Goldreich, Ostrovsky — <em>Software protection and simulation on
+oblivious RAMs</em> — <a
+href="https://dl.acm.org/doi/10.1145/233551.233553">J. ACM 1996</a>.
+Original definition of ORAM and the Ω(log N) lower bound.</p></li>
+<li><p>Stefanov, van Dijk, Shi, Chan, Fletcher, Ren, Yu, Devadas —
+<em><a href="https://arxiv.org/abs/1202.5150">Path ORAM: an extremely
+simple oblivious RAM protocol</a></em> — CCS 2013 / J. ACM 2018. The
+most practical ORAM construction for small-client-storage settings;
+widely adopted in secure-processor designs.</p></li>
+<li><p>Asharov, Komargodski, Lin, Shi — <em><a
+href="https://link.springer.com/chapter/10.1007/978-3-030-45724-2_14">OptORAMa:
+optimal oblivious RAM</a></em> — Eurocrypt 2020 / J. ACM 2022.
+Asymptotically optimal ORAM matching the Ω(log N) bound.</p></li>
+<li><p>Boyle, Komargodski, Vafa — <em><a
+href="https://eprint.iacr.org/2024/123">Memory checking requires
+logarithmic overhead</a></em> — STOC 2024. Tight lower bound for memory
+checking with computational security.</p></li>
+</ul>
+<h3 id="side-channel-and-fault-attacks-on-falcon">Side-channel and fault
+attacks on Falcon</h3>
+<ul>
+<li><p>McCarthy, Howe, Smyth, Brannigan, O’Neill — <em><a
+href="https://eprint.iacr.org/2019/478">BEARZ Attack FALCON:
+Implementation Attacks with Countermeasures</a></em> — SECRYPT 2019.
+First fault attack on Falcon’s trapdoor sampler, with countermeasure
+analysis.</p></li>
+<li><p>Zhang, Lin, Yu, Wang — <em><a
+href="https://eprint.iacr.org/2023/224">Improved Power Analysis Attacks
+on Falcon</a></em> — Eurocrypt 2023. State-of-the-art power-analysis
+attack on Falcon’s gaussian sampler.</p></li>
+<li><p>Coron, Gérard, Trannoy, Zeitoun — <em><a
+href="https://eprint.iacr.org/2024/709">Masked Computation of the Floor
+Function and its Application to the FALCON Signature</a></em> — TCHES
+2024. Masking the floor function, one of the hardest pieces of Falcon to
+mask.</p></li>
+<li><p>Karabulut, Aysu — <em><a
+href="https://tches.iacr.org/index.php/TCHES/article/view/11804">Masking
+FALCON’s Floating-Point Multiplication in Hardware</a></em> — TCHES
+2024. Hardware masking of Falcon’s FP multiplications.</p></li>
+<li><p>Lin, Wang, Zhang, Yu — <em><a
+href="https://eprint.iacr.org/2024/1581">A side-channel-resistant
+gaussian sampler for Falcon</a></em> — PKC 2025. The protected sampler
+used in this work’s SCA-protected build.</p></li>
+</ul>
+<h3 id="hardware-wallet-platform">Hardware wallet platform</h3>
+<ul>
+<li><p><a
+href="https://www.ledger.com/introducing-bolos-blockchain-open-ledger-operating-system">Introducing
+BOLOS</a> — Ledger’s secure-element OS</p></li>
+<li><p><a
+href="https://developers.ledger.com/docs/device-app/integration/requirements/cryptography">Ledger
+Developer Portal — Cryptography</a> — guidance on <code>cx_*</code>
+primitives</p></li>
+<li><p><a
+href="https://github.com/LedgerHQ/ledger-secure-os">LedgerHQ/ledger-secure-os</a>
+— public parts of BOLOS</p></li>
+<li><p><a href="https://github.com/LedgerHQ/vanadium">Vanadium</a> and
+<a
+href="https://github.com/LedgerHQ/vanadium-legacy">vanadium-legacy</a> —
+Ledger’s RISC-V VM with full encrypted page swapping. Generalizes the
+streaming pattern to whole-app virtualization.</p></li>
+<li><p><a href="https://www.ledger.com/blog/app-streaming">App
+Streaming: a New Development Paradigm for Environments with Constrained
+Resources</a> — Ledger’s blog post on the Vanadium architecture</p></li>
+</ul>
+<h3 id="standards-used-in-this-work">Standards used in this work</h3>
+<ul>
+<li><p><a
+href="https://github.com/satoshilabs/slips/blob/master/slip-0010.md">BIP-32
+/ BIP-39 / SLIP-10</a> — deterministic key derivation</p></li>
+<li><p><a
+href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf">SHAKE256
+— FIPS 202</a></p></li>
+</ul>
+<h3 id="others">Others</h3>
+<ul>
+<li><p>Unlimited public computation in constrained hardware using ZK
+proofs — Application to ZK clear signing, ZKNOX Blog,
+https://zknox.eth.limo/posts/2026/03/13/zk_clear_signing_160326.html</p></li>
+<li><p>Quantum Computing’s Threat to Blockchain: The Enduring Need for
+Secure Keys
+https://www.ledger.com/blog-quantum-computing-threat-to-blockchain</p></li>
+</ul>
+<h2 id="reach-us">Reach us</h2>
+<p>🔐 Practical security on the whole chain.</p>
+<p><a href="https://github.com/zknoxhq">Github</a> | <a
+href="https://www.zknox.com">Website</a> | <a
+href="https://x.com/zknoxhq">Twitter</a> | <a
+href="https://zknox.eth.limo">Blog</a> | <a
+href="mailto:gm@zknox.com">Contact Info</a></p>
+<p><small>Found a typo, or want to improve the note? Our blog is open to
+PRs.</small></p>
+ </div> 
+<!-- ZKNOX Footer -->
+<footer class="zknox-footer">
+    <div class="footer-container">
+        <p class="footer-copy">Copyright © 2025 <a href="https://zknox.com">ZKNOX</a> All rights reserved.</p>
+    </div>
+</footer>
+<style>
+.zknox-footer {
+    background: #0a0a0f;
+    padding: 2rem;
+    text-align: center;
+    border-top: 1px solid rgba(167, 139, 250, 0.2);
+    margin-top: 4rem;
+}
+.zknox-footer .footer-copy {
+    color: #a78bfa;
+    font-size: 15px;
+    margin: 0;
+    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.zknox-footer .footer-copy a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+}
+.zknox-footer .footer-copy a:hover {
+    color: #c4b5fd;
+}
+</style>
+
+<script>
+function toggleMenu() {
+    document.querySelector('.zknox-nav .nav-links').classList.toggle('active');
+}
+
+// Accordéon mobile
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.zknox-nav .nav-dropdown > .nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (window.innerWidth <= 900) {
+                e.preventDefault();
+                const dropdown = this.parentElement;
+                document.querySelectorAll('.zknox-nav .nav-dropdown.open').forEach(d => {
+                    if (d !== dropdown) d.classList.remove('open');
+                });
+                dropdown.classList.toggle('open');
+            }
+        });
+    });
+});
+</script>
+</body></html>

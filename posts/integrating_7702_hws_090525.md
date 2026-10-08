@@ -1,4 +1,4 @@
-[category]: <> (General)
+[category]: <> (Hardware wallet, Account abstraction)
 [date]: <> (2025/05/09)
 [title]: <> (Integrating EIP-7702 with Hardware Wallets)
 

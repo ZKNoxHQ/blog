@@ -1,4 +1,4 @@
-[category]: <> (General)
+[category]: <> (Post-quantum)
 [date]: <> (2025/03/21)
 [title]: <> (ETHDILITHIUM and ETHFALCON for Ethereum PQ Era)
 

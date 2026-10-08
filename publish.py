@@ -616,7 +616,7 @@ RSS_MAIN_TEMPLATE = """
 """
 
 def extract_metadata(fil, filename=None):
-    metadata = {}
+    metadata = {'categories': set()}
     if filename:
         assert filename[-3:] == '.md'
         metadata["filename"] = filename[:-3]+'.html'
@@ -687,8 +687,8 @@ def defancify(text):
 def make_categories_header(categories, root_path):
     o = ['<center><hr>']
     for category in categories:
-        template = '<span class="toc-category" style="font-size:{}%"><a href="{}/categories/{}.html">{}</a></span>'
-        o.append(template.format(min(100, 900 // len(category)), root_path, category, category.capitalize()))
+        template = '<span class="toc-category"><a href="{}/categories/{}.html">{}</a></span>'
+        o.append(template.format(root_path, category, category.capitalize()))
     o.append('<hr></center>')
     return '\n'.join(o)
 

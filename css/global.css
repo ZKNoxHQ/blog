@@ -132,6 +132,15 @@ html.dark #doc img.invert {
   border-color: var(--color-table-border);
 }
 
+/* Narrow screens: compact cells, scroll the table instead of wrapping values */
+@media (max-width: 600px) {
+  #doc table th, #doc table td {
+    padding: 6px 8px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+}
+
 #doc table.transparent,
 #doc table.transparent th,
 #doc table.transparent td,

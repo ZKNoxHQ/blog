@@ -1,4 +1,4 @@
-[category]: <> (General)
+[category]: <> (Post-quantum, Hardware wallet)
 [date]: <> (2026/04/30)
 [title]: <> (Unlimited working memory in constrained hardware using authenticated streaming — FALCON1024 with 32KB of RAM - Ledger/ST33)
 

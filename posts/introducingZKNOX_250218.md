@@ -1,4 +1,3 @@
-[category]: <> (General)
 [date]: <> (2025/02/18)
 [title]: <> (Introducing ZKNOX)
 

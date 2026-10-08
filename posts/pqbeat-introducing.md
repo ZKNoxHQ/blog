@@ -1,4 +1,4 @@
-[category]: <> (General)
+[category]: <> (Post-quantum)
 [date]: <> (2026/01/05)
 [title]: <> (Introducing PQbeat: A Post-Quantum Readiness Tracker for Ethereum)
 

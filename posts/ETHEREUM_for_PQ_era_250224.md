@@ -1,4 +1,4 @@
-[category]: <> (General)
+[category]: <> (Post-quantum)
 [date]: <> (2025/02/24)
 [title]: <> (Practical results on Lattice onchain verifiers)
 

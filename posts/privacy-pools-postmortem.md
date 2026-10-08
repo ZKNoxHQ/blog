@@ -1,4 +1,4 @@
-[category]: <> (Security Research)
+[category]: <> (Security research, Privacy)
 [date]: <> (2026/03/26)
 [title]: <> (Privacy Pools: Anatomy of a 53-bit Entropy Collapse)
 

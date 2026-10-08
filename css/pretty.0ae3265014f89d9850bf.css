@@ -793,16 +793,9 @@ pre[class*="language-"] { padding: 1em; margin: .5em 0; overflow: auto; }
  code[class*="language-"], pre[class*="language-"] { text-shadow: none; }
 }
 
-@media only screen and (orientation: landscape) {
-    .markdown-body { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font-size: 16px; line-height: 1.75; word-wrap: break-word; }
-    #doc.markdown-body { max-width: 760px; padding-bottom: 80px; }
-    .container-thiner { max-width: 760px; margin: 0 auto; padding: 0 15px; }
-}
-@media only screen and (orientation: portrait) {
-    .markdown-body { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font-size: 30px; line-height: 1.75; word-wrap: break-word; }
-    #doc.markdown-body { max-width: 92%; padding-bottom: 80px; }
-    .container-thiner { max-width: 92%; margin: 0 auto; padding: 0 10px; }
-}
+.markdown-body { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font-size: 16px; line-height: 1.75; word-wrap: break-word; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+#doc.markdown-body { max-width: 760px; padding-bottom: 80px; }
+.container-thiner { max-width: 760px; margin: 0 auto; padding: 0 15px; }
 .markdown-body::before { display: table; content: ""; }
 .markdown-body::after { display: table; clear: both; content: ""; }
 .markdown-body>*:first-child { margin-top: 0 !important; }

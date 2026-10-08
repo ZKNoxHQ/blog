@@ -1,4 +1,4 @@
-[category]: <> (General)
+[category]: <> (Post-quantum)
 [date]: <> (2026/02/11)
 [title]: <> (Scenarios for Post-Quantum Migrations)
 

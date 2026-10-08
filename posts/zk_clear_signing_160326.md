@@ -1,4 +1,4 @@
-[category]: <> (General)
+[category]: <> (Hardware wallet)
 [date]: <> (2026/03/13)
 [title]: <> (Unlimited public computation in constrained hardware using ZK proofs — Application to ZK clear signing)
 

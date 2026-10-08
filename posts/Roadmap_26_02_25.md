@@ -1,4 +1,3 @@
-[category]: <> (General)
 [date]: <> (2025/02/26)
 [title]: <> (ZKNOX: Roadmap 2025)
 

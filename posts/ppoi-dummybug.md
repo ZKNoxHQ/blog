@@ -1,4 +1,4 @@
-[category]: <> (General)
+[category]: <> (Security research, Privacy)
 [date]: <> (2026/10/08)
 [title]: <> (Private Proofs of Innocence: a circuit flaw and a four-year retrospective)
 

@@ -6,15 +6,15 @@
 
 In this blog post, we dig into the details of one important feature of recent privacy-preserving protocols: regulatory compliance.
 
-ZKNOX found a soundness flaw in Railgun's Private Proof of Innocence circuit, supplied the patch code, and the Railgun team deployed it. Following the flaw discovery, ZKNOX analyzed this vulnerability with on-chain data in order to detect whether notes were shielded and blocked by PPOI, and later unshielded to a new address with a valid PPOI and concluded it had not been exploited. It was also an opportunity to take stock of how well a mechanism like PPOI actually performs in practice, which turned out to be the more interesting result. The first part of this post is the description of the system and the bug, the second one gives some elements of the forensic.
+ZKNOX found a soundness flaw in Railgun's Private Proof of Innocence circuit, supplied the patch code, and the Railgun team deployed it. Following the flaw discovery, ZKNOX analyzed this vulnerability with on-chain data in order to detect whether notes were shielded and blocked by PPOI, and later unshielded to a new address with a valid PPOI and concluded it had not been exploited. It was also an opportunity to take stock of how well a mechanism like PPOI actually performs in practice, which turned out to be the more interesting result. The first part of this post is the description of the system and the bug, the second one gives some elements of the forensics.
 
 ## Compliance across the different privacy protocols
 
-In this post, we focus on Ethereum privacy-preserving protocols. Tornado Cash was historically the first scheme enabling privacy-preserving transactions, but it has also been criticized for money laundering. More recently, Railgun has been introduced, enabling a broader range of possibilities, with a real private UTXO model, and many features. In this protocol, it is possible to keep private funds secured by a hardware device, a feature that is not fully possible on Tornado Cash. Another protocol has also been deployed with the aim of improving Tornado Cash in different aspects. In order to prevent money laundering, these protocols have integrated private proofs attesting that the funds interacted only with accepted actors:
+Among Ethereum privacy-preserving protocols, Tornado Cash was historically the first scheme enabling privacy-preserving transactions, but it has also been criticized for enabling money laundering. More recently, Railgun has been introduced, enabling a broader range of possibilities, with a real private UTXO model, and many features. In this protocol, it is possible to keep private funds secured by a hardware device, a feature that is not fully possible on Tornado Cash. Another protocol has also been deployed with the aim of improving Tornado Cash in different aspects. In order to prevent money laundering, these protocols have integrated private proofs attesting that the funds interacted only with accepted actors:
 
-- Tornado Cash can be used together with a proof of innocence provided by Chainway (https://poi.chainway.xyz/).
-- Privacy Pools controls illicit funds through an Association Set Provider Layer (https://docs.privacypools.com/layers/asp),
-- Railgun integrates Private Proof Of Innocence (https://docs.railgun.org/wiki/assurance/private-proofs-of-innocence), a separate system also based of ZK proofs.
+- Tornado Cash can be used together with a proof of innocence provided by [Chainway](https://poi.chainway.xyz/).
+- Privacy Pools controls illicit funds through an [Association Set Provider Layer](https://docs.privacypools.com/layers/asp),
+- Railgun integrates [Private Proof Of Innocence](https://docs.railgun.org/wiki/assurance/private-proofs-of-innocence), a separate system also based on ZK proofs.
 
 In all of these technologies, the protocol relies on several entities that provide lists of bad actors. In the case of Railgun, five providers are queried, and any address blacklisted by at least one of them would be considered a bad actor. This list is thus updated in real time in order to prevent even the most recent actors from laundering.
 
@@ -22,7 +22,7 @@ In all of these technologies, the protocol relies on several entities that provi
 
 In this blog post, we focus on PPOI and Railgun. Before digging into the details of PPOI, we need to recall how Railgun works.
 
-Private transactions are made using a UTXO model, where a private address (starting with 0zk) owns encrypted notes. A private address encodes the necessary information necessary to enable transactions without revealing any information about the participants. We now recall the main actions in Railgun (shield, transact and unshield), and how PPOI interacts with them.
+Private transactions are made using a UTXO model, where a private address (starting with 0zk) owns encrypted notes. A private address encodes the necessary information to enable transactions without revealing any information about the participants. We now recall the main actions in Railgun (shield, transact and unshield), and how PPOI interacts with them.
 
 ### Shield
 
@@ -32,15 +32,15 @@ A shield does not become spendable immediately. The waiting period before the at
 
 Railgun wallets allow a user to later transact with this note only if the note has a valid PPOI. Here is an example of a valid shield:
 
-- Vitalik sends 400 ETH from vb2 to 0x1810c87a85B1d3AFf71F3bd7fe45e4dc03EFF10E: (link (https://etherscan.io/tx/0x16101b1eecc913710a2f878543590e702d7012d180f78f8d37a5c128b4afd516))
-- This wallet shields the 400 ETH into WETH in the Railgun contract (link (https://etherscan.io/tx/0x9cc42e39aa3af5654183a6a82f09631135b2044e5ab4c423b596ad88ed1b289b))
-- The proof of innocence is available here (https://ppoi.info/Ethereum/tx/0x9cc42e39aa3af5654183a6a82f09631135b2044e5ab4c423b596ad88ed1b289b).
+- Vitalik sends 400 ETH from vb2 to 0x1810c87a85B1d3AFf71F3bd7fe45e4dc03EFF10E: ([link](https://etherscan.io/tx/0x16101b1eecc913710a2f878543590e702d7012d180f78f8d37a5c128b4afd516))
+- This wallet shields the 400 ETH into WETH in the Railgun contract ([link](https://etherscan.io/tx/0x9cc42e39aa3af5654183a6a82f09631135b2044e5ab4c423b596ad88ed1b289b))
+- The proof of innocence is available ([link](https://ppoi.info/Ethereum/tx/0x9cc42e39aa3af5654183a6a82f09631135b2044e5ab4c423b596ad88ed1b289b)).
 
-When a shield is blocked by PPOI, its owner has no other choice than to unshield to the origin address, i.e. send back the money to the sender in the transparent model. This technique prevents money laundering, as in this example (an attempt to launder of $3 091 755):
+When a shield is blocked by PPOI, its owner has no other choice than to unshield to the origin address, i.e. send back the money to the sender in the transparent model. This technique prevents money laundering, as in this example (an attempt to launder $3,091,755):
 
-- The bad actor tries to shield 3 091 755 $DAI (link (https://etherscan.io/tx/0x2b6253700eb17c3691f880152c1b58fc96a1339b9102a01397445292077ed2bb))
-- The shield is blocked by PPOI (link (https://ppoi.info/Ethereum/tx/0x2b6253700eb17c3691f880152c1b58fc96a1339b9102a01397445292077ed2bb))
-- The bad actor unshields to origin (link (https://etherscan.io/tx/0x5b9e359f6ce445fb451e1d4cd688230eb8d47bd5bfb67d04ae5363b7492ea1bf))
+- The bad actor tries to shield 3,091,755 DAI ([link](https://etherscan.io/tx/0x2b6253700eb17c3691f880152c1b58fc96a1339b9102a01397445292077ed2bb))
+- The shield is blocked by PPOI ([link](https://ppoi.info/Ethereum/tx/0x2b6253700eb17c3691f880152c1b58fc96a1339b9102a01397445292077ed2bb))
+- The bad actor unshields to origin ([link](https://etherscan.io/tx/0x5b9e359f6ce445fb451e1d4cd688230eb8d47bd5bfb67d04ae5363b7492ea1bf))
 - He later tries to send the funds to other addresses, but all of them are also blocked. He has no other choice than to unshield to the origin address for every shield.
 
 In practice, a shield always requires a valid PPOI to later be able to unshield. This comes with a drawback in terms of user experience: shielding a note requires waiting for validation from the providers before getting the PPOI.
@@ -79,7 +79,7 @@ for(var i=0; i<nInputs; i++) {
 
 Here, dummy notes are characterized by amount == 0, but this allows a bad actor get a valid PPOI for a blocked note by simply setting the note amount to 0. As the PPOI is external to the contract and does not change the private state, the PPOI is validated and the actor is able to unshield with a fake proof of innocence.
 
-For instance, Alice can bypass PPOI and send an illicit note of $1000 to Bob by submitting the following information to PPOI:
+For instance, Alice can bypass PPOI and send an illicit note of $1,000 to Bob by submitting the following information to PPOI:
 
 ```
 INPUT NOTES
@@ -104,7 +104,7 @@ Note 13:  Owner=None, Amount=0
 For this submission, the PPOI circuit will bypass the check on the first input note (considering it as dummy). Note that the Railgun contract and the PPOI circuit check distinct assertions:
 
 - Railgun checks the nullifier computation (for input notes), commitment computation (for output notes) check the balance of amount (and token type) for input vs output notes, etc. The onchain state is then modified (updating of the spent and created notes sets).
-- PPOI checks nullifiers and commitments for the non-dummy notes, but do not verify the balance check. Also, the value of the nullifier does not depend on the amount of the note. The PPOI proof is independent from the onchain state, and so the note owned by Alice remains with amount=$1000 (but is nullified).
+- PPOI checks nullifiers and commitments for the non-dummy notes, but do not verify the balance check. Also, the value of the nullifier does not depend on the amount of the note. The PPOI proof is independent from the onchain state, and so the note owned by Alice remains with amount=$1,000 (but is nullified).
 
 ZKNOX delivered to PPOI a new version of the circuit in order to fix this vulnerability. A dummy note is now characterized by a fixed leaf in the set of nullifiers:
 
@@ -182,7 +182,7 @@ We also screened every blocked depositor and every address on the exit side agai
 
 That one note is the thread worth pulling. Its depositor, `0x640Fb638…A2e96Ab`, had two shields blocked for a combined 393 WETH. One is the note still in the pool. The value behind the other did not go back to origin: it left through a no-POI unshield.
 
-That exit is permitted, and it is also conspicuous. Every mainstream Railgun wallet (Railway, Kohaku, Railoxide, anon) enforces the attestation client-side and will not build an unshield without one. The contract does not care, so the transaction is perfectly valid, but producing it means stepping outside the standard clients. A no-POI exit is therefore both allowed by the protocol and self-marking in the data.
+That exit is possible, and it is also conspicuous. Every mainstream Railgun wallet (Railway, Kohaku, Railoxide, anon) enforces the attestation client-side and will not build an unshield without one. The contract does not care, so the transaction is perfectly valid, but producing it means stepping outside the standard clients. A no-POI exit is therefore both allowed by the protocol and self-marking in the data.
 
 This is the property that makes the whole analysis possible, and it is worth stating plainly because it is easy to read as a weakness. Funds can always leave: that is what permissionless means, and it is why a blocked user is never expropriated. What they cannot do is leave unnoticed. The attestation is not a lock on the exit, it is a label on it, and the absence of that label is itself public and permanent on chain. Anyone can enumerate the no-POI exits, as we did here, and so can an exchange, a compliance team or an analytics firm deciding what to do with funds that arrive carrying that history.
 
@@ -204,21 +204,21 @@ Since disclosure, we are working with chain analyzers and the Railgun team, on h
 
 ## References
 
-- Railgun, Private Proofs of Innocence (https://docs.railgun.org/wiki/assurance/private-proofs-of-innocence)
-- PPOI circuits, Railgun-Privacy/proof-of-innocence-circuits (https://github.com/Railgun-Privacy/proof-of-innocence-circuits)
-- PPOI node, Railgun-Community/private-proof-of-innocence (https://github.com/Railgun-Community/private-proof-of-innocence)
-- Privacy Pools, Association Set Provider layer (https://docs.privacypools.com/layers/asp)
-- Tornado Cash proof of innocence, Chainway (https://poi.chainway.xyz/)
-- SEAL 911 (https://www.seal911.org/)
+- Railgun, [Private Proofs of Innocence](https://docs.railgun.org/wiki/assurance/private-proofs-of-innocence)
+- PPOI circuits, [Railgun-Privacy/proof-of-innocence-circuits](https://github.com/Railgun-Privacy/proof-of-innocence-circuits)
+- PPOI node, [Railgun-Community/private-proof-of-innocence](https://github.com/Railgun-Community/private-proof-of-innocence)
+- Privacy Pools, [Association Set Provider layer](https://docs.privacypools.com/layers/asp)
+- Tornado Cash proof of innocence, [Chainway](https://poi.chainway.xyz/)
+- [SEAL 911](https://www.seal911.org/)
 
 ## Signal bad behavior
 
-If you are witnessing or have been hit by an ongoing attack on a protocol, SEAL 911 (https://www.seal911.org/) reaches a vetted group of security researchers and incident responders directly, at any hour.
+If you are witnessing or have been hit by an ongoing attack on a protocol, [SEAL 911](https://www.seal911.org/) reaches a vetted group of security researchers and incident responders directly, at any hour.
 
 ## Reach us
 
 🔐 Practical security on the whole chain.
 
-Github (https://github.com/zknoxhq) | Website (https://www.zknox.com) | Twitter (https://x.com/zknoxhq) | Blog (https://zknox.eth.limo) | Contact Info
+[Github](https://github.com/zknoxhq) | [Website](https://www.zknox.com) | [Twitter](https://x.com/zknoxhq) | [Blog](https://zknox.eth.limo) | [Contact Info](mailto:gm@zknox.com)
 
-<small>Found typo, or want to improve the note ? Our blog is open to PRs. (https://github.com/ZKNoxHQ/blog/pulls)</small>
+<small>Found typo, or want to improve the note ? Our blog is open to [PRs](https://github.com/ZKNoxHQ/blog/pulls).</small>

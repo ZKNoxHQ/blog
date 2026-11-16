@@ -7,7 +7,7 @@ This blogpost is a summary of the talk ["You can't withdraw your privacy"](https
 
 In this post we study three privacy protocols integrated in [Kohaku](https://github.com/ethereum/kohaku), the Ethereum privacy SDK: Tornado Cash, Privacy Pools and Railgun.
 
-<img src="../images/kohaku-logo.svg" alt="Kohaku" class="transparent" width="120" style="display:block;margin:0 auto"/>
+<img src="../../../../../images/kohaku-logo.svg" alt="Kohaku" class="transparent" width="120" style="display:block;margin:0 auto"/>
 
 An efficient quantum computer breaks most of today's public-key cryptography. Running Shor's algorithm breaks factoring (RSA) and discrete logarithms (elliptic curves, pairings). Symmetric primitives (AES, ChaCha, hash functions) remain safe with appropriate parameters. In consequence, Ethereum must migrate the cryptography to quantum-safe primitives. This topic is tackled by several cryptographers, mostly at the _authentication_ level.
 
@@ -39,7 +39,7 @@ Only the first option leads to quantum privacy, and it should become the norm in
 
 ## Kohaku protocols
 
-### Tornado Cash <img src="../images/tornado-logo.svg" alt="Tornado Cash" class="transparent" height="30" style="vertical-align:middle"/>
+### Tornado Cash <img src="../../../../../images/tornado-logo.svg" alt="Tornado Cash" class="transparent" height="30" style="vertical-align:middle"/>
 
 Tornado Cash uses fixed-denomination pools. The construction described above is exactly what is used in this protocol. To deposit, a user samples a random nullifier $n$ and secret $s$ and publishes a commitment $c= \mathsf{Ped}(n \Vert s)$, which becomes a new leaf of a Merkle tree. To withdraw to a recipient address, the user publishes the nullifier hash $\mathsf{nf}= \mathsf{Ped}(n)$ together with a zero-knowledge proof that "$\mathsf{nf}$ corresponds to an unspent leaf of the tree". 
 
@@ -86,7 +86,7 @@ The timing of the transactions shrinks the pool even more: a withdrawal can only
 
 The conclusion for Tornado Cash is that its privacy is **seriously weakened against a quantum adversary**, and broken for the users who repeat the same deposit and withdrawal pattern. Using one-time withdrawal addresses keeps the target deposit addresses larger, but the real fix requires a contract upgrade: the commitments and nullifier hashes are already on-chain.
 
-### Privacy Pools <img src="../images/privacypools-logo.svg" alt="Privacy Pools" class="transparent" height="30" style="vertical-align:middle"/>
+### Privacy Pools <img src="../../../../../images/privacypools-logo.svg" alt="Privacy Pools" class="transparent" height="30" style="vertical-align:middle"/>
 
 Privacy Pools v1 follows the same deposit/withdraw design as Tornado Cash, with a compliance layer (Association Set Providers). The first version replaced the Pedersen hash with Poseidon, a hash function that is not based on any algebraic structure exploitable by Shor: $c = \mathsf{Pos}\bigl(v, \ell, \mathsf{Pos}(n, s)\bigr)$ and $\mathsf{nf} = \mathsf{Pos}(n)$.
 Commitments and nullifiers do not leak anything to a quantum adversary: **Privacy Pools v1 is post-quantum private**.
@@ -101,7 +101,7 @@ The symmetric encryption is quantum safe, but the ECDH is not: with Shor, the ad
 - **Confidentiality**: with $K = H(K_{\mathsf{ecdh}} \Vert K_{\mathsf{kem}} \Vert \dots)$, the note stays confidential as long as *either* ECDH *or* ML-KEM holds. Breaking it requires breaking both.
 - **Key privacy** (who is the sender, who is the recipient): every public value tied to a key can leak this information. It is broken as soon as *any* of them leaks.
 
-### Railgun <img src="../images/railgun-logo.svg" alt="Railgun" class="transparent" height="30" style="vertical-align:middle"/>
+### Railgun <img src="../../../../../images/railgun-logo.svg" alt="Railgun" class="transparent" height="30" style="vertical-align:middle"/>
 
 Railgun is a UTXO protocol: funds are *shielded* into the pool, transferred privately between `0zk` addresses, and *unshielded* back. Railgun has an important design advantage, *à la* Zcash: the spending authorization is a **signature verified inside the ZK proof**. The hardware wallet holds the spending key and signs the transaction $\sigma = \mathsf{Sign}_{sk}(\mathsf{tx})$. The host computes the proof using $\sigma$, without ever learning the spending key, and the signature authorizes this transaction only. Railgun therefore provides real **hardware security** of the spending key.
 

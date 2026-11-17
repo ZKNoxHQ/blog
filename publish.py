@@ -464,11 +464,10 @@ HEADER_TEMPLATE = """
 <link rel="stylesheet" type="text/css" href="$root/css/global.css">
 <link rel="stylesheet" type="text/css" href="$root/css/misc.css">
 
-<script type="text/x-mathjax-config">
 <script>
 MathJax = {
   tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']]
+    inlineMath: [['\\\\(', '\\\\)']]
   },
   svg: {
     fontCache: 'global',
@@ -753,7 +752,7 @@ if __name__ == '__main__':
         # Generate the html file
         options = metadata.get('pandoc', '')
 
-        os.system('pandoc -o /tmp/temp_output.html {} {}'.format(file_location, options))
+        os.system('pandoc --mathjax -o /tmp/temp_output.html {} {}'.format(file_location, options))
         root_path = '../../../..'
         total_file_contents = (
             PRE_HEADER +

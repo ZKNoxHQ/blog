@@ -3,36 +3,37 @@
 [title]: <> (Analysis of the quantum threat on the privacy of Kohaku protocols)
 
 
-This blogpost is a summary of the talk ["You can't withdraw your privacy"](https://www.youtube.com/watch?v=XffwTy3S_FI) presented at Devcon 2026 in Mumbai. It digs into the technical details omitted during the presentation.
+This blog post is a summary of the talk ["You can't withdraw your privacy"](https://www.youtube.com/watch?v=XffwTy3S_FI) presented at Devcon 2026 in Mumbai. It digs into the technical details omitted during the presentation.
 
 In this post we study three privacy protocols integrated in [Kohaku](https://github.com/ethereum/kohaku), the Ethereum privacy SDK: Tornado Cash, Privacy Pools and Railgun.
 
 <img src="../../../../../images/kohaku-logo.svg" alt="Kohaku" class="transparent" width="120" style="display:block;margin:0 auto"/>
 
-An efficient quantum computer breaks most of today's public-key cryptography. Running Shor's algorithm breaks factoring (RSA) and discrete logarithms (elliptic curves, pairings). Symmetric primitives (AES, ChaCha, hash functions) remain safe with appropriate parameters. In consequence, Ethereum must migrate the cryptography to quantum-safe primitives. This topic is tackled by several cryptographers, mostly at the _authentication_ level.
+An efficient quantum computer breaks most of today's public-key cryptography. Running Shor's algorithm breaks factoring (RSA) and discrete logarithms (elliptic curves, pairings). Symmetric primitives (AES, ChaCha, hash functions) remain safe with appropriate parameters. As a consequence, Ethereum must migrate the cryptography to quantum-safe primitives. This topic is tackled by several cryptographers, mostly at the _authentication_ level.
 
 
 ## Privacy vs authentication
 
 The security of Ethereum relies on cryptographic primitives, and some of them are threatened by the arrival of a cryptographically relevant quantum computer. Most of the discussion so far has been about **authentication**: how transactions are validated at the execution level with a cryptographic signature, how the validators agree at the consensus level, with a signature aggregation. Justin Drake provided an overview of the situation in [this talk](https://www.youtube.com/watch?v=rqJ5ir-8hAQ) during Devcon Mumbai.
 
-On the other side, the **privacy** of transctions is made through a construction with a ZK proof together with a Merkle tree circuit, and nullifiers (see later the details for each protocol). While a ZK proof system is perfectly zero-knowledge (input size is unbounded, but the output is succinct), even with a quantum computer, the extra elements (commitments in the Merkle tree and nullifiers) might weaken the privacy when an efficient quantum computer is able to break some of the cryptographic primitives.
+On the other hand, the **privacy** of transactions is made through a construction with a ZK proof together with a Merkle tree circuit, and nullifiers (see later the details for each protocol). While a ZK proof system is perfectly zero-knowledge even with a quantum computer (input size is unbounded, but the output is succinct), the extra elements (commitments in the Merkle tree and nullifiers) might weaken the privacy when an efficient quantum computer is able to break some of the cryptographic primitives.
 
-The migration of a privacy-preserving protocol to a quantum-resistant privacy version has a different deadline:
+The migration of a privacy-preserving protocol to a quantum-resistant privacy version has two different deadlines:
+
 - The authentication (signatures, proofs) is only at risk for transactions made *after* Q-day. A signature verified in 2026 cannot be forged retroactively: the transaction is already finalized, and after the migration, the sender of the transaction will have moved their funds to a quantum-safe account. This means that migrating before Q-day is enough.
-- In contrast, the privacy is at risk *retroactively*. Every byte ever published on-chain stays there forever. An adversary does not need to act today, they only have to wait for the release of the quantum computer, and break the past privacy. This means that the privacy property must be quantum-safe *today* in order to keep the privacy. 
+- In contrast, the privacy is at risk *retroactively*. Every byte ever published on-chain stays there forever. An adversary does not need to act today; they only have to wait for the release of the quantum computer, and break the past privacy. This means that the privacy property must be quantum-safe *today* in order to keep the privacy. 
 
 ## A general privacy-preserving construction
 
 In this section, we describe a simple and generic model for building private transactions. We present the keys needed for this to work, and also a first way for a quantum computer to break the privacy at the wallet level.
 
-The idea is very simple: users deposit funds in a smart account that accepts withdrawals only for owners of the deposits. More precisely, the smart account contains a Merkle tree of note commitments. When a user deposits a note, the Merkle tree is updated with a new leaf, a commitment of the note. During a withdrawal, the user provides a nullifier of the note (preventing double spending), and a proof that the nullified note corresponds to a note of the tree. Deposits and withdrawals are public and can be observed on-chain. We can see one user depositing on the smart account, another address receiving some funds later, but the proof is zero-knowledge, meaning that it is not possible to know which deposited note corresponds to the withdrawal.
+The idea is very simple: users deposit funds in a smart account that accepts withdrawals only for owners of the deposits. More precisely, the smart account contains a Merkle tree of note commitments. When a user deposits a note, the Merkle tree is updated with a new leaf, a commitment of the note. During a withdrawal, the user provides a nullifier of the note (preventing double-spending), and a proof that the nullified note corresponds to a note of the tree. Deposits and withdrawals are public and can be observed on-chain. We can see one user depositing on the smart account, another address receiving some funds later, but the proof is zero-knowledge, meaning that it is not possible to know which deposited note corresponds to the withdrawal.
 
 In this simple setting, withdrawing a note requires a zero-knowledge proof. Generating such a proof does not fit in a hardware wallet, which makes Tornado Cash and Privacy Pools hardware integration impossible. Railgun, on the other hand, uses a different approach (à la Zcash) and it is possible to have hardware security of the spending key.
 
 In terms of keys, the user needs secret keys for computing the commitment and the nullifier of the note. Depending on the way these keys are derived, the privacy might be affected. Before diving into the protocols, a point that affects all three of them: how are the private secrets derived in wallets? Two approaches coexist.
 
-- **Derivation path from the mnemonic** (originally specified by [Fat Solutions](https://www.fatsolutions.xyz/) for Kohaku): the secrets are derived from the seed with a hash-based derivation path, like any other BIP-32 key. This is **post-quantum safe** as long as the hash function is quantum-resistant (BIP-32 does, for example).
+- **Derivation path from the mnemonic** (originally specified by [Fat Solutions](https://www.fatsolutions.xyz/) for Kohaku): the secrets are derived from the seed with a hash-based derivation path, like any other BIP-32 key. This is **post-quantum safe** as long as the hash function is quantum-resistant (which is the case for BIP-32).
 - **Derivation from an Ethereum signature**: the wallet signs a message with ECDSA, and the secrets are derived from the signature. A hardware wallet can then derive the secrets with an existing app and export them to the host that computes the ZK proof, without hardware security since the secrets leave the device. ECDSA signatures are deterministic (RFC 6979): a quantum adversary who knows the public key of the signing key recovers the private key with Shor, recomputes the signatures and derives all the secrets. This is **quantum broken** as soon as this public key is on-chain, which is the case for any account that has sent a transaction.
 
 The first option is quantum private by construction, while the second one depends on how the signing key is used. For each protocol, we therefore separate two questions: does the construction allow post-quantum privacy, and are the wallets that implement it post-quantum private?
@@ -43,11 +44,12 @@ The first option is quantum private by construction, while the second one depend
 
 Tornado Cash uses fixed-denomination pools. The construction described above is exactly what is used in this protocol. To deposit, a user samples a random nullifier $n$ and secret $s$ and publishes a commitment $c= \mathsf{Ped}(n \Vert s)$, which becomes a new leaf of a Merkle tree. To withdraw to a recipient address, the user publishes the nullifier hash $\mathsf{nf}= \mathsf{Ped}(n)$ together with a zero-knowledge proof that "$\mathsf{nf}$ corresponds to an unspent leaf of the tree". 
 
-Both values are computed with a [Pedersen hash](https://iden3-docs.readthedocs.io/en/latest/iden3_repos/research/publications/zkproof-standards-workshop-2/pedersen-hash/pedersen.html) over the Baby Jubjub curve. A Pedersen hash is a multi-scalar multiplication: the input bits are cut into windows and each window multiplies a fixed generator. It is collision resistant under the discrete logarithm assumption, which a quantum computer breaks. More importantly, it is somehow **linear**: since $n$ is the prefix of $n \Vert s$, the nullifier contribution cancels out in $c - \mathsf{nf}$, which only depends on $s$.
+Both values are computed with a [Pedersen hash](https://iden3-docs.readthedocs.io/en/latest/iden3_repos/research/publications/zkproof-standards-workshop-2/pedersen-hash/pedersen.html) over the Baby Jubjub curve. A Pedersen hash is a multi-scalar multiplication: the input bits are cut into windows and each window multiplies a fixed generator. It is collision resistant under the discrete logarithm assumption, which a quantum computer breaks. More importantly, it is somewhat **linear**: since $n$ is the prefix of $n \Vert s$, the nullifier contribution cancels out in $c - \mathsf{nf}$, which only depends on $s$.
 
 #### PQ attack on Tornado Cash
 
-In order to break the privacy of Tornado Cash, an attacker would use Shor's algorithm in order to compute the discrete logarithms of the generators of the Pedersen hash specification (once and for all) and of every commitment and nullifier hash ever published. Given a candidate pair $(c, \mathsf{nf})$, it gets $\delta = \mathrm{dlog}(c) - \mathrm{dlog}(\mathsf{nf})$, and checks whether $\delta$ can be written as the contribution of a 248-bit secret $s$. Concretely, $s$ spans 62 windows of 4 bits, encoded as digits in $\lbrace \pm1, \dots, \pm8 \rbrace$, so the question is to find $x \in \lbrace \pm1, \dots, \pm8 \rbrace^{62}$ such that $\sum_{i=1}^{62} c_i x_i \equiv \delta \bmod L$, where the $c_i$ are public constants derived from the generators. This is a 62-dimensional lattice problem, well within reach of standard lattice reduction once the discrete logarithms are known.
+In order to break the privacy of Tornado Cash, an attacker would use Shor's algorithm in order to compute the discrete logarithms of the generators of the Pedersen hash specification (once and for all) and of every commitment and nullifier hash ever published. Given a candidate pair $(c, \mathsf{nf})$, it gets $\delta = \mathrm{dlog}(c) - \mathrm{dlog}(\mathsf{nf})$, and checks whether $\delta$ can be written as the contribution of a 248-bit secret $s$. Concretely, $s$ spans 62 windows of 4 bits, encoded as digits in $\lbrace \pm1, \dots, \pm8 \rbrace$, so the question is to find $x \in \lbrace \pm 1, \dots, \pm 8 \rbrace^{62}$ such that $\sum_{i=1}^{62} c_i x_i \equiv \delta \bmod L$, where the $c_i$ are public constants derived from the generators. This is a 62-dimensional lattice problem, well within reach of standard lattice reduction once the discrete logarithms are known.
+
 - If $(c, \mathsf{nf})$ is a genuine deposit/withdrawal pair, a solution exists. 
 - If not, a solution still exists with probability about $2^{248}/2^{250.6} \approx 16\%$, since there are $2^{248}$ digit vectors for a group of order $L \approx 2^{250.6}$. These false openings are genuine openings: no algorithm can tell them apart from the real one.
 
@@ -55,7 +57,7 @@ This attack does not completely break the privacy, because some openings might b
 
 #### Improvement with metadata
 
-The quantum test becomes devastating when combined with on-chain metadata. Indeed, many users deposit several notes from the same address, and withdraw them to the same recipient address. If an address `0xa` made $k$ deposits and an address `0xb` received $k$ withdrawals, the adversary tests all the pairs. For a wrong candidate, all $k$ tests pass with probability $0.16^k$: about $2.7\%$ for two notes, $0.07\%$ for four, and $0.0003\%$ for seven.
+The quantum test becomes devastating when combined with on-chain metadata. Indeed, many users deposit several notes from the same address, and withdraw them to the same recipient address. If an address made $k$ deposits and another address received as many withdrawals, the adversary tests all the pairs. For a wrong candidate, all $k$ tests pass with probability $0.16^k$: about $2.7\%$ for two notes, $0.07\%$ for four, and $0.0003\%$ for seven.
 
 To get a sense of how much metadata is available, we analyzed every withdrawal of the 20 Tornado Cash pools on Ethereum mainnet (ETH, DAI, cDAI, USDC, USDT and WBTC), up to block 26,389,735, and counted the withdrawals received by each recipient address. We left out 775 withdrawals to the zero address, emitted in 8 transactions right after the deployment of the 0.1 ETH pool in December 2019, which do not correspond to users.
 
@@ -86,7 +88,7 @@ The reuse varies with the asset. In the table below, the last two columns give t
 | USDT | 2,998 | 1,212 | 72.4% | 40.1% |
 | WBTC | 2,386 | 376 | 92.3% | 74.4% |
 
-In other words, two thirds of the withdrawals reach a recipient address that received several of them. When these notes also come from a common depositor address, the quantum test is not applied to a single note but to a group of notes, and a wrong candidate passes all the tests with probability $0.16^k$. This makes the privacy of Tornado Cash weak in practice.
+In other words, two-thirds of the withdrawals reach a recipient address that received several of them. When these notes also come from a common depositor address, the quantum test is not applied to a single note but to a group of notes, and a wrong candidate passes all the tests with probability $0.16^k$. This makes the privacy of Tornado Cash weak in practice.
 
 The timing of the transactions shrinks the pool even more: a withdrawal can only spend a note deposited before it, so for each nullifier hash, only the earlier commitments, and the depositor addresses active at that time, are candidates. A real adversary will also combine amounts across pools, gas price habits, relayer choices, and funding of the addresses.
 
@@ -96,7 +98,7 @@ The conclusion for Tornado Cash is that its privacy is **seriously weakened agai
 
 Since denominations are fixed, wallets split an amount into several notes. Kohaku shields 1.3 ETH as one 1 ETH note and three 0.1 ETH notes from the user's public account, and [unshields them in a single ERC-4337 user operation](https://github.com/ethereum/kohaku/tree/master/packages/tornado-cash) whose withdrawals all reach the same execution account. The $k$ notes of a bundle are therefore tested as one group, and a wrong candidate passes with probability $0.16^k$ (0.07% for 1.3 ETH). Even without a quantum computer, the same combination of denominations on both sides is a fingerprint, and bundles are rare: up to block 26,389,735, only 15 of the 302,552 Tornado withdrawal transactions contain several withdrawals (not counting the zero-address transactions mentioned above).
 
-The same applies to a poor man's Railgun (Figures 1 and 2): withdrawals are consolidated into one account, which earns yield and deposits again into Tornado to fund spending accounts. The second layer removes the direct links to the spending accounts, but the consolidation account receives $k$ withdrawals and makes $m$ deposits, so it is tested as a group on both layers, and its deposits anchor any amount or timing correlation with the spending accounts. As the tables above show, this reuse is already common.
+The same applies to a user whose withdrawals are consolidated into one account, which earns yield and deposits again into Tornado to fund spending accounts (Figures 1 and 2). The second layer removes the direct links to the spending accounts, but the consolidation account receives $k$ withdrawals and makes $m$ deposits, so it is tested as a group on both layers, and its deposits anchor any amount or timing correlation with the spending accounts. As the tables above show, this reuse is already common.
 
 <p align="center">
 <img src="../../../../../images/tornado-consolidation-hub.svg" alt="Consolidation account behind one Tornado layer" class="center" width="680"/>
@@ -106,7 +108,7 @@ The same applies to a poor man's Railgun (Figures 1 and 2): withdrawals are cons
 <p align="center">
 <img src="../../../../../images/poor-mans-railgun.svg" alt="Poor man's Railgun" class="center" width="680"/>
 </p>
-<p align="center"><small>Figure 2. Poor man's Railgun: a second Tornado layer removes the direct transfers, and the consolidation account stays linkable on both sides.</small></p>
+<p align="center"><small>Figure 2. A second Tornado layer removes the direct transfers, and the consolidation account stays linkable on both sides.</small></p>
 
 ### Privacy Pools <img src="../../../../../images/privacypools-logo.svg" alt="Privacy Pools" class="transparent" height="30" style="vertical-align:middle"/>
 
@@ -122,7 +124,8 @@ The second version moves to a **UTXO model**: notes can be split and sent to oth
 - Alice samples $r$, computes a shared key $K = \mathsf{KDF}(r \cdot \mathsf{vk} \cdot G)$ with a static ECDH, and publishes the note encrypted under $K$ with XChaCha20.
 - Bob recomputes $K = \mathsf{KDF}(\mathsf{vk} \cdot r G)$ and decrypts.
 
-The symmetric encryption is quantum safe, but the ECDH is not: with Shor, the adversary recovers every viewing key $\mathsf{vk}$ from the keystore and decrypts every note ever sent. **Privacy Pools v2 encryption is quantum broken.** A fix is possible: hybrid encryption combining ECDH with a post-quantum KEM such as ML-KEM. There are subtleties for implementing hybrid encryption properly. There exist standards for hybrid encryption (in TLS or Signal messenger, for example), keeping the privacy introduces a layer of complexity. Two properties are at stake, and they do not combine the same way:
+The symmetric encryption is quantum safe, but the ECDH is not: with Shor, the adversary recovers every viewing key $\mathsf{vk}$ from the keystore and decrypts every note ever sent. **Privacy Pools v2 encryption is quantum broken.** A fix is possible: hybrid encryption combining ECDH with a post-quantum KEM such as ML-KEM. There are subtleties for implementing hybrid encryption properly. There exist standards for hybrid encryption (in TLS or the Signal messenger, for example), but preserving privacy adds another layer of complexity. Two properties are at stake, and they do not combine the same way:
+
 - **Confidentiality**: with $K = H(K_{\mathsf{ecdh}} \Vert K_{\mathsf{kem}} \Vert \dots)$, the note stays confidential as long as *either* ECDH *or* ML-KEM holds. Breaking it requires breaking both.
 - **Key privacy** (who is the sender, who is the recipient): every public value tied to a key can leak this information. It is broken as soon as *any* of them leaks.
 
@@ -140,9 +143,9 @@ We built PQP Railgun, a proof of concept of a post-quantum private Railgun walle
 
 - Keys are derived through a derivation path from the mnemonic, following the BIP-32 specification.
 - At the encryption level, $V'_S$ is itself encrypted under $H(K_{\mathsf{kem}})$, so that **no curve point is published on-chain**. The public part is only an ML-KEM ciphertext and an AES-GCM ciphertext, and key privacy reduces to the anonymity (ANO-CCA) of ML-KEM. The sender blob is keyed by $H(v_S)$, derived from the seed and out of reach of Shor, which preserves sender recovery.
-- We provide hardware blind signing with a Ledger integration. Note that blind signing is not affected by the quantum encryption. Clear-signing would require computing the encryption on the device. In the case of Ledger devices, the interface for ML-KEM encryption is already available.
+- We provide hardware blind signing with a Ledger integration. Note that blind signing is not affected by the quantum encryption. Clear signing would require computing the encryption on the device. In the case of Ledger devices, the interface for ML-KEM encryption is already available.
 
-One drawback of this construction is that the `0zk` address is now much larger (it includes an ML-KEM public key). This is problematic at the UX level, but is not a blocker on-chain. On Sepolia, this costs 1,205 additional bytes of calldata per note, and 2.8% more gas. This increase is not significant, mainly because this data is not stored in the contract (not part of the Merkle tree), but simply part of the data log. [Here](https://sepolia.etherscan.io/tx/0xcd99f3932feffd7df6d1a9a044ce23c1818e853d59d9ff741479f9c9bd98c71e#eventlog) is an example of a private transaction with hybrid-encrypted notes on Sepolia: the ciphertexts in the `Transact` event contain the ML-KEM encapsulations, and no curve point. Only the broadcaster fee note is kept in classical ECDH encryption; a PQ broadcaster could also be used in practice to reduce the metadata quantum leak. We did not investigate this part yet. 
+One drawback of this construction is that the `0zk` address is now much larger (it includes an ML-KEM public key). This is problematic at the UX level, but is not a blocker on-chain. On Sepolia, this costs 1,205 additional bytes of calldata per note, and 2.8% more gas. This increase is not significant, mainly because this data is not stored in the contract (not part of the Merkle tree), but simply part of the data log. [Here](https://sepolia.etherscan.io/tx/0xcd99f3932feffd7df6d1a9a044ce23c1818e853d59d9ff741479f9c9bd98c71e#eventlog) is an example of a private transaction with hybrid-encrypted notes on Sepolia: the ciphertexts in the `Transact` event contain the ML-KEM encapsulations, and no curve point. Only the broadcaster fee note is kept in classical ECDH encryption; a PQ broadcaster could also be used in practice to reduce the metadata quantum leak. We have not investigated this part yet. 
 
 PQP Railgun is post-quantum *private*. Being fully post-quantum would also require changing the proof system. Railgun uses Groth16 proofs over BN254, whose soundness relies on pairings and discrete logarithms: after Q-day, an adversary could forge proofs and spend the notes of other users. The zero-knowledge property of Groth16 is perfect, so these proofs do not leak anything, even to a quantum adversary. The spending signature verified inside the proof (EdDSA over Baby Jubjub) would have to be replaced as well. This is an authentication problem, with the later deadline discussed at the beginning of this post.
 
@@ -159,19 +162,29 @@ The first table answers the question at the protocol level: can the construction
 
 The second table answers the question at the wallet level: are the users of a given wallet post-quantum private today?
 
-| protocol | wallet | derivation of the secrets | PQ private |
-|:--------------------|:---------------------|:----------------------------|:-------------------------------|
-| [Tornado Cash](https://github.com/tornadocash/tornado-core/blob/1ef6a263ac6a0e476d063fcb269a9df65a1bd56a/circuits/withdraw.circom#L5-L26) | any | random notes or signature | no, because of the protocol |
-| [Privacy Pools v1](https://github.com/0xbow-io/privacy-pools-website/blob/8b3fbf0ce8cf00fbb7461df218dbea3b71a84c76/src/utils/walletSeed.ts#L40-L67) | Privacy Pools app | signature of the connected account | no |
-| [Privacy Pools v1](https://github.com/0xbow-io/privacy-pools-core/blob/df4bf730214bf9d0c717a9258f7a74861758c269/packages/sdk/src/crypto.ts#L39-L58) | Privacy Pools app | random mnemonic | yes, unless the phrase is imported into a wallet |
-| <span style="opacity:0.55">[Privacy Pools v1](https://github.com/0xbow-io/privacy-pools-core/blob/df4bf730214bf9d0c717a9258f7a74861758c269/packages/sdk/src/core/account.service.ts#L106-L118)</span> | <span style="opacity:0.55">Privacy Pools app, legacy keys (deprecated)</span> | <span style="opacity:0.55">mnemonic, key rounded to a float</span> | <span style="opacity:0.55">no, about 53 bits of entropy</span> |
-| [Privacy Pools v1](https://github.com/ethereum/kohaku/blob/6324afe9c4cab9691b392b583d8b2ba366ab6130/packages/privacy-pools/src/account/signature-keys.ts#L148-L162) | Kohaku | signature by a dedicated key | yes |
-| <span style="opacity:0.55">[Privacy Pools v1](https://github.com/ethereum/kohaku/blob/6324afe9c4cab9691b392b583d8b2ba366ab6130/packages/privacy-pools/src/account/keys.ts#L70-L86)</span> | <span style="opacity:0.55">Kohaku, BIP-32 secrets (deprecated)</span> | <span style="opacity:0.55">mnemonic, path `m/28784'/1'`</span> | <span style="opacity:0.55">yes</span> |
-| [Privacy Pools v1](https://github.com/LedgerHQ/app-ethereum/blob/f7985b427841ace20795b548905ababf6a5b17a4/makefile_conf/chain/ethereum.mk#L1-L7) | Kohaku, hardware signer | signature by a `44'/60'` key | no, once this account has sent a transaction |
-| [Privacy Pools v2](https://github.com/0xbow-io/privacy-pools-v2/blob/6fd83a092004ab7123613abff2b0ca319a2106ce/components/sdk-provider.tsx#L1831-L1838) | Privacy Pools v2 app | signature of the connected account | no, because of ECDH and of the derivation |
-| [Privacy Pools v2](https://github.com/0xbow-io/privacy-pools-v2/blob/6fd83a092004ab7123613abff2b0ca319a2106ce/services/passkey-derivation.ts#L84-L89) | Privacy Pools v2 app | passkey (experimental) | no, because of ECDH |
-| [Railgun](https://github.com/Railgun-Community/engine/blob/6e2614d53a106dd62abad91e7ce03ee4a3956138/src/key-derivation/wallet-node.ts#L17-L20) | Railgun wallets | mnemonic | no, because of ECDH |
-| [Railgun](https://github.com/ZKNoxHQ/kohaku-rs/blob/34d929d350a8952928bbc61e551364b19625e9b0/crates/railgun/src/crypto/keys.rs#L285-L290) | PQP Railgun | mnemonic | yes |
+<style>
+#doc table.grouped tr:nth-child(n) { background-color: var(--color-table-row-odd); }
+#doc table.grouped tr.even:nth-child(n) { background-color: var(--color-table-row-even); }
+</style>
+
+<table class="grouped">
+<thead>
+<tr><th style="text-align: left;">protocol</th><th style="text-align: left;">wallet</th><th style="text-align: left;">derivation of the secrets</th><th style="text-align: left;">PQ private</th></tr>
+</thead>
+<tbody>
+<tr><td>Tornado Cash</td><td>any</td><td><a href="https://github.com/tornadocash/tornado-core/blob/1ef6a263ac6a0e476d063fcb269a9df65a1bd56a/circuits/withdraw.circom#L5-L26">random notes or signature</a></td><td>no, because of the protocol</td></tr>
+<tr class="even"><td rowspan="6">Privacy Pools v1</td><td rowspan="2">Privacy Pools app</td><td><a href="https://github.com/0xbow-io/privacy-pools-website/blob/8b3fbf0ce8cf00fbb7461df218dbea3b71a84c76/src/utils/walletSeed.ts#L40-L67">signature of the connected account</a></td><td>no</td></tr>
+<tr class="even"><td><a href="https://github.com/0xbow-io/privacy-pools-core/blob/df4bf730214bf9d0c717a9258f7a74861758c269/packages/sdk/src/crypto.ts#L39-L58">random mnemonic</a></td><td>yes, unless the phrase is imported into a wallet</td></tr>
+<tr class="even"><td><span style="opacity:0.55">Privacy Pools app, legacy keys (deprecated)</span></td><td><span style="opacity:0.55"><a href="https://github.com/0xbow-io/privacy-pools-core/blob/df4bf730214bf9d0c717a9258f7a74861758c269/packages/sdk/src/core/account.service.ts#L106-L118">mnemonic, key rounded to a float</a></span></td><td><span style="opacity:0.55">no, about 53 bits of entropy</span></td></tr>
+<tr class="even"><td>Kohaku</td><td><a href="https://github.com/ethereum/kohaku/blob/6324afe9c4cab9691b392b583d8b2ba366ab6130/packages/privacy-pools/src/account/signature-keys.ts#L148-L162">signature by a dedicated key</a></td><td>yes, if no signature on this path</td></tr>
+<tr class="even"><td><span style="opacity:0.55">Kohaku, BIP-32 secrets (deprecated)</span></td><td><span style="opacity:0.55"><a href="https://github.com/ethereum/kohaku/blob/6324afe9c4cab9691b392b583d8b2ba366ab6130/packages/privacy-pools/src/account/keys.ts#L70-L86">mnemonic, path <code>m/28784'/1'</code></a></span></td><td><span style="opacity:0.55">yes</span></td></tr>
+<tr class="even"><td>Kohaku, hardware exported signature</td><td><a href="https://github.com/LedgerHQ/app-ethereum/blob/f7985b427841ace20795b548905ababf6a5b17a4/makefile_conf/chain/ethereum.mk#L1-L7">signature by a <code>44'/60'</code> key</a></td><td>no, once this account has sent a transaction</td></tr>
+<tr><td rowspan="2">Privacy Pools v2</td><td rowspan="2">Privacy Pools v2 app</td><td><a href="https://github.com/0xbow-io/privacy-pools-v2/blob/6fd83a092004ab7123613abff2b0ca319a2106ce/components/sdk-provider.tsx#L1831-L1838">signature of the connected account</a></td><td>no, because of ECDH and of the derivation</td></tr>
+<tr><td><a href="https://github.com/0xbow-io/privacy-pools-v2/blob/6fd83a092004ab7123613abff2b0ca319a2106ce/services/passkey-derivation.ts#L84-L89">passkey (experimental)</a></td><td>no, because of ECDH</td></tr>
+<tr class="even"><td rowspan="2">Railgun</td><td>Railgun wallets</td><td><a href="https://github.com/Railgun-Community/engine/blob/6e2614d53a106dd62abad91e7ce03ee4a3956138/src/key-derivation/wallet-node.ts#L17-L20">mnemonic</a></td><td>no, because of ECDH</td></tr>
+<tr class="even"><td>PQP Railgun</td><td><a href="https://github.com/ZKNoxHQ/kohaku-rs/blob/34d929d350a8952928bbc61e551364b19625e9b0/crates/railgun/src/crypto/keys.rs#L285-L290">mnemonic</a></td><td>yes</td></tr>
+</tbody>
+</table>
 
 Tornado Cash cannot be fixed at the wallet level, and combined with on-chain metadata, the quantum test de-anonymizes the users who deposit and withdraw several notes with the same addresses. For the other protocols, the weak point moves to the wallets: the secrets must come from the mnemonic, or from a signature by a key whose public key never appears on-chain, and the notes must be encrypted with ML-KEM hybrid encryption. PQP Railgun shows that this is possible today, while keeping hardware security of the spending key. Being fully post-quantum also requires replacing the Groth16 proof system and the in-circuit EdDSA signature.
 
@@ -182,6 +195,6 @@ Making **privacy** quantum safe is possible today, and it is urgent: every note 
 
 🔐 Practical security on the whole chain.
 
-[Github](https://github.com/zknoxhq) | [Website](https://www.zknox.com) | [Twitter](https://x.com/zknoxhq) | [Blog](https://zknox.eth.limo) | [Contact Info](mailto:gm@zknox.com)
+[GitHub](https://github.com/zknoxhq) | [Website](https://www.zknox.com) | [Twitter](https://x.com/zknoxhq) | [Blog](https://zknox.eth.limo) | [Contact Info](mailto:gm@zknox.com)
 
-<small>Found a typo, or want to improve the note ? Our blog is open to [PRs](https://github.com/ZKNoxHQ/blog/pulls).</small>
+<small>Found a typo, or want to improve the note? Our blog is open to [PRs](https://github.com/ZKNoxHQ/blog/pulls).</small>
